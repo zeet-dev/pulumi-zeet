@@ -1,0 +1,47 @@
+query currentUserID {
+    currentUser {
+        id
+    }
+}
+
+mutation createProject($userID: UUID!, $name: String!) {
+    createProjectV2(input: {
+        userID: $userID,
+        name: $name
+    }) {
+        id
+        name
+        updatedAt
+    }
+}
+
+mutation createEnvironment($projectID: UUID!, $name: String!) {
+    createProjectEnvironment(input: {
+        projectID: $projectID,
+        name: $name
+    }) {
+        id
+        name
+        project {
+            id
+        }
+        updatedAt
+    }
+}
+
+# Used to create Zeet "Repos", aka "Apps"
+# ProjectID and EnvironmentID are expected to be specified
+mutation createAppGit($input: CreateProjectGitInput!) {
+    createProjectGit(input: $input) {
+        id
+        name
+        envs {
+            id
+            name
+            value
+        }
+        cpu
+        memory
+        updatedAt
+    }
+}
