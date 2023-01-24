@@ -42,10 +42,6 @@ go_sdk:: IMPORT_BASE_PATH := "github.com/zeet-dev/pulumi-zeet-native/sdk/go/zeet
 go_sdk:: $(WORKING_DIR)/bin/$(PROVIDER)
 	rm -rf sdk/go
 	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language go
-	# fix sdk imports
-	# ! NOTE: requires gnu-sed
-	grep -rl "\"model\"" sdk/go/zeetnative | xargs sed -i"" -e "s|\"model\"|\"${IMPORT_BASE_PATH}/model\"|g"
-	grep -rl "\"time\"" sdk/go/zeetnative | xargs sed -i"" -e "s|\"time\"|\"${IMPORT_BASE_PATH}/time\"|g"
 
 nodejs_sdk:: VERSION := $(shell pulumictl get version --language javascript)
 nodejs_sdk::

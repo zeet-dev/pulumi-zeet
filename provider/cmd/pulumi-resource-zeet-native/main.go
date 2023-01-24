@@ -17,6 +17,7 @@ package main
 import (
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
+	"github.com/pulumi/pulumi-go-provider/middleware/schema"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"
 )
 
@@ -32,6 +33,13 @@ func main() {
 			infer.Resource[Project, ProjectArgs, ProjectState](),
 			infer.Resource[Environment, EnvironmentArgs, EnvironmentState](),
 			infer.Resource[App, AppArgs, AppState](),
+		},
+		Metadata: schema.Metadata{
+			LanguageMap: map[string]any{
+				"go": map[string]any{
+					"importBasePath": "github.com/zeet-dev/pulumi-zeet-native/sdk/go/zeetnative",
+				},
+			},
 		},
 	}
 	provider := infer.Provider(providerOptions)
