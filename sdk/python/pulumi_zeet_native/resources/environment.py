@@ -7,8 +7,8 @@ import warnings
 import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
-from . import _utilities
-from . import time as _time
+from .. import _utilities
+from .. import time as _time
 
 __all__ = ['EnvironmentArgs', 'Environment']
 
@@ -98,7 +98,7 @@ class Environment(pulumi.CustomResource):
             __props__.__dict__["environment_id"] = None
             __props__.__dict__["updated_at"] = None
         super(Environment, __self__).__init__(
-            'zeet-native:index:Environment',
+            'zeet-native:resources:Environment',
             resource_name,
             __props__,
             opts)

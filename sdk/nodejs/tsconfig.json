@@ -13,12 +13,12 @@
         "strict": true
     },
     "files": [
-        "app.ts",
-        "environment.ts",
         "index.ts",
-        "project.ts",
         "provider.ts",
-        "random.ts",
+        "resources/app.ts",
+        "resources/environment.ts",
+        "resources/index.ts",
+        "resources/project.ts",
         "types/index.ts",
         "types/input.ts",
         "types/output.ts",

@@ -12,9 +12,9 @@ type CreateAppBuildInput struct {
 
 type CreateAppDeployInput struct {
 	DeployTarget string `pulumi:"deployTarget"`
+	ClusterID    string `pulumi:"clusterId,optional"`
 	//DeployType    DeployType    `pulumi:"deployType"`
 	//DeployRuntime DeployRuntime `pulumi:"deployRuntime"`
-	ClusterID string `pulumi:"clusterId,optional"`
 }
 
 type CreateAppGithubInput struct {

@@ -7,9 +7,9 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Pulumi.Serialization;
 
-namespace Pulumi.ZeetNative
+namespace Pulumi.ZeetNative.Resources
 {
-    [ZeetNativeResourceType("zeet-native:index:App")]
+    [ZeetNativeResourceType("zeet-native:resources:App")]
     public partial class App : global::Pulumi.CustomResource
     {
         [Output("appId")]
@@ -54,12 +54,12 @@ namespace Pulumi.ZeetNative
         /// <param name="args">The arguments used to populate this resource's properties</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
         public App(string name, AppArgs args, CustomResourceOptions? options = null)
-            : base("zeet-native:index:App", name, args ?? new AppArgs(), MakeResourceOptions(options, ""))
+            : base("zeet-native:resources:App", name, args ?? new AppArgs(), MakeResourceOptions(options, ""))
         {
         }
 
         private App(string name, Input<string> id, CustomResourceOptions? options = null)
-            : base("zeet-native:index:App", name, null, MakeResourceOptions(options, id))
+            : base("zeet-native:resources:App", name, null, MakeResourceOptions(options, id))
         {
         }
 

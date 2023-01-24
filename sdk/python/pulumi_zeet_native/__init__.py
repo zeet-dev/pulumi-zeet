@@ -5,20 +5,19 @@
 from . import _utilities
 import typing
 # Export this package's modules as members:
-from .app import *
-from .environment import *
-from .project import *
 from .provider import *
-from .random import *
 
 # Make subpackages available:
 if typing.TYPE_CHECKING:
     import pulumi_zeet_native.model as __model
     model = __model
+    import pulumi_zeet_native.resources as __resources
+    resources = __resources
     import pulumi_zeet_native.time as __time
     time = __time
 else:
     model = _utilities.lazy_import('pulumi_zeet_native.model')
+    resources = _utilities.lazy_import('pulumi_zeet_native.resources')
     time = _utilities.lazy_import('pulumi_zeet_native.time')
 
 _utilities.register(
@@ -26,13 +25,12 @@ _utilities.register(
 [
  {
   "pkg": "zeet-native",
-  "mod": "index",
-  "fqn": "pulumi_zeet_native",
+  "mod": "resources",
+  "fqn": "pulumi_zeet_native.resources",
   "classes": {
-   "zeet-native:index:App": "App",
-   "zeet-native:index:Environment": "Environment",
-   "zeet-native:index:Project": "Project",
-   "zeet-native:index:Random": "Random"
+   "zeet-native:resources:App": "App",
+   "zeet-native:resources:Environment": "Environment",
+   "zeet-native:resources:Project": "Project"
   }
  }
 ]

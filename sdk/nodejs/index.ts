@@ -5,57 +5,20 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "./utilities";
 
 // Export members:
-export { AppArgs } from "./app";
-export type App = import("./app").App;
-export const App: typeof import("./app").App = null as any;
-utilities.lazyLoad(exports, ["App"], () => require("./app"));
-
-export { EnvironmentArgs } from "./environment";
-export type Environment = import("./environment").Environment;
-export const Environment: typeof import("./environment").Environment = null as any;
-utilities.lazyLoad(exports, ["Environment"], () => require("./environment"));
-
-export { ProjectArgs } from "./project";
-export type Project = import("./project").Project;
-export const Project: typeof import("./project").Project = null as any;
-utilities.lazyLoad(exports, ["Project"], () => require("./project"));
-
 export { ProviderArgs } from "./provider";
 export type Provider = import("./provider").Provider;
 export const Provider: typeof import("./provider").Provider = null as any;
 utilities.lazyLoad(exports, ["Provider"], () => require("./provider"));
 
-export { RandomArgs } from "./random";
-export type Random = import("./random").Random;
-export const Random: typeof import("./random").Random = null as any;
-utilities.lazyLoad(exports, ["Random"], () => require("./random"));
-
 
 // Export sub-modules:
+import * as resources from "./resources";
 import * as types from "./types";
 
 export {
+    resources,
     types,
 };
-
-const _module = {
-    version: utilities.getVersion(),
-    construct: (name: string, type: string, urn: string): pulumi.Resource => {
-        switch (type) {
-            case "zeet-native:index:App":
-                return new App(name, <any>undefined, { urn })
-            case "zeet-native:index:Environment":
-                return new Environment(name, <any>undefined, { urn })
-            case "zeet-native:index:Project":
-                return new Project(name, <any>undefined, { urn })
-            case "zeet-native:index:Random":
-                return new Random(name, <any>undefined, { urn })
-            default:
-                throw new Error(`unknown resource type ${type}`);
-        }
-    },
-};
-pulumi.runtime.registerResourceModule("zeet-native", "index", _module)
 pulumi.runtime.registerResourcePackage("zeet-native", {
     version: utilities.getVersion(),
     constructProvider: (name: string, type: string, urn: string): pulumi.ProviderResource => {

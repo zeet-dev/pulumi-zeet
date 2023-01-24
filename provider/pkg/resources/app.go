@@ -1,8 +1,8 @@
-package main
+package resources
 
 import (
 	"fmt"
-	provider "github.com/pulumi/pulumi-go-provider"
+	"github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/resource"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"

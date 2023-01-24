@@ -2,9 +2,9 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import * as inputs from "./types/input";
-import * as outputs from "./types/output";
-import * as utilities from "./utilities";
+import * as inputs from "../types/input";
+import * as outputs from "../types/output";
+import * as utilities from "../utilities";
 
 export class App extends pulumi.CustomResource {
     /**
@@ -20,7 +20,7 @@ export class App extends pulumi.CustomResource {
     }
 
     /** @internal */
-    public static readonly __pulumiType = 'zeet-native:index:App';
+    public static readonly __pulumiType = 'zeet-native:resources:App';
 
     /**
      * Returns true if the given object is an instance of App.  This is designed to work even

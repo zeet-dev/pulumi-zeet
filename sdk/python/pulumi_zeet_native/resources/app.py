@@ -7,9 +7,9 @@ import warnings
 import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
-from . import _utilities
-from . import model as _model
-from . import time as _time
+from .. import _utilities
+from .. import model as _model
+from .. import time as _time
 
 __all__ = ['AppArgs', 'App']
 
@@ -210,7 +210,7 @@ class App(pulumi.CustomResource):
             __props__.__dict__["app_id"] = None
             __props__.__dict__["updated_at"] = None
         super(App, __self__).__init__(
-            'zeet-native:index:App',
+            'zeet-native:resources:App',
             resource_name,
             __props__,
             opts)

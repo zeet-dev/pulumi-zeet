@@ -1,7 +1,7 @@
-package main
+package resources
 
 import (
-	provider "github.com/pulumi/pulumi-go-provider"
+	"github.com/pulumi/pulumi-go-provider"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"
 	"time"
 )

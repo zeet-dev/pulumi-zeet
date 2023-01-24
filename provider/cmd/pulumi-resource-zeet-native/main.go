@@ -19,6 +19,7 @@ import (
 	"github.com/pulumi/pulumi-go-provider/infer"
 	"github.com/pulumi/pulumi-go-provider/middleware/schema"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"
+	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/resources"
 )
 
 // Version is initialized by the Go linker to contain the semver of this build.
@@ -29,10 +30,9 @@ func main() {
 	// NOTE: resources must be implemented in this main package! See README
 	providerOptions := infer.Options{
 		Resources: []infer.InferredResource{
-			infer.Resource[Random, RandomArgs, RandomState](),
-			infer.Resource[Project, ProjectArgs, ProjectState](),
-			infer.Resource[Environment, EnvironmentArgs, EnvironmentState](),
-			infer.Resource[App, AppArgs, AppState](),
+			infer.Resource[resources.Project, resources.ProjectArgs, resources.ProjectState](),
+			infer.Resource[resources.Environment, resources.EnvironmentArgs, resources.EnvironmentState](),
+			infer.Resource[resources.App, resources.AppArgs, resources.AppState](),
 		},
 		Metadata: schema.Metadata{
 			LanguageMap: map[string]any{

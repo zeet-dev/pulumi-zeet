@@ -7,8 +7,8 @@ import warnings
 import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
-from . import _utilities
-from . import time as _time
+from .. import _utilities
+from .. import time as _time
 
 __all__ = ['ProjectArgs', 'Project']
 
@@ -98,7 +98,7 @@ class Project(pulumi.CustomResource):
             __props__.__dict__["project_id"] = None
             __props__.__dict__["updated_at"] = None
         super(Project, __self__).__init__(
-            'zeet-native:index:Project',
+            'zeet-native:resources:Project',
             resource_name,
             __props__,
             opts)
