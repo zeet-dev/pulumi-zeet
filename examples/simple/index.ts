@@ -2,25 +2,23 @@ import * as zeet from "@pulumi/zeet-native";
 import * as pulumi from "@pulumi/pulumi";
 
 
-const random = new zeet.Random("my-random", { length: 24 });
-
 let config = new pulumi.Config();
 
 let teamIdConfig = config.get("team-id");
 let clusterId = config.get("cluster-id");
 let githubRepoUrl = config.get("github-repo-url");
 
-const project = new zeet.Project("my-project", {
+const project = new zeet.resources.Project("my-project", {
     userId: teamIdConfig,
     name: "pulumi-test-project-01",
 })
 
-const environment = new zeet.Environment("my-environment", {
+const environment = new zeet.resources.Environment("my-environment", {
     projectId: project.projectId,
     name: "pulumi-test-environment-01",
 })
 
-const app = new zeet.App("github-app", {
+const app = new zeet.resources.App("github-app", {
     userId: teamIdConfig,
     projectId: project.projectId,
     environmentId: environment.environmentId,
@@ -43,10 +41,21 @@ const app = new zeet.App("github-app", {
     github: {
         url: githubRepoUrl,
         productionBranch: "main"
-    }
+    },
+    environmentVariables: [
+        {
+            name: "TEST_ENV",
+            value: "1"
+        },
+        {
+            name: "TEST_ENV_SEALED",
+            value: "xyz",
+            sealed: true
+        }
+    ]
 })
 
-export const output = random.result;
+export const output = "<obsolete>";
 
 export const projectId = project.projectId;
 export const environmentId = environment.environmentId;
