@@ -682,6 +682,14 @@ func (v *__createProjectInput) GetUserID() string { return v.UserID }
 // GetName returns __createProjectInput.Name, and is useful for accessing the field via an interface.
 func (v *__createProjectInput) GetName() string { return v.Name }
 
+// __getProjectByIDInput is used internally by genqlient
+type __getProjectByIDInput struct {
+	ProjectID string `json:"projectID"`
+}
+
+// GetProjectID returns __getProjectByIDInput.ProjectID, and is useful for accessing the field via an interface.
+func (v *__getProjectByIDInput) GetProjectID() string { return v.ProjectID }
+
 // createAppGitCreateProjectGitRepo includes the requested fields of the GraphQL type Repo.
 type createAppGitCreateProjectGitRepo struct {
 	Id        string                                        `json:"id"`
@@ -820,6 +828,54 @@ type currentUserIDResponse struct {
 // GetCurrentUser returns currentUserIDResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *currentUserIDResponse) GetCurrentUser() *currentUserIDCurrentUser { return v.CurrentUser }
 
+// getProjectByIDProject includes the requested fields of the GraphQL type Project.
+type getProjectByIDProject struct {
+	Id           string                                                 `json:"id"`
+	Name         string                                                 `json:"name"`
+	UpdatedAt    time.Time                                              `json:"updatedAt"`
+	Environments []*getProjectByIDProjectEnvironmentsProjectEnvironment `json:"environments"`
+}
+
+// GetId returns getProjectByIDProject.Id, and is useful for accessing the field via an interface.
+func (v *getProjectByIDProject) GetId() string { return v.Id }
+
+// GetName returns getProjectByIDProject.Name, and is useful for accessing the field via an interface.
+func (v *getProjectByIDProject) GetName() string { return v.Name }
+
+// GetUpdatedAt returns getProjectByIDProject.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *getProjectByIDProject) GetUpdatedAt() time.Time { return v.UpdatedAt }
+
+// GetEnvironments returns getProjectByIDProject.Environments, and is useful for accessing the field via an interface.
+func (v *getProjectByIDProject) GetEnvironments() []*getProjectByIDProjectEnvironmentsProjectEnvironment {
+	return v.Environments
+}
+
+// getProjectByIDProjectEnvironmentsProjectEnvironment includes the requested fields of the GraphQL type ProjectEnvironment.
+type getProjectByIDProjectEnvironmentsProjectEnvironment struct {
+	Id        string    `json:"id"`
+	Name      string    `json:"name"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+// GetId returns getProjectByIDProjectEnvironmentsProjectEnvironment.Id, and is useful for accessing the field via an interface.
+func (v *getProjectByIDProjectEnvironmentsProjectEnvironment) GetId() string { return v.Id }
+
+// GetName returns getProjectByIDProjectEnvironmentsProjectEnvironment.Name, and is useful for accessing the field via an interface.
+func (v *getProjectByIDProjectEnvironmentsProjectEnvironment) GetName() string { return v.Name }
+
+// GetUpdatedAt returns getProjectByIDProjectEnvironmentsProjectEnvironment.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *getProjectByIDProjectEnvironmentsProjectEnvironment) GetUpdatedAt() time.Time {
+	return v.UpdatedAt
+}
+
+// getProjectByIDResponse is returned by getProjectByID on success.
+type getProjectByIDResponse struct {
+	Project *getProjectByIDProject `json:"project"`
+}
+
+// GetProject returns getProjectByIDResponse.Project, and is useful for accessing the field via an interface.
+func (v *getProjectByIDResponse) GetProject() *getProjectByIDProject { return v.Project }
+
 // Used to create Zeet "Repos", aka "Apps"
 // ProjectID and EnvironmentID are expected to be specified
 func createAppGit(
@@ -955,6 +1011,45 @@ query currentUserID {
 	var err error
 
 	var data currentUserIDResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func getProjectByID(
+	ctx context.Context,
+	client graphql.Client,
+	projectID string,
+) (*getProjectByIDResponse, error) {
+	req := &graphql.Request{
+		OpName: "getProjectByID",
+		Query: `
+query getProjectByID ($projectID: UUID!) {
+	project(id: $projectID) {
+		id
+		name
+		updatedAt
+		environments {
+			id
+			name
+			updatedAt
+		}
+	}
+}
+`,
+		Variables: &__getProjectByIDInput{
+			ProjectID: projectID,
+		},
+	}
+	var err error
+
+	var data getProjectByIDResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

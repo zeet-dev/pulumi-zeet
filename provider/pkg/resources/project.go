@@ -2,11 +2,14 @@ package resources
 
 import (
 	"github.com/pulumi/pulumi-go-provider"
+	"github.com/pulumi/pulumi-go-provider/infer"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"
 	"time"
 )
 
 type Project struct{}
+
+var _ = (infer.CustomRead[ProjectArgs, ProjectState])((*Project)(nil))
 
 // Each resources has in input struct, defining what arguments it accepts.
 type ProjectArgs struct {
@@ -30,7 +33,7 @@ type ProjectState struct {
 func (Project) Create(ctx provider.Context, name string, input ProjectArgs, preview bool) (string, ProjectState, error) {
 	state := ProjectState{ProjectArgs: input}
 	if preview {
-		return name, state, nil
+		return state.ProjectID, state, nil
 	}
 	newProject, err := config.ZeetClient.CreateProject(ctx, input.UserID, input.Name)
 	if err != nil {
@@ -38,5 +41,19 @@ func (Project) Create(ctx provider.Context, name string, input ProjectArgs, prev
 	}
 	state.ProjectID = newProject.ID
 	state.UpdatedAt = newProject.UpdatedAt
-	return name, state, nil
+	return state.ProjectID, state, nil
+}
+
+func (p Project) Read(ctx provider.Context, id string, inputs ProjectArgs, state ProjectState) (canonicalID string, normalizedInputs ProjectArgs, normalizedState ProjectState, err error) {
+	remoteState, err := config.ZeetClient.ReadProject(ctx, id)
+	if err != nil {
+		return "", ProjectArgs{}, ProjectState{}, err
+	}
+	normalizedState.UserID = inputs.UserID
+
+	normalizedState.ProjectID = remoteState.ID
+	normalizedState.Name = remoteState.Name
+	normalizedState.UpdatedAt = remoteState.UpdatedAt
+
+	return normalizedState.ProjectID, inputs, normalizedState, nil
 }
