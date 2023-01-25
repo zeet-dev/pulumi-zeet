@@ -24,6 +24,7 @@ class AppArgs:
                  project_id: pulumi.Input[str],
                  resources: pulumi.Input['_model.CreateAppResourcesInputArgs'],
                  user_id: pulumi.Input[str],
+                 environment_variables: Optional[pulumi.Input[Sequence[pulumi.Input['_model.CreateAppEnvironmentVariableInputArgs']]]] = None,
                  github: Optional[pulumi.Input['_model.CreateAppGithubInputArgs']] = None):
         """
         The set of arguments for constructing a App resource.
@@ -36,6 +37,8 @@ class AppArgs:
         pulumi.set(__self__, "project_id", project_id)
         pulumi.set(__self__, "resources", resources)
         pulumi.set(__self__, "user_id", user_id)
+        if environment_variables is not None:
+            pulumi.set(__self__, "environment_variables", environment_variables)
         if github is not None:
             pulumi.set(__self__, "github", github)
 
@@ -112,6 +115,15 @@ class AppArgs:
         pulumi.set(self, "user_id", value)
 
     @property
+    @pulumi.getter(name="environmentVariables")
+    def environment_variables(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['_model.CreateAppEnvironmentVariableInputArgs']]]]:
+        return pulumi.get(self, "environment_variables")
+
+    @environment_variables.setter
+    def environment_variables(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['_model.CreateAppEnvironmentVariableInputArgs']]]]):
+        pulumi.set(self, "environment_variables", value)
+
+    @property
     @pulumi.getter
     def github(self) -> Optional[pulumi.Input['_model.CreateAppGithubInputArgs']]:
         return pulumi.get(self, "github")
@@ -130,6 +142,7 @@ class App(pulumi.CustomResource):
                  deploy: Optional[pulumi.Input[pulumi.InputType['_model.CreateAppDeployInputArgs']]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
                  environment_id: Optional[pulumi.Input[str]] = None,
+                 environment_variables: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['_model.CreateAppEnvironmentVariableInputArgs']]]]] = None,
                  github: Optional[pulumi.Input[pulumi.InputType['_model.CreateAppGithubInputArgs']]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  project_id: Optional[pulumi.Input[str]] = None,
@@ -168,6 +181,7 @@ class App(pulumi.CustomResource):
                  deploy: Optional[pulumi.Input[pulumi.InputType['_model.CreateAppDeployInputArgs']]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
                  environment_id: Optional[pulumi.Input[str]] = None,
+                 environment_variables: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['_model.CreateAppEnvironmentVariableInputArgs']]]]] = None,
                  github: Optional[pulumi.Input[pulumi.InputType['_model.CreateAppGithubInputArgs']]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  project_id: Optional[pulumi.Input[str]] = None,
@@ -194,6 +208,7 @@ class App(pulumi.CustomResource):
             if environment_id is None and not opts.urn:
                 raise TypeError("Missing required property 'environment_id'")
             __props__.__dict__["environment_id"] = environment_id
+            __props__.__dict__["environment_variables"] = environment_variables
             __props__.__dict__["github"] = github
             if name is None and not opts.urn:
                 raise TypeError("Missing required property 'name'")
@@ -236,6 +251,7 @@ class App(pulumi.CustomResource):
         __props__.__dict__["deploy"] = None
         __props__.__dict__["enabled"] = None
         __props__.__dict__["environment_id"] = None
+        __props__.__dict__["environment_variables"] = None
         __props__.__dict__["github"] = None
         __props__.__dict__["name"] = None
         __props__.__dict__["project_id"] = None
@@ -268,6 +284,11 @@ class App(pulumi.CustomResource):
     @pulumi.getter(name="environmentId")
     def environment_id(self) -> pulumi.Output[str]:
         return pulumi.get(self, "environment_id")
+
+    @property
+    @pulumi.getter(name="environmentVariables")
+    def environment_variables(self) -> pulumi.Output[Optional[Sequence['_model.outputs.CreateAppEnvironmentVariableInput']]]:
+        return pulumi.get(self, "environment_variables")
 
     @property
     @pulumi.getter

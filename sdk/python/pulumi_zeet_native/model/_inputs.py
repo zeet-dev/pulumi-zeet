@@ -12,6 +12,7 @@ from .. import _utilities
 __all__ = [
     'CreateAppBuildInputArgs',
     'CreateAppDeployInputArgs',
+    'CreateAppEnvironmentVariableInputArgs',
     'CreateAppGithubInputArgs',
     'CreateAppResourcesInputArgs',
 ]
@@ -70,6 +71,45 @@ class CreateAppDeployInputArgs:
     @cluster_id.setter
     def cluster_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "cluster_id", value)
+
+
+@pulumi.input_type
+class CreateAppEnvironmentVariableInputArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 value: pulumi.Input[str],
+                 sealed: Optional[pulumi.Input[bool]] = None):
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+        if sealed is not None:
+            pulumi.set(__self__, "sealed", sealed)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+    @property
+    @pulumi.getter
+    def sealed(self) -> Optional[pulumi.Input[bool]]:
+        return pulumi.get(self, "sealed")
+
+    @sealed.setter
+    def sealed(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "sealed", value)
 
 
 @pulumi.input_type

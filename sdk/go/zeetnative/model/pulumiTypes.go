@@ -120,6 +120,112 @@ func (o CreateAppDeployInputOutput) DeployTarget() pulumi.StringOutput {
 	return o.ApplyT(func(v CreateAppDeployInput) string { return v.DeployTarget }).(pulumi.StringOutput)
 }
 
+type CreateAppEnvironmentVariableInput struct {
+	Name   string `pulumi:"name"`
+	Sealed *bool  `pulumi:"sealed"`
+	Value  string `pulumi:"value"`
+}
+
+// CreateAppEnvironmentVariableInputInput is an input type that accepts CreateAppEnvironmentVariableInputArgs and CreateAppEnvironmentVariableInputOutput values.
+// You can construct a concrete instance of `CreateAppEnvironmentVariableInputInput` via:
+//
+//	CreateAppEnvironmentVariableInputArgs{...}
+type CreateAppEnvironmentVariableInputInput interface {
+	pulumi.Input
+
+	ToCreateAppEnvironmentVariableInputOutput() CreateAppEnvironmentVariableInputOutput
+	ToCreateAppEnvironmentVariableInputOutputWithContext(context.Context) CreateAppEnvironmentVariableInputOutput
+}
+
+type CreateAppEnvironmentVariableInputArgs struct {
+	Name   pulumi.StringInput  `pulumi:"name"`
+	Sealed pulumi.BoolPtrInput `pulumi:"sealed"`
+	Value  pulumi.StringInput  `pulumi:"value"`
+}
+
+func (CreateAppEnvironmentVariableInputArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*CreateAppEnvironmentVariableInput)(nil)).Elem()
+}
+
+func (i CreateAppEnvironmentVariableInputArgs) ToCreateAppEnvironmentVariableInputOutput() CreateAppEnvironmentVariableInputOutput {
+	return i.ToCreateAppEnvironmentVariableInputOutputWithContext(context.Background())
+}
+
+func (i CreateAppEnvironmentVariableInputArgs) ToCreateAppEnvironmentVariableInputOutputWithContext(ctx context.Context) CreateAppEnvironmentVariableInputOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(CreateAppEnvironmentVariableInputOutput)
+}
+
+// CreateAppEnvironmentVariableInputArrayInput is an input type that accepts CreateAppEnvironmentVariableInputArray and CreateAppEnvironmentVariableInputArrayOutput values.
+// You can construct a concrete instance of `CreateAppEnvironmentVariableInputArrayInput` via:
+//
+//	CreateAppEnvironmentVariableInputArray{ CreateAppEnvironmentVariableInputArgs{...} }
+type CreateAppEnvironmentVariableInputArrayInput interface {
+	pulumi.Input
+
+	ToCreateAppEnvironmentVariableInputArrayOutput() CreateAppEnvironmentVariableInputArrayOutput
+	ToCreateAppEnvironmentVariableInputArrayOutputWithContext(context.Context) CreateAppEnvironmentVariableInputArrayOutput
+}
+
+type CreateAppEnvironmentVariableInputArray []CreateAppEnvironmentVariableInputInput
+
+func (CreateAppEnvironmentVariableInputArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]CreateAppEnvironmentVariableInput)(nil)).Elem()
+}
+
+func (i CreateAppEnvironmentVariableInputArray) ToCreateAppEnvironmentVariableInputArrayOutput() CreateAppEnvironmentVariableInputArrayOutput {
+	return i.ToCreateAppEnvironmentVariableInputArrayOutputWithContext(context.Background())
+}
+
+func (i CreateAppEnvironmentVariableInputArray) ToCreateAppEnvironmentVariableInputArrayOutputWithContext(ctx context.Context) CreateAppEnvironmentVariableInputArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(CreateAppEnvironmentVariableInputArrayOutput)
+}
+
+type CreateAppEnvironmentVariableInputOutput struct{ *pulumi.OutputState }
+
+func (CreateAppEnvironmentVariableInputOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*CreateAppEnvironmentVariableInput)(nil)).Elem()
+}
+
+func (o CreateAppEnvironmentVariableInputOutput) ToCreateAppEnvironmentVariableInputOutput() CreateAppEnvironmentVariableInputOutput {
+	return o
+}
+
+func (o CreateAppEnvironmentVariableInputOutput) ToCreateAppEnvironmentVariableInputOutputWithContext(ctx context.Context) CreateAppEnvironmentVariableInputOutput {
+	return o
+}
+
+func (o CreateAppEnvironmentVariableInputOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v CreateAppEnvironmentVariableInput) string { return v.Name }).(pulumi.StringOutput)
+}
+
+func (o CreateAppEnvironmentVariableInputOutput) Sealed() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v CreateAppEnvironmentVariableInput) *bool { return v.Sealed }).(pulumi.BoolPtrOutput)
+}
+
+func (o CreateAppEnvironmentVariableInputOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v CreateAppEnvironmentVariableInput) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type CreateAppEnvironmentVariableInputArrayOutput struct{ *pulumi.OutputState }
+
+func (CreateAppEnvironmentVariableInputArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]CreateAppEnvironmentVariableInput)(nil)).Elem()
+}
+
+func (o CreateAppEnvironmentVariableInputArrayOutput) ToCreateAppEnvironmentVariableInputArrayOutput() CreateAppEnvironmentVariableInputArrayOutput {
+	return o
+}
+
+func (o CreateAppEnvironmentVariableInputArrayOutput) ToCreateAppEnvironmentVariableInputArrayOutputWithContext(ctx context.Context) CreateAppEnvironmentVariableInputArrayOutput {
+	return o
+}
+
+func (o CreateAppEnvironmentVariableInputArrayOutput) Index(i pulumi.IntInput) CreateAppEnvironmentVariableInputOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) CreateAppEnvironmentVariableInput {
+		return vs[0].([]CreateAppEnvironmentVariableInput)[vs[1].(int)]
+	}).(CreateAppEnvironmentVariableInputOutput)
+}
+
 type CreateAppGithubInput struct {
 	ProductionBranch string `pulumi:"productionBranch"`
 	Url              string `pulumi:"url"`
@@ -326,11 +432,15 @@ func (o CreateAppResourcesInputOutput) Memory() pulumi.StringOutput {
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppBuildInputInput)(nil)).Elem(), CreateAppBuildInputArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppDeployInputInput)(nil)).Elem(), CreateAppDeployInputArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppEnvironmentVariableInputInput)(nil)).Elem(), CreateAppEnvironmentVariableInputArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppEnvironmentVariableInputArrayInput)(nil)).Elem(), CreateAppEnvironmentVariableInputArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppGithubInputInput)(nil)).Elem(), CreateAppGithubInputArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppGithubInputPtrInput)(nil)).Elem(), CreateAppGithubInputArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppResourcesInputInput)(nil)).Elem(), CreateAppResourcesInputArgs{})
 	pulumi.RegisterOutputType(CreateAppBuildInputOutput{})
 	pulumi.RegisterOutputType(CreateAppDeployInputOutput{})
+	pulumi.RegisterOutputType(CreateAppEnvironmentVariableInputOutput{})
+	pulumi.RegisterOutputType(CreateAppEnvironmentVariableInputArrayOutput{})
 	pulumi.RegisterOutputType(CreateAppGithubInputOutput{})
 	pulumi.RegisterOutputType(CreateAppGithubInputPtrOutput{})
 	pulumi.RegisterOutputType(CreateAppResourcesInputOutput{})
