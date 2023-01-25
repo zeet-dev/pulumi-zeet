@@ -15,16 +15,29 @@ mutation createProject($userID: UUID!, $name: String!) {
     }
 }
 
-query getProjectByID($projectID: UUID!) {
-    project(id: $projectID) {
+fragment ProjectStateFragment on Project {
+    id
+    name
+    updatedAt
+    environments {
         id
         name
         updatedAt
-        environments {
-            id
-            name
-            updatedAt
-        }
+    }
+}
+
+query getProjectByID($projectID: UUID!) {
+    project(id: $projectID) {
+        ...ProjectStateFragment
+    }
+}
+}
+mutation updateProject($projectID: UUID!, $name: String) {
+    updateProjectV2(input: {
+        id: $projectID,
+        name: $name,
+    }) {
+        ...ProjectStateFragment
     }
 }
 

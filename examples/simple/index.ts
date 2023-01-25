@@ -15,7 +15,7 @@ const project = new zeet.resources.Project("my-project", {
 
 const newProjectWithId = new zeet.resources.Project("second-project", {
     userId: teamIdConfig,
-    name: "pulumi-test-project-02"
+    name: "pulumi-test-project-02-renamed"
 })
 
 let existingProjectIdConfig = config.get("existing-project-id");

@@ -74,6 +74,18 @@ func (c *ZeetGraphqlClient) ReadProject(ctx context.Context, projectID string) (
 	}, nil
 }
 
+func (c *ZeetGraphqlClient) UpdateProject(ctx context.Context, projectID string, name *string) (CreateProjectResponse, error) {
+	resp, err := updateProject(ctx, c.client, projectID, name)
+	if err != nil {
+		return CreateProjectResponse{}, err
+	}
+	return CreateProjectResponse{
+		ID:        resp.UpdateProjectV2.Id,
+		Name:      resp.UpdateProjectV2.Name,
+		UpdatedAt: resp.UpdateProjectV2.UpdatedAt,
+	}, nil
+}
+
 type CreateEnvironmentResponse struct {
 	ID        string
 	Name      string

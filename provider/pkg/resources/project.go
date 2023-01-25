@@ -10,6 +10,7 @@ import (
 type Project struct{}
 
 var _ = (infer.CustomRead[ProjectArgs, ProjectState])((*Project)(nil))
+var _ = (infer.CustomUpdate[ProjectArgs, ProjectState])((*Project)(nil))
 
 // Each resources has in input struct, defining what arguments it accepts.
 type ProjectArgs struct {
@@ -56,4 +57,21 @@ func (p Project) Read(ctx provider.Context, id string, inputs ProjectArgs, state
 	normalizedState.UpdatedAt = remoteState.UpdatedAt
 
 	return normalizedState.ProjectID, inputs, normalizedState, nil
+}
+
+func (p Project) Update(ctx provider.Context, id string, olds ProjectState, news ProjectArgs, preview bool) (ProjectState, error) {
+	newState := ProjectState{
+		ProjectArgs: news,
+		ProjectID:   olds.ProjectID,
+		UpdatedAt:   time.Time{},
+	}
+	if preview {
+		return newState, nil
+	}
+	updated, err := config.ZeetClient.UpdateProject(ctx, id, &news.Name)
+	if err != nil {
+		return newState, err
+	}
+	newState.UpdatedAt = updated.UpdatedAt
+	return newState, nil
 }
