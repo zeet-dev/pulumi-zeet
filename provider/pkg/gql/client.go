@@ -104,6 +104,7 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 			DeployTarget: deployTarget,
 			ClusterID:    &args.Deploy.ClusterID,
 		},
+		Envs: environmentVariablesToRequestInput(args.EnvironmentVariables),
 	}
 	if args.GithubInput != nil {
 		input.Url = args.GithubInput.Url
@@ -119,4 +120,17 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 		ID:        resp.CreateProjectGit.Id,
 		UpdatedAt: resp.CreateProjectGit.UpdatedAt,
 	}, nil
+}
+
+func environmentVariablesToRequestInput(variables []model.CreateAppEnvironmentVariableInput) []*EnvVarInput {
+	out := []*EnvVarInput{}
+	for _, variable := range variables {
+		input := &EnvVarInput{
+			Name:   variable.Name,
+			Value:  variable.Value,
+			Sealed: variable.Sealed,
+		}
+		out = append(out, input)
+	}
+	return out
 }

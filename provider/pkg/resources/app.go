@@ -44,15 +44,16 @@ type AppArgs struct {
 	// Fields projected into Pulumi must be public and hava a `pulumi:"..."` tag.
 	// The pulumi tag doesn't need to match the field name, but its generally a
 	// good idea.
-	UserID         string                        `pulumi:"userId"`
-	ProjectID      string                        `pulumi:"projectId"`
-	EnvironmentID  string                        `pulumi:"environmentId"`
-	Name           string                        `pulumi:"name"`
-	Enabled        bool                          `pulumi:"enabled"`
-	ResourcesInput model.CreateAppResourcesInput `pulumi:"resources"`
-	BuildInput     model.CreateAppBuildInput     `pulumi:"build"`
-	DeployInput    model.CreateAppDeployInput    `pulumi:"deploy"`
-	GithubInput    model.CreateAppGithubInput    `pulumi:"github,optional"`
+	UserID               string                                    `pulumi:"userId"`
+	ProjectID            string                                    `pulumi:"projectId"`
+	EnvironmentID        string                                    `pulumi:"environmentId"`
+	Name                 string                                    `pulumi:"name"`
+	Enabled              bool                                      `pulumi:"enabled"`
+	ResourcesInput       model.CreateAppResourcesInput             `pulumi:"resources"`
+	BuildInput           model.CreateAppBuildInput                 `pulumi:"build"`
+	DeployInput          model.CreateAppDeployInput                `pulumi:"deploy"`
+	GithubInput          model.CreateAppGithubInput                `pulumi:"github,optional"`
+	EnvironmentVariables []model.CreateAppEnvironmentVariableInput `pulumi:"environmentVariables,optional"`
 }
 
 // Each resources has a state, describing the fields that exist on the created resources.
@@ -71,15 +72,16 @@ func (App) Create(ctx provider.Context, name string, input AppArgs, preview bool
 	}
 
 	args := model.CreateAppInput{
-		UserID:        input.UserID,
-		ProjectID:     input.ProjectID,
-		EnvironmentID: input.EnvironmentID,
-		Name:          input.Name,
-		Enabled:       input.Enabled,
-		Resources:     input.ResourcesInput,
-		Build:         input.BuildInput,
-		Deploy:        input.DeployInput,
-		GithubInput:   &input.GithubInput,
+		UserID:               input.UserID,
+		ProjectID:            input.ProjectID,
+		EnvironmentID:        input.EnvironmentID,
+		Name:                 input.Name,
+		Enabled:              input.Enabled,
+		Resources:            input.ResourcesInput,
+		Build:                input.BuildInput,
+		Deploy:               input.DeployInput,
+		GithubInput:          &input.GithubInput,
+		EnvironmentVariables: input.EnvironmentVariables,
 	}
 	newApp, err := config.ZeetClient.CreateApp(ctx, args)
 	if err != nil {

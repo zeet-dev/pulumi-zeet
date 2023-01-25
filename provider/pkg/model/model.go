@@ -22,14 +22,21 @@ type CreateAppGithubInput struct {
 	ProductionBranch string `pulumi:"productionBranch"`
 }
 
+type CreateAppEnvironmentVariableInput struct {
+	Name   string `pulumi:"name"`
+	Value  string `pulumi:"value"`
+	Sealed *bool  `pulumi:"sealed,optional"`
+}
+
 type CreateAppInput struct {
-	UserID        string
-	ProjectID     string
-	EnvironmentID string
-	Name          string
-	GithubInput   *CreateAppGithubInput
-	Enabled       bool
-	Build         CreateAppBuildInput
-	Resources     CreateAppResourcesInput
-	Deploy        CreateAppDeployInput
+	UserID               string
+	ProjectID            string
+	EnvironmentID        string
+	Name                 string
+	GithubInput          *CreateAppGithubInput
+	Enabled              bool
+	Build                CreateAppBuildInput
+	Resources            CreateAppResourcesInput
+	Deploy               CreateAppDeployInput
+	EnvironmentVariables []CreateAppEnvironmentVariableInput
 }
