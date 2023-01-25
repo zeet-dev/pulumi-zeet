@@ -16,6 +16,12 @@ export namespace model {
         deployTarget: pulumi.Input<string>;
     }
 
+    export interface CreateAppEnvironmentVariableInputArgs {
+        name: pulumi.Input<string>;
+        sealed?: pulumi.Input<boolean>;
+        value: pulumi.Input<string>;
+    }
+
     export interface CreateAppGithubInputArgs {
         productionBranch: pulumi.Input<string>;
         url: pulumi.Input<string>;

@@ -12,6 +12,7 @@ from .. import _utilities
 __all__ = [
     'CreateAppBuildInput',
     'CreateAppDeployInput',
+    'CreateAppEnvironmentVariableInput',
     'CreateAppGithubInput',
     'CreateAppResourcesInput',
 ]
@@ -90,6 +91,33 @@ class CreateAppDeployInput(dict):
     @pulumi.getter(name="clusterId")
     def cluster_id(self) -> Optional[str]:
         return pulumi.get(self, "cluster_id")
+
+
+@pulumi.output_type
+class CreateAppEnvironmentVariableInput(dict):
+    def __init__(__self__, *,
+                 name: str,
+                 value: str,
+                 sealed: Optional[bool] = None):
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+        if sealed is not None:
+            pulumi.set(__self__, "sealed", sealed)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        return pulumi.get(self, "value")
+
+    @property
+    @pulumi.getter
+    def sealed(self) -> Optional[bool]:
+        return pulumi.get(self, "sealed")
 
 
 @pulumi.output_type

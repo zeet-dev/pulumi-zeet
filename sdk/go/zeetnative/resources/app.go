@@ -16,17 +16,18 @@ import (
 type App struct {
 	pulumi.CustomResourceState
 
-	AppId         pulumi.StringOutput                 `pulumi:"appId"`
-	Build         model.CreateAppBuildInputOutput     `pulumi:"build"`
-	Deploy        model.CreateAppDeployInputOutput    `pulumi:"deploy"`
-	Enabled       pulumi.BoolOutput                   `pulumi:"enabled"`
-	EnvironmentId pulumi.StringOutput                 `pulumi:"environmentId"`
-	Github        model.CreateAppGithubInputPtrOutput `pulumi:"github"`
-	Name          pulumi.StringOutput                 `pulumi:"name"`
-	ProjectId     pulumi.StringOutput                 `pulumi:"projectId"`
-	Resources     model.CreateAppResourcesInputOutput `pulumi:"resources"`
-	UpdatedAt     time.TimeOutput                     `pulumi:"updatedAt"`
-	UserId        pulumi.StringOutput                 `pulumi:"userId"`
+	AppId                pulumi.StringOutput                                `pulumi:"appId"`
+	Build                model.CreateAppBuildInputOutput                    `pulumi:"build"`
+	Deploy               model.CreateAppDeployInputOutput                   `pulumi:"deploy"`
+	Enabled              pulumi.BoolOutput                                  `pulumi:"enabled"`
+	EnvironmentId        pulumi.StringOutput                                `pulumi:"environmentId"`
+	EnvironmentVariables model.CreateAppEnvironmentVariableInputArrayOutput `pulumi:"environmentVariables"`
+	Github               model.CreateAppGithubInputPtrOutput                `pulumi:"github"`
+	Name                 pulumi.StringOutput                                `pulumi:"name"`
+	ProjectId            pulumi.StringOutput                                `pulumi:"projectId"`
+	Resources            model.CreateAppResourcesInputOutput                `pulumi:"resources"`
+	UpdatedAt            time.TimeOutput                                    `pulumi:"updatedAt"`
+	UserId               pulumi.StringOutput                                `pulumi:"userId"`
 }
 
 // NewApp registers a new resource with the given unique name, arguments, and options.
@@ -92,28 +93,30 @@ func (AppState) ElementType() reflect.Type {
 }
 
 type appArgs struct {
-	Build         model.CreateAppBuildInput     `pulumi:"build"`
-	Deploy        model.CreateAppDeployInput    `pulumi:"deploy"`
-	Enabled       bool                          `pulumi:"enabled"`
-	EnvironmentId string                        `pulumi:"environmentId"`
-	Github        *model.CreateAppGithubInput   `pulumi:"github"`
-	Name          string                        `pulumi:"name"`
-	ProjectId     string                        `pulumi:"projectId"`
-	Resources     model.CreateAppResourcesInput `pulumi:"resources"`
-	UserId        string                        `pulumi:"userId"`
+	Build                model.CreateAppBuildInput                 `pulumi:"build"`
+	Deploy               model.CreateAppDeployInput                `pulumi:"deploy"`
+	Enabled              bool                                      `pulumi:"enabled"`
+	EnvironmentId        string                                    `pulumi:"environmentId"`
+	EnvironmentVariables []model.CreateAppEnvironmentVariableInput `pulumi:"environmentVariables"`
+	Github               *model.CreateAppGithubInput               `pulumi:"github"`
+	Name                 string                                    `pulumi:"name"`
+	ProjectId            string                                    `pulumi:"projectId"`
+	Resources            model.CreateAppResourcesInput             `pulumi:"resources"`
+	UserId               string                                    `pulumi:"userId"`
 }
 
 // The set of arguments for constructing a App resource.
 type AppArgs struct {
-	Build         model.CreateAppBuildInputInput
-	Deploy        model.CreateAppDeployInputInput
-	Enabled       pulumi.BoolInput
-	EnvironmentId pulumi.StringInput
-	Github        model.CreateAppGithubInputPtrInput
-	Name          pulumi.StringInput
-	ProjectId     pulumi.StringInput
-	Resources     model.CreateAppResourcesInputInput
-	UserId        pulumi.StringInput
+	Build                model.CreateAppBuildInputInput
+	Deploy               model.CreateAppDeployInputInput
+	Enabled              pulumi.BoolInput
+	EnvironmentId        pulumi.StringInput
+	EnvironmentVariables model.CreateAppEnvironmentVariableInputArrayInput
+	Github               model.CreateAppGithubInputPtrInput
+	Name                 pulumi.StringInput
+	ProjectId            pulumi.StringInput
+	Resources            model.CreateAppResourcesInputInput
+	UserId               pulumi.StringInput
 }
 
 func (AppArgs) ElementType() reflect.Type {
@@ -171,6 +174,10 @@ func (o AppOutput) Enabled() pulumi.BoolOutput {
 
 func (o AppOutput) EnvironmentId() pulumi.StringOutput {
 	return o.ApplyT(func(v *App) pulumi.StringOutput { return v.EnvironmentId }).(pulumi.StringOutput)
+}
+
+func (o AppOutput) EnvironmentVariables() model.CreateAppEnvironmentVariableInputArrayOutput {
+	return o.ApplyT(func(v *App) model.CreateAppEnvironmentVariableInputArrayOutput { return v.EnvironmentVariables }).(model.CreateAppEnvironmentVariableInputArrayOutput)
 }
 
 func (o AppOutput) Github() model.CreateAppGithubInputPtrOutput {

@@ -27,6 +27,9 @@ namespace Pulumi.ZeetNative.Resources
         [Output("environmentId")]
         public Output<string> EnvironmentId { get; private set; } = null!;
 
+        [Output("environmentVariables")]
+        public Output<ImmutableArray<Pulumi.ZeetNative.Model.Outputs.CreateAppEnvironmentVariableInput>> EnvironmentVariables { get; private set; } = null!;
+
         [Output("github")]
         public Output<Pulumi.ZeetNative.Model.Outputs.CreateAppGithubInput?> Github { get; private set; } = null!;
 
@@ -101,6 +104,14 @@ namespace Pulumi.ZeetNative.Resources
 
         [Input("environmentId", required: true)]
         public Input<string> EnvironmentId { get; set; } = null!;
+
+        [Input("environmentVariables")]
+        private InputList<Pulumi.ZeetNative.Model.Inputs.CreateAppEnvironmentVariableInputArgs>? _environmentVariables;
+        public InputList<Pulumi.ZeetNative.Model.Inputs.CreateAppEnvironmentVariableInputArgs> EnvironmentVariables
+        {
+            get => _environmentVariables ?? (_environmentVariables = new InputList<Pulumi.ZeetNative.Model.Inputs.CreateAppEnvironmentVariableInputArgs>());
+            set => _environmentVariables = value;
+        }
 
         [Input("github")]
         public Input<Pulumi.ZeetNative.Model.Inputs.CreateAppGithubInputArgs>? Github { get; set; }

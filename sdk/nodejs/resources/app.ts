@@ -38,6 +38,7 @@ export class App extends pulumi.CustomResource {
     public readonly deploy!: pulumi.Output<outputs.model.CreateAppDeployInput>;
     public readonly enabled!: pulumi.Output<boolean>;
     public readonly environmentId!: pulumi.Output<string>;
+    public readonly environmentVariables!: pulumi.Output<outputs.model.CreateAppEnvironmentVariableInput[] | undefined>;
     public readonly github!: pulumi.Output<outputs.model.CreateAppGithubInput | undefined>;
     public readonly name!: pulumi.Output<string>;
     public readonly projectId!: pulumi.Output<string>;
@@ -84,6 +85,7 @@ export class App extends pulumi.CustomResource {
             resourceInputs["deploy"] = args ? args.deploy : undefined;
             resourceInputs["enabled"] = args ? args.enabled : undefined;
             resourceInputs["environmentId"] = args ? args.environmentId : undefined;
+            resourceInputs["environmentVariables"] = args ? args.environmentVariables : undefined;
             resourceInputs["github"] = args ? args.github : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["projectId"] = args ? args.projectId : undefined;
@@ -97,6 +99,7 @@ export class App extends pulumi.CustomResource {
             resourceInputs["deploy"] = undefined /*out*/;
             resourceInputs["enabled"] = undefined /*out*/;
             resourceInputs["environmentId"] = undefined /*out*/;
+            resourceInputs["environmentVariables"] = undefined /*out*/;
             resourceInputs["github"] = undefined /*out*/;
             resourceInputs["name"] = undefined /*out*/;
             resourceInputs["projectId"] = undefined /*out*/;
@@ -117,6 +120,7 @@ export interface AppArgs {
     deploy: pulumi.Input<inputs.model.CreateAppDeployInputArgs>;
     enabled: pulumi.Input<boolean>;
     environmentId: pulumi.Input<string>;
+    environmentVariables?: pulumi.Input<pulumi.Input<inputs.model.CreateAppEnvironmentVariableInputArgs>[]>;
     github?: pulumi.Input<inputs.model.CreateAppGithubInputArgs>;
     name: pulumi.Input<string>;
     projectId: pulumi.Input<string>;

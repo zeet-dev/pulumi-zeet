@@ -16,6 +16,12 @@ export namespace model {
         deployTarget: string;
     }
 
+    export interface CreateAppEnvironmentVariableInput {
+        name: string;
+        sealed?: boolean;
+        value: string;
+    }
+
     export interface CreateAppGithubInput {
         productionBranch: string;
         url: string;
