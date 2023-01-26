@@ -13,6 +13,23 @@ const project = new zeet.resources.Project("my-project", {
     name: "pulumi-test-project-01",
 })
 
+// deleted
+// const newProjectWithId = new zeet.resources.Project("second-project", {
+//     userId: teamIdConfig,
+//     name: "pulumi-test-project-02-renamed"
+// })
+
+
+let existingProjectIdConfig = config.get("existing-project-id");
+
+const existingProject = zeet.resources.Project.get("existing-project", existingProjectIdConfig)
+const existingProject2 = zeet.resources.Project.get("existing-project2", existingProjectIdConfig)
+
+const newProjectPreview = new zeet.resources.Project("new-project-for-preview", {
+    userId: teamIdConfig,
+    name: "pulumi-test-preview"
+})
+
 const environment = new zeet.resources.Environment("my-environment", {
     projectId: project.projectId,
     name: "pulumi-test-environment-01",
@@ -58,4 +75,9 @@ const app = new zeet.resources.App("github-app", {
 export const output = "<obsolete>";
 
 export const projectId = project.projectId;
+export const projectPulumiId = project.id;
+export const newProjectPulumiId = "<deleted>";
+export const existingProjectName = existingProject.name;
+export const existingProjectId = existingProject2.id;
+export const newProjectPreviewId = newProjectPreview.id;
 export const environmentId = environment.environmentId;

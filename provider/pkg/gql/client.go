@@ -62,6 +62,30 @@ func (c *ZeetGraphqlClient) CreateProject(ctx context.Context, userID string, na
 	}, nil
 }
 
+func (c *ZeetGraphqlClient) ReadProject(ctx context.Context, projectID string) (CreateProjectResponse, error) {
+	resp, err := getProjectByID(ctx, c.client, projectID)
+	if err != nil {
+		return CreateProjectResponse{}, err
+	}
+	return CreateProjectResponse{
+		ID:        resp.Project.Id,
+		Name:      resp.Project.Name,
+		UpdatedAt: resp.Project.UpdatedAt,
+	}, nil
+}
+
+func (c *ZeetGraphqlClient) UpdateProject(ctx context.Context, projectID string, name *string) (CreateProjectResponse, error) {
+	resp, err := updateProject(ctx, c.client, projectID, name)
+	if err != nil {
+		return CreateProjectResponse{}, err
+	}
+	return CreateProjectResponse{
+		ID:        resp.UpdateProjectV2.Id,
+		Name:      resp.UpdateProjectV2.Name,
+		UpdatedAt: resp.UpdateProjectV2.UpdatedAt,
+	}, nil
+}
+
 type CreateEnvironmentResponse struct {
 	ID        string
 	Name      string
@@ -120,6 +144,20 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 		ID:        resp.CreateProjectGit.Id,
 		UpdatedAt: resp.CreateProjectGit.UpdatedAt,
 	}, nil
+}
+
+func (c *ZeetGraphqlClient) DeleteProject(ctx provider.Context, projectID string) error {
+	resp, err := deleteProject(ctx, c.client, projectID)
+	// graphql error
+	if err != nil {
+		return err
+	}
+	// server returned false
+	if !resp.GetDeleteProjectV2() {
+		return fmt.Errorf("unable to delete project '%s'", projectID)
+	}
+	// server returned true
+	return nil
 }
 
 func environmentVariablesToRequestInput(variables []model.CreateAppEnvironmentVariableInput) []*EnvVarInput {
