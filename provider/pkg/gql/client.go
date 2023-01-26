@@ -146,6 +146,20 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 	}, nil
 }
 
+func (c *ZeetGraphqlClient) DeleteProject(ctx provider.Context, projectID string) error {
+	resp, err := deleteProject(ctx, c.client, projectID)
+	// graphql error
+	if err != nil {
+		return err
+	}
+	// server returned false
+	if !resp.GetDeleteProjectV2() {
+		return fmt.Errorf("unable to delete project '%s'", projectID)
+	}
+	// server returned true
+	return nil
+}
+
 func environmentVariablesToRequestInput(variables []model.CreateAppEnvironmentVariableInput) []*EnvVarInput {
 	out := []*EnvVarInput{}
 	for _, variable := range variables {

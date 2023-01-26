@@ -723,6 +723,14 @@ func (v *__createProjectInput) GetUserID() string { return v.UserID }
 // GetName returns __createProjectInput.Name, and is useful for accessing the field via an interface.
 func (v *__createProjectInput) GetName() string { return v.Name }
 
+// __deleteProjectInput is used internally by genqlient
+type __deleteProjectInput struct {
+	ProjectID string `json:"projectID"`
+}
+
+// GetProjectID returns __deleteProjectInput.ProjectID, and is useful for accessing the field via an interface.
+func (v *__deleteProjectInput) GetProjectID() string { return v.ProjectID }
+
 // __getProjectByIDInput is used internally by genqlient
 type __getProjectByIDInput struct {
 	ProjectID string `json:"projectID"`
@@ -880,6 +888,14 @@ type currentUserIDResponse struct {
 
 // GetCurrentUser returns currentUserIDResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *currentUserIDResponse) GetCurrentUser() *currentUserIDCurrentUser { return v.CurrentUser }
+
+// deleteProjectResponse is returned by deleteProject on success.
+type deleteProjectResponse struct {
+	DeleteProjectV2 bool `json:"deleteProjectV2"`
+}
+
+// GetDeleteProjectV2 returns deleteProjectResponse.DeleteProjectV2, and is useful for accessing the field via an interface.
+func (v *deleteProjectResponse) GetDeleteProjectV2() bool { return v.DeleteProjectV2 }
 
 // getProjectByIDProject includes the requested fields of the GraphQL type Project.
 type getProjectByIDProject struct {
@@ -1180,6 +1196,36 @@ query currentUserID {
 	var err error
 
 	var data currentUserIDResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func deleteProject(
+	ctx context.Context,
+	client graphql.Client,
+	projectID string,
+) (*deleteProjectResponse, error) {
+	req := &graphql.Request{
+		OpName: "deleteProject",
+		Query: `
+mutation deleteProject ($projectID: UUID!) {
+	deleteProjectV2(id: $projectID)
+}
+`,
+		Variables: &__deleteProjectInput{
+			ProjectID: projectID,
+		},
+	}
+	var err error
+
+	var data deleteProjectResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

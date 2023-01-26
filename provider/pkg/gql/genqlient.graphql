@@ -31,7 +31,7 @@ query getProjectByID($projectID: UUID!) {
         ...ProjectStateFragment
     }
 }
-}
+
 mutation updateProject($projectID: UUID!, $name: String) {
     updateProjectV2(input: {
         id: $projectID,
@@ -39,6 +39,10 @@ mutation updateProject($projectID: UUID!, $name: String) {
     }) {
         ...ProjectStateFragment
     }
+}
+
+mutation deleteProject($projectID: UUID!) {
+    deleteProjectV2(id: $projectID)
 }
 
 mutation createEnvironment($projectID: UUID!, $name: String!) {

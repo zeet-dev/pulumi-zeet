@@ -11,6 +11,7 @@ type Project struct{}
 
 var _ = (infer.CustomRead[ProjectArgs, ProjectState])((*Project)(nil))
 var _ = (infer.CustomUpdate[ProjectArgs, ProjectState])((*Project)(nil))
+var _ = (infer.CustomDelete[ProjectState])((*Project)(nil))
 
 // Each resources has in input struct, defining what arguments it accepts.
 type ProjectArgs struct {
@@ -74,4 +75,8 @@ func (p Project) Update(ctx provider.Context, id string, olds ProjectState, news
 	}
 	newState.UpdatedAt = updated.UpdatedAt
 	return newState, nil
+}
+
+func (p Project) Delete(ctx provider.Context, id string, props ProjectState) error {
+	return config.ZeetClient.DeleteProject(ctx, id)
 }

@@ -13,10 +13,12 @@ const project = new zeet.resources.Project("my-project", {
     name: "pulumi-test-project-01",
 })
 
-const newProjectWithId = new zeet.resources.Project("second-project", {
-    userId: teamIdConfig,
-    name: "pulumi-test-project-02-renamed"
-})
+// deleted
+// const newProjectWithId = new zeet.resources.Project("second-project", {
+//     userId: teamIdConfig,
+//     name: "pulumi-test-project-02-renamed"
+// })
+
 
 let existingProjectIdConfig = config.get("existing-project-id");
 
@@ -74,7 +76,7 @@ export const output = "<obsolete>";
 
 export const projectId = project.projectId;
 export const projectPulumiId = project.id;
-export const newProjectPulumiId = newProjectWithId.id;
+export const newProjectPulumiId = "<deleted>";
 export const existingProjectName = existingProject.name;
 export const existingProjectId = existingProject2.id;
 export const newProjectPreviewId = newProjectPreview.id;
