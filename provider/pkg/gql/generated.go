@@ -399,6 +399,34 @@ func (v *EnvVarInput) GetValue() string { return v.Value }
 // GetSealed returns EnvVarInput.Sealed, and is useful for accessing the field via an interface.
 func (v *EnvVarInput) GetSealed() *bool { return v.Sealed }
 
+// ## Environment ###
+type EnvironmentStateFragment struct {
+	Id        string                           `json:"id"`
+	Name      string                           `json:"name"`
+	Project   *EnvironmentStateFragmentProject `json:"project"`
+	UpdatedAt time.Time                        `json:"updatedAt"`
+}
+
+// GetId returns EnvironmentStateFragment.Id, and is useful for accessing the field via an interface.
+func (v *EnvironmentStateFragment) GetId() string { return v.Id }
+
+// GetName returns EnvironmentStateFragment.Name, and is useful for accessing the field via an interface.
+func (v *EnvironmentStateFragment) GetName() string { return v.Name }
+
+// GetProject returns EnvironmentStateFragment.Project, and is useful for accessing the field via an interface.
+func (v *EnvironmentStateFragment) GetProject() *EnvironmentStateFragmentProject { return v.Project }
+
+// GetUpdatedAt returns EnvironmentStateFragment.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *EnvironmentStateFragment) GetUpdatedAt() time.Time { return v.UpdatedAt }
+
+// EnvironmentStateFragmentProject includes the requested fields of the GraphQL type Project.
+type EnvironmentStateFragmentProject struct {
+	Id string `json:"id"`
+}
+
+// GetId returns EnvironmentStateFragmentProject.Id, and is useful for accessing the field via an interface.
+func (v *EnvironmentStateFragmentProject) GetId() string { return v.Id }
+
 type KanikoFlagsInput struct {
 	CompressedCaching *bool `json:"compressedCaching"`
 }
@@ -723,6 +751,14 @@ func (v *__createProjectInput) GetUserID() string { return v.UserID }
 // GetName returns __createProjectInput.Name, and is useful for accessing the field via an interface.
 func (v *__createProjectInput) GetName() string { return v.Name }
 
+// __deleteEnvironmentInput is used internally by genqlient
+type __deleteEnvironmentInput struct {
+	EnvironmentID string `json:"environmentID"`
+}
+
+// GetEnvironmentID returns __deleteEnvironmentInput.EnvironmentID, and is useful for accessing the field via an interface.
+func (v *__deleteEnvironmentInput) GetEnvironmentID() string { return v.EnvironmentID }
+
 // __deleteProjectInput is used internally by genqlient
 type __deleteProjectInput struct {
 	ProjectID string `json:"projectID"`
@@ -738,6 +774,26 @@ type __getProjectByIDInput struct {
 
 // GetProjectID returns __getProjectByIDInput.ProjectID, and is useful for accessing the field via an interface.
 func (v *__getProjectByIDInput) GetProjectID() string { return v.ProjectID }
+
+// __getProjectEnvironmentsInput is used internally by genqlient
+type __getProjectEnvironmentsInput struct {
+	ProjectID string `json:"projectID"`
+}
+
+// GetProjectID returns __getProjectEnvironmentsInput.ProjectID, and is useful for accessing the field via an interface.
+func (v *__getProjectEnvironmentsInput) GetProjectID() string { return v.ProjectID }
+
+// __updateEnvironmentInput is used internally by genqlient
+type __updateEnvironmentInput struct {
+	EnvironmentID string  `json:"environmentID"`
+	Name          *string `json:"name"`
+}
+
+// GetEnvironmentID returns __updateEnvironmentInput.EnvironmentID, and is useful for accessing the field via an interface.
+func (v *__updateEnvironmentInput) GetEnvironmentID() string { return v.EnvironmentID }
+
+// GetName returns __updateEnvironmentInput.Name, and is useful for accessing the field via an interface.
+func (v *__updateEnvironmentInput) GetName() *string { return v.Name }
 
 // __updateProjectInput is used internally by genqlient
 type __updateProjectInput struct {
@@ -809,33 +865,81 @@ func (v *createAppGitResponse) GetCreateProjectGit() *createAppGitCreateProjectG
 
 // createEnvironmentCreateProjectEnvironment includes the requested fields of the GraphQL type ProjectEnvironment.
 type createEnvironmentCreateProjectEnvironment struct {
-	Id        string                                            `json:"id"`
-	Name      string                                            `json:"name"`
-	Project   *createEnvironmentCreateProjectEnvironmentProject `json:"project"`
-	UpdatedAt time.Time                                         `json:"updatedAt"`
+	EnvironmentStateFragment `json:"-"`
 }
 
 // GetId returns createEnvironmentCreateProjectEnvironment.Id, and is useful for accessing the field via an interface.
-func (v *createEnvironmentCreateProjectEnvironment) GetId() string { return v.Id }
+func (v *createEnvironmentCreateProjectEnvironment) GetId() string {
+	return v.EnvironmentStateFragment.Id
+}
 
 // GetName returns createEnvironmentCreateProjectEnvironment.Name, and is useful for accessing the field via an interface.
-func (v *createEnvironmentCreateProjectEnvironment) GetName() string { return v.Name }
+func (v *createEnvironmentCreateProjectEnvironment) GetName() string {
+	return v.EnvironmentStateFragment.Name
+}
 
 // GetProject returns createEnvironmentCreateProjectEnvironment.Project, and is useful for accessing the field via an interface.
-func (v *createEnvironmentCreateProjectEnvironment) GetProject() *createEnvironmentCreateProjectEnvironmentProject {
-	return v.Project
+func (v *createEnvironmentCreateProjectEnvironment) GetProject() *EnvironmentStateFragmentProject {
+	return v.EnvironmentStateFragment.Project
 }
 
 // GetUpdatedAt returns createEnvironmentCreateProjectEnvironment.UpdatedAt, and is useful for accessing the field via an interface.
-func (v *createEnvironmentCreateProjectEnvironment) GetUpdatedAt() time.Time { return v.UpdatedAt }
-
-// createEnvironmentCreateProjectEnvironmentProject includes the requested fields of the GraphQL type Project.
-type createEnvironmentCreateProjectEnvironmentProject struct {
-	Id string `json:"id"`
+func (v *createEnvironmentCreateProjectEnvironment) GetUpdatedAt() time.Time {
+	return v.EnvironmentStateFragment.UpdatedAt
 }
 
-// GetId returns createEnvironmentCreateProjectEnvironmentProject.Id, and is useful for accessing the field via an interface.
-func (v *createEnvironmentCreateProjectEnvironmentProject) GetId() string { return v.Id }
+func (v *createEnvironmentCreateProjectEnvironment) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*createEnvironmentCreateProjectEnvironment
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.createEnvironmentCreateProjectEnvironment = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.EnvironmentStateFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalcreateEnvironmentCreateProjectEnvironment struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Project *EnvironmentStateFragmentProject `json:"project"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (v *createEnvironmentCreateProjectEnvironment) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *createEnvironmentCreateProjectEnvironment) __premarshalJSON() (*__premarshalcreateEnvironmentCreateProjectEnvironment, error) {
+	var retval __premarshalcreateEnvironmentCreateProjectEnvironment
+
+	retval.Id = v.EnvironmentStateFragment.Id
+	retval.Name = v.EnvironmentStateFragment.Name
+	retval.Project = v.EnvironmentStateFragment.Project
+	retval.UpdatedAt = v.EnvironmentStateFragment.UpdatedAt
+	return &retval, nil
+}
 
 // createEnvironmentResponse is returned by createEnvironment on success.
 type createEnvironmentResponse struct {
@@ -888,6 +992,16 @@ type currentUserIDResponse struct {
 
 // GetCurrentUser returns currentUserIDResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *currentUserIDResponse) GetCurrentUser() *currentUserIDCurrentUser { return v.CurrentUser }
+
+// deleteEnvironmentResponse is returned by deleteEnvironment on success.
+type deleteEnvironmentResponse struct {
+	DeleteProjectEnvironment bool `json:"deleteProjectEnvironment"`
+}
+
+// GetDeleteProjectEnvironment returns deleteEnvironmentResponse.DeleteProjectEnvironment, and is useful for accessing the field via an interface.
+func (v *deleteEnvironmentResponse) GetDeleteProjectEnvironment() bool {
+	return v.DeleteProjectEnvironment
+}
 
 // deleteProjectResponse is returned by deleteProject on success.
 type deleteProjectResponse struct {
@@ -977,6 +1091,257 @@ type getProjectByIDResponse struct {
 // GetProject returns getProjectByIDResponse.Project, and is useful for accessing the field via an interface.
 func (v *getProjectByIDResponse) GetProject() *getProjectByIDProject { return v.Project }
 
+// getProjectEnvironmentsProject includes the requested fields of the GraphQL type Project.
+type getProjectEnvironmentsProject struct {
+	ProjectStateFragment `json:"-"`
+	Environments         []*getProjectEnvironmentsProjectEnvironmentsProjectEnvironment `json:"environments"`
+}
+
+// GetEnvironments returns getProjectEnvironmentsProject.Environments, and is useful for accessing the field via an interface.
+func (v *getProjectEnvironmentsProject) GetEnvironments() []*getProjectEnvironmentsProjectEnvironmentsProjectEnvironment {
+	return v.Environments
+}
+
+// GetId returns getProjectEnvironmentsProject.Id, and is useful for accessing the field via an interface.
+func (v *getProjectEnvironmentsProject) GetId() string { return v.ProjectStateFragment.Id }
+
+// GetName returns getProjectEnvironmentsProject.Name, and is useful for accessing the field via an interface.
+func (v *getProjectEnvironmentsProject) GetName() string { return v.ProjectStateFragment.Name }
+
+// GetUpdatedAt returns getProjectEnvironmentsProject.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *getProjectEnvironmentsProject) GetUpdatedAt() time.Time {
+	return v.ProjectStateFragment.UpdatedAt
+}
+
+func (v *getProjectEnvironmentsProject) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*getProjectEnvironmentsProject
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.getProjectEnvironmentsProject = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.ProjectStateFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalgetProjectEnvironmentsProject struct {
+	Environments []*getProjectEnvironmentsProjectEnvironmentsProjectEnvironment `json:"environments"`
+
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (v *getProjectEnvironmentsProject) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *getProjectEnvironmentsProject) __premarshalJSON() (*__premarshalgetProjectEnvironmentsProject, error) {
+	var retval __premarshalgetProjectEnvironmentsProject
+
+	retval.Environments = v.Environments
+	retval.Id = v.ProjectStateFragment.Id
+	retval.Name = v.ProjectStateFragment.Name
+	retval.UpdatedAt = v.ProjectStateFragment.UpdatedAt
+	return &retval, nil
+}
+
+// getProjectEnvironmentsProjectEnvironmentsProjectEnvironment includes the requested fields of the GraphQL type ProjectEnvironment.
+type getProjectEnvironmentsProjectEnvironmentsProjectEnvironment struct {
+	EnvironmentStateFragment `json:"-"`
+}
+
+// GetId returns getProjectEnvironmentsProjectEnvironmentsProjectEnvironment.Id, and is useful for accessing the field via an interface.
+func (v *getProjectEnvironmentsProjectEnvironmentsProjectEnvironment) GetId() string {
+	return v.EnvironmentStateFragment.Id
+}
+
+// GetName returns getProjectEnvironmentsProjectEnvironmentsProjectEnvironment.Name, and is useful for accessing the field via an interface.
+func (v *getProjectEnvironmentsProjectEnvironmentsProjectEnvironment) GetName() string {
+	return v.EnvironmentStateFragment.Name
+}
+
+// GetProject returns getProjectEnvironmentsProjectEnvironmentsProjectEnvironment.Project, and is useful for accessing the field via an interface.
+func (v *getProjectEnvironmentsProjectEnvironmentsProjectEnvironment) GetProject() *EnvironmentStateFragmentProject {
+	return v.EnvironmentStateFragment.Project
+}
+
+// GetUpdatedAt returns getProjectEnvironmentsProjectEnvironmentsProjectEnvironment.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *getProjectEnvironmentsProjectEnvironmentsProjectEnvironment) GetUpdatedAt() time.Time {
+	return v.EnvironmentStateFragment.UpdatedAt
+}
+
+func (v *getProjectEnvironmentsProjectEnvironmentsProjectEnvironment) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*getProjectEnvironmentsProjectEnvironmentsProjectEnvironment
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.getProjectEnvironmentsProjectEnvironmentsProjectEnvironment = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.EnvironmentStateFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalgetProjectEnvironmentsProjectEnvironmentsProjectEnvironment struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Project *EnvironmentStateFragmentProject `json:"project"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (v *getProjectEnvironmentsProjectEnvironmentsProjectEnvironment) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *getProjectEnvironmentsProjectEnvironmentsProjectEnvironment) __premarshalJSON() (*__premarshalgetProjectEnvironmentsProjectEnvironmentsProjectEnvironment, error) {
+	var retval __premarshalgetProjectEnvironmentsProjectEnvironmentsProjectEnvironment
+
+	retval.Id = v.EnvironmentStateFragment.Id
+	retval.Name = v.EnvironmentStateFragment.Name
+	retval.Project = v.EnvironmentStateFragment.Project
+	retval.UpdatedAt = v.EnvironmentStateFragment.UpdatedAt
+	return &retval, nil
+}
+
+// getProjectEnvironmentsResponse is returned by getProjectEnvironments on success.
+type getProjectEnvironmentsResponse struct {
+	Project *getProjectEnvironmentsProject `json:"project"`
+}
+
+// GetProject returns getProjectEnvironmentsResponse.Project, and is useful for accessing the field via an interface.
+func (v *getProjectEnvironmentsResponse) GetProject() *getProjectEnvironmentsProject {
+	return v.Project
+}
+
+// updateEnvironmentResponse is returned by updateEnvironment on success.
+type updateEnvironmentResponse struct {
+	UpdateProjectEnvironment *updateEnvironmentUpdateProjectEnvironment `json:"updateProjectEnvironment"`
+}
+
+// GetUpdateProjectEnvironment returns updateEnvironmentResponse.UpdateProjectEnvironment, and is useful for accessing the field via an interface.
+func (v *updateEnvironmentResponse) GetUpdateProjectEnvironment() *updateEnvironmentUpdateProjectEnvironment {
+	return v.UpdateProjectEnvironment
+}
+
+// updateEnvironmentUpdateProjectEnvironment includes the requested fields of the GraphQL type ProjectEnvironment.
+type updateEnvironmentUpdateProjectEnvironment struct {
+	EnvironmentStateFragment `json:"-"`
+}
+
+// GetId returns updateEnvironmentUpdateProjectEnvironment.Id, and is useful for accessing the field via an interface.
+func (v *updateEnvironmentUpdateProjectEnvironment) GetId() string {
+	return v.EnvironmentStateFragment.Id
+}
+
+// GetName returns updateEnvironmentUpdateProjectEnvironment.Name, and is useful for accessing the field via an interface.
+func (v *updateEnvironmentUpdateProjectEnvironment) GetName() string {
+	return v.EnvironmentStateFragment.Name
+}
+
+// GetProject returns updateEnvironmentUpdateProjectEnvironment.Project, and is useful for accessing the field via an interface.
+func (v *updateEnvironmentUpdateProjectEnvironment) GetProject() *EnvironmentStateFragmentProject {
+	return v.EnvironmentStateFragment.Project
+}
+
+// GetUpdatedAt returns updateEnvironmentUpdateProjectEnvironment.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *updateEnvironmentUpdateProjectEnvironment) GetUpdatedAt() time.Time {
+	return v.EnvironmentStateFragment.UpdatedAt
+}
+
+func (v *updateEnvironmentUpdateProjectEnvironment) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*updateEnvironmentUpdateProjectEnvironment
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.updateEnvironmentUpdateProjectEnvironment = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.EnvironmentStateFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalupdateEnvironmentUpdateProjectEnvironment struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Project *EnvironmentStateFragmentProject `json:"project"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (v *updateEnvironmentUpdateProjectEnvironment) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *updateEnvironmentUpdateProjectEnvironment) __premarshalJSON() (*__premarshalupdateEnvironmentUpdateProjectEnvironment, error) {
+	var retval __premarshalupdateEnvironmentUpdateProjectEnvironment
+
+	retval.Id = v.EnvironmentStateFragment.Id
+	retval.Name = v.EnvironmentStateFragment.Name
+	retval.Project = v.EnvironmentStateFragment.Project
+	retval.UpdatedAt = v.EnvironmentStateFragment.UpdatedAt
+	return &retval, nil
+}
+
 // updateProjectResponse is returned by updateProject on success.
 type updateProjectResponse struct {
 	UpdateProjectV2 *updateProjectUpdateProjectV2Project `json:"updateProjectV2"`
@@ -1061,6 +1426,7 @@ func (v *updateProjectUpdateProjectV2Project) __premarshalJSON() (*__premarshalu
 	return &retval, nil
 }
 
+// ## Apps ###
 // Used to create Zeet "Repos", aka "Apps"
 // ProjectID and EnvironmentID are expected to be specified
 func createAppGit(
@@ -1115,13 +1481,16 @@ func createEnvironment(
 		Query: `
 mutation createEnvironment ($projectID: UUID!, $name: String!) {
 	createProjectEnvironment(input: {projectID:$projectID,name:$name}) {
-		id
-		name
-		project {
-			id
-		}
-		updatedAt
+		... EnvironmentStateFragment
 	}
+}
+fragment EnvironmentStateFragment on ProjectEnvironment {
+	id
+	name
+	project {
+		id
+	}
+	updatedAt
 }
 `,
 		Variables: &__createEnvironmentInput{
@@ -1143,6 +1512,7 @@ mutation createEnvironment ($projectID: UUID!, $name: String!) {
 	return &data, err
 }
 
+// ## Project ###
 func createProject(
 	ctx context.Context,
 	client graphql.Client,
@@ -1196,6 +1566,36 @@ query currentUserID {
 	var err error
 
 	var data currentUserIDResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func deleteEnvironment(
+	ctx context.Context,
+	client graphql.Client,
+	environmentID string,
+) (*deleteEnvironmentResponse, error) {
+	req := &graphql.Request{
+		OpName: "deleteEnvironment",
+		Query: `
+mutation deleteEnvironment ($environmentID: UUID!) {
+	deleteProjectEnvironment(id: $environmentID)
+}
+`,
+		Variables: &__deleteEnvironmentInput{
+			EnvironmentID: environmentID,
+		},
+	}
+	var err error
+
+	var data deleteEnvironmentResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -1268,6 +1668,101 @@ fragment ProjectStateFragment on Project {
 	var err error
 
 	var data getProjectByIDResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func getProjectEnvironments(
+	ctx context.Context,
+	client graphql.Client,
+	projectID string,
+) (*getProjectEnvironmentsResponse, error) {
+	req := &graphql.Request{
+		OpName: "getProjectEnvironments",
+		Query: `
+query getProjectEnvironments ($projectID: UUID!) {
+	project(id: $projectID) {
+		... ProjectStateFragment
+		environments {
+			... EnvironmentStateFragment
+		}
+	}
+}
+fragment ProjectStateFragment on Project {
+	id
+	name
+	updatedAt
+	environments {
+		id
+		name
+		updatedAt
+	}
+}
+fragment EnvironmentStateFragment on ProjectEnvironment {
+	id
+	name
+	project {
+		id
+	}
+	updatedAt
+}
+`,
+		Variables: &__getProjectEnvironmentsInput{
+			ProjectID: projectID,
+		},
+	}
+	var err error
+
+	var data getProjectEnvironmentsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func updateEnvironment(
+	ctx context.Context,
+	client graphql.Client,
+	environmentID string,
+	name *string,
+) (*updateEnvironmentResponse, error) {
+	req := &graphql.Request{
+		OpName: "updateEnvironment",
+		Query: `
+mutation updateEnvironment ($environmentID: UUID!, $name: String) {
+	updateProjectEnvironment(input: {id:$environmentID,name:$name}) {
+		... EnvironmentStateFragment
+	}
+}
+fragment EnvironmentStateFragment on ProjectEnvironment {
+	id
+	name
+	project {
+		id
+	}
+	updatedAt
+}
+`,
+		Variables: &__updateEnvironmentInput{
+			EnvironmentID: environmentID,
+			Name:          name,
+		},
+	}
+	var err error
+
+	var data updateEnvironmentResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

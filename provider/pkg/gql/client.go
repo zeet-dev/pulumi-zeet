@@ -86,6 +86,20 @@ func (c *ZeetGraphqlClient) UpdateProject(ctx context.Context, projectID string,
 	}, nil
 }
 
+func (c *ZeetGraphqlClient) DeleteProject(ctx provider.Context, projectID string) error {
+	resp, err := deleteProject(ctx, c.client, projectID)
+	// graphql error
+	if err != nil {
+		return err
+	}
+	// server returned false
+	if !resp.GetDeleteProjectV2() {
+		return fmt.Errorf("unable to delete project '%s'", projectID)
+	}
+	// server returned true
+	return nil
+}
+
 type CreateEnvironmentResponse struct {
 	ID        string
 	Name      string
@@ -99,12 +113,70 @@ func (c *ZeetGraphqlClient) CreateEnvironment(ctx provider.Context, projectID st
 		return CreateEnvironmentResponse{}, err
 	}
 	environment := resp.CreateProjectEnvironment
+	project := environment.GetProject()
+	if project == nil {
+		return CreateEnvironmentResponse{}, fmt.Errorf("expected to find project for environment '%s'", environment.GetId())
+	}
 	return CreateEnvironmentResponse{
-		ID:        environment.Id,
-		Name:      environment.Name,
-		ProjectID: environment.Project.Id,
-		UpdatedAt: environment.UpdatedAt,
+		ID:        environment.GetId(),
+		Name:      environment.GetName(),
+		ProjectID: project.GetId(),
+		UpdatedAt: environment.GetUpdatedAt(),
 	}, nil
+}
+
+func (c *ZeetGraphqlClient) ReadEnvironment(ctx context.Context, projectID string, environmentID string) (CreateEnvironmentResponse, error) {
+	resp, err := getProjectEnvironments(ctx, c.client, projectID)
+	if err != nil {
+		return CreateEnvironmentResponse{}, err
+	}
+	proj := resp.GetProject()
+	if proj == nil {
+		return CreateEnvironmentResponse{}, fmt.Errorf("could not fetch project by id '%s'", projectID)
+	}
+	// find environment by id in array
+	for _, environment := range proj.GetEnvironments() {
+		if environment == nil {
+			continue
+		}
+		if environment.GetId() == environmentID {
+			return CreateEnvironmentResponse{
+				ID:        environment.GetId(),
+				Name:      environment.GetName(),
+				ProjectID: proj.GetId(),
+				UpdatedAt: environment.GetUpdatedAt(),
+			}, nil
+		}
+	}
+	// environment was not found in project
+	return CreateEnvironmentResponse{}, fmt.Errorf("no environment with id '%s' found in project '%s'", environmentID, projectID)
+}
+
+func (c *ZeetGraphqlClient) UpdateEnvironment(ctx context.Context, environmentID string, name *string) (CreateEnvironmentResponse, error) {
+	resp, err := updateEnvironment(ctx, c.client, environmentID, name)
+	if err != nil {
+		return CreateEnvironmentResponse{}, err
+	}
+	updatedEnv := resp.GetUpdateProjectEnvironment()
+	return CreateEnvironmentResponse{
+		ID:        updatedEnv.GetId(),
+		Name:      updatedEnv.GetName(),
+		UpdatedAt: updatedEnv.GetUpdatedAt(),
+	}, nil
+}
+
+func (c *ZeetGraphqlClient) DeleteEnvironment(ctx provider.Context, environmentID string) error {
+	resp, err := deleteEnvironment(ctx, c.client, environmentID)
+	// graphql error
+	if err != nil {
+		return err
+	}
+	// server returned false
+	if !resp.GetDeleteProjectEnvironment() {
+		return fmt.Errorf("unable to delete environment '%s'", environmentID)
+	}
+	// server returned true
+	return nil
 }
 
 type CreateAppResponse struct {
@@ -144,20 +216,6 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 		ID:        resp.CreateProjectGit.Id,
 		UpdatedAt: resp.CreateProjectGit.UpdatedAt,
 	}, nil
-}
-
-func (c *ZeetGraphqlClient) DeleteProject(ctx provider.Context, projectID string) error {
-	resp, err := deleteProject(ctx, c.client, projectID)
-	// graphql error
-	if err != nil {
-		return err
-	}
-	// server returned false
-	if !resp.GetDeleteProjectV2() {
-		return fmt.Errorf("unable to delete project '%s'", projectID)
-	}
-	// server returned true
-	return nil
 }
 
 func environmentVariablesToRequestInput(variables []model.CreateAppEnvironmentVariableInput) []*EnvVarInput {

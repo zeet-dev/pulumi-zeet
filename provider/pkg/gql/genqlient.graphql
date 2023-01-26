@@ -4,6 +4,7 @@ query currentUserID {
     }
 }
 
+### Project ###
 mutation createProject($userID: UUID!, $name: String!) {
     createProjectV2(input: {
         userID: $userID,
@@ -45,20 +46,47 @@ mutation deleteProject($projectID: UUID!) {
     deleteProjectV2(id: $projectID)
 }
 
+### Environment ###
+fragment EnvironmentStateFragment on ProjectEnvironment {
+    id
+    name
+    project {
+        id
+    }
+    updatedAt
+}
 mutation createEnvironment($projectID: UUID!, $name: String!) {
     createProjectEnvironment(input: {
         projectID: $projectID,
         name: $name
     }) {
-        id
-        name
-        project {
-            id
-        }
-        updatedAt
+        ...EnvironmentStateFragment
     }
 }
 
+query getProjectEnvironments($projectID: UUID!) {
+    project(id: $projectID) {
+        ...ProjectStateFragment
+        environments {
+            ...EnvironmentStateFragment
+        }
+    }
+}
+
+mutation updateEnvironment($environmentID: UUID!, $name: String) {
+    updateProjectEnvironment(input: {
+        id: $environmentID,
+        name: $name,
+    }) {
+        ...EnvironmentStateFragment
+    }
+}
+
+mutation deleteEnvironment($environmentID: UUID!) {
+    deleteProjectEnvironment(id: $environmentID)
+}
+
+### Apps ###
 # Used to create Zeet "Repos", aka "Apps"
 # ProjectID and EnvironmentID are expected to be specified
 mutation createAppGit($input: CreateProjectGitInput!) {

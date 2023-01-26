@@ -32,8 +32,23 @@ const newProjectPreview = new zeet.resources.Project("new-project-for-preview", 
 
 const environment = new zeet.resources.Environment("my-environment", {
     projectId: project.projectId,
-    name: "pulumi-test-environment-01",
+    name: "pulumi-test-environment-02-renamed",
 })
+
+// Deleted
+// const environmentToDelete = new zeet.resources.Environment("env-to-delete", {
+//     projectId: project.projectId,
+//     name: "pulumi-env-to-delete"
+// })
+
+let existingEnvIdConfig = config.get("existing-env-id");
+
+let existingEnvProjectIdConfig = config.get("existing-env-project-id");
+
+// NB: .get() doesn't work when the resource id is insufficient to fetch the resource
+// const existingEnvironment = zeet.resources.Environment.get("existing-env", existingEnvIdConfig, {
+//     projectId: existingEnvProjectIdConfig
+// })
 
 const app = new zeet.resources.App("github-app", {
     userId: teamIdConfig,
@@ -80,4 +95,5 @@ export const newProjectPulumiId = "<deleted>";
 export const existingProjectName = existingProject.name;
 export const existingProjectId = existingProject2.id;
 export const newProjectPreviewId = newProjectPreview.id;
+export const envDeleteId = "<deleted>";
 export const environmentId = environment.environmentId;
