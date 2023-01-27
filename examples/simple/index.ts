@@ -48,7 +48,7 @@ let existingEnvProjectIdConfig = config.get("existing-env-project-id");
 // NB: .get() doesn't work when the resource id is insufficient to fetch the resource
 // const existingEnvironment = zeet.resources.Environment.get("existing-env", existingEnvIdConfig, {
 //     projectId: existingEnvProjectIdConfig
-// })
+// } as any)
 
 const app = new zeet.resources.App("github-app", {
     userId: teamIdConfig,

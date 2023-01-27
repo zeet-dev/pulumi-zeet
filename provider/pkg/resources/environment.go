@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
+	"github.com/pulumi/pulumi/sdk/v3/go/common/diag"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"
 	"time"
 )
@@ -46,6 +47,7 @@ func (Environment) Create(ctx provider.Context, name string, input EnvironmentAr
 }
 
 func (e Environment) Read(ctx provider.Context, id string, inputs EnvironmentArgs, state EnvironmentState) (canonicalID string, normalizedInputs EnvironmentArgs, normalizedState EnvironmentState, err error) {
+	ctx.Log(diag.Warning, "Environment.get() is not verified to be functional at this time.")
 	if inputs.ProjectID == "" {
 		err = fmt.Errorf("must specify projectId to read environment")
 		return
