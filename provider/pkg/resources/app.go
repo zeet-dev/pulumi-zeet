@@ -6,6 +6,7 @@ import (
 	"github.com/pulumi/pulumi-go-provider/infer"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/resource"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"
+	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/gql"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/model"
 	"time"
 )
@@ -13,6 +14,9 @@ import (
 type App struct{}
 
 var _ = (infer.CustomCheck[AppArgs])((*App)(nil))
+var _ = (infer.CustomRead[AppArgs, AppState])((*App)(nil))
+var _ = (infer.CustomUpdate[AppArgs, AppState])((*App)(nil))
+var _ = (infer.CustomDelete[AppState])((*App)(nil))
 
 func (a App) Check(ctx provider.Context, name string, oldInputs resource.PropertyMap, newInputs resource.PropertyMap) (AppArgs, []provider.CheckFailure, error) {
 	// check that one of the required "AppArgs" params is set
@@ -24,7 +28,7 @@ func (a App) Check(ctx provider.Context, name string, oldInputs resource.Propert
 		return parsedArgs, i, err
 	}
 	if parsedArgs.BuildInput.Type == "DOCKER" {
-		if parsedArgs.BuildInput.DockerfilePath == "" {
+		if parsedArgs.BuildInput.DockerfilePath == nil {
 			return parsedArgs, i, fmt.Errorf("must specify DockerfilePath for DOCKER build type")
 		}
 	}
@@ -90,4 +94,81 @@ func (App) Create(ctx provider.Context, name string, input AppArgs, preview bool
 	state.AppID = newApp.ID
 	state.UpdatedAt = newApp.UpdatedAt
 	return name, state, nil
+}
+
+func (a App) Read(ctx provider.Context, id string, inputs AppArgs, state AppState) (canonicalID string, normalizedInputs AppArgs, normalizedState AppState, err error) {
+	resp, err := config.ZeetClient.ReadApp(ctx, id)
+	if err != nil {
+		return
+	}
+	normalizedState = responseToAppState(resp)
+	return resp.ID, inputs, normalizedState, nil
+}
+
+func responseToAppState(resp gql.CreateAppResponse) AppState {
+	return AppState{
+		AppArgs: AppArgs{
+			UserID:        resp.UserID,
+			ProjectID:     resp.ProjectID,
+			EnvironmentID: resp.EnvironmentID,
+			Name:          resp.Name,
+			Enabled:       resp.Enabled,
+			ResourcesInput: model.CreateAppResourcesInput{
+				Cpu:    resp.Resources.Cpu,
+				Memory: resp.Resources.Memory,
+			},
+			BuildInput: model.CreateAppBuildInput{
+				Type:           resp.Build.Type,
+				DockerfilePath: resp.Build.DockerfilePath,
+			},
+			DeployInput: model.CreateAppDeployInput{
+				DeployTarget: resp.Deploy.DeployTarget,
+				ClusterID:    resp.Deploy.ClusterID,
+			},
+			GithubInput: model.CreateAppGithubInput{
+				Url:              resp.GithubInput.Url,
+				ProductionBranch: resp.GithubInput.ProductionBranch,
+			},
+			EnvironmentVariables: resp.EnvironmentVariables,
+		},
+		AppID:     resp.ID,
+		UpdatedAt: resp.UpdatedAt,
+	}
+}
+
+func (a App) Update(ctx provider.Context, id string, olds AppState, news AppArgs, preview bool) (AppState, error) {
+	if preview {
+		newState := olds
+		newState.AppArgs = news
+		return newState, nil
+	}
+	resp, err := config.ZeetClient.UpdateApp(ctx, id, model.CreateAppInput{
+		UserID:        olds.UserID,
+		ProjectID:     olds.ProjectID,
+		EnvironmentID: olds.EnvironmentID,
+		Name:          news.Name,
+		GithubInput: &model.CreateAppGithubInput{
+			Url:              olds.GithubInput.Url,
+			ProductionBranch: olds.GithubInput.ProductionBranch,
+		},
+		Enabled: news.Enabled,
+		Build:   news.BuildInput,
+		Resources: model.CreateAppResourcesInput{
+			Cpu:    news.ResourcesInput.Cpu,
+			Memory: news.ResourcesInput.Memory,
+		},
+		Deploy: model.CreateAppDeployInput{
+			DeployTarget: olds.DeployInput.DeployTarget,
+			ClusterID:    olds.DeployInput.ClusterID,
+		},
+		EnvironmentVariables: olds.EnvironmentVariables,
+	})
+	if err != nil {
+		return AppState{}, err
+	}
+	return responseToAppState(resp), nil
+}
+
+func (a App) Delete(ctx provider.Context, id string, props AppState) error {
+	return config.ZeetClient.DeleteApp(ctx, id)
 }

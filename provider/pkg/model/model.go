@@ -6,8 +6,8 @@ type CreateAppResourcesInput struct {
 }
 
 type CreateAppBuildInput struct {
-	Type           string `pulumi:"type"` // DOCKER
-	DockerfilePath string `pulumi:"dockerfilePath,optional"`
+	Type           string  `pulumi:"type"` // DOCKER
+	DockerfilePath *string `pulumi:"dockerfilePath,optional"`
 }
 
 type CreateAppDeployInput struct {
@@ -18,8 +18,8 @@ type CreateAppDeployInput struct {
 }
 
 type CreateAppGithubInput struct {
-	Url              string `pulumi:"url"`
-	ProductionBranch string `pulumi:"productionBranch"`
+	Url              string  `pulumi:"url"`
+	ProductionBranch *string `pulumi:"productionBranch"`
 }
 
 type CreateAppEnvironmentVariableInput struct {

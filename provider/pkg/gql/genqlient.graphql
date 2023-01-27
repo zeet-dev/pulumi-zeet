@@ -86,20 +86,78 @@ mutation deleteEnvironment($environmentID: UUID!) {
     deleteProjectEnvironment(id: $environmentID)
 }
 
+#nput := CreateProjectGitInput{
+#		UserID:        &args.UserID,
+#		ProjectID:     &args.ProjectID,
+#		EnvironmentID: &args.EnvironmentID,
+#		Name:          &args.Name,
+#		Build: &ProjectBuildInput{
+#			BuildType:      &buildType,
+#			DockerfilePath: &args.Build.DockerfilePath,
+#		},
+#		DeployTarget: &ProjectDeployInput{
+#			DeployTarget: deployTarget,
+#			ClusterID:    &args.Deploy.ClusterID,
+#		},
+#		Envs: environmentVariablesToRequestInput(args.EnvironmentVariables),
+#	}
+fragment AppStateFragment on Repo {
+    id
+    name
+    project {
+        id
+    }
+    projectEnvironment {
+        id
+    }
+    buildMethod {
+        type
+        dockerfilePath
+    }
+    deployTarget
+    cluster {
+        id
+    }
+    envs {
+        id
+        name
+        value
+        sealed
+    }
+    cpu
+    memory
+    owner {
+        id
+    }
+    enabled
+    githubRepository {
+        url
+    }
+    productionBranch
+    updatedAt
+}
+
 ### Apps ###
 # Used to create Zeet "Repos", aka "Apps"
 # ProjectID and EnvironmentID are expected to be specified
 mutation createAppGit($input: CreateProjectGitInput!) {
     createProjectGit(input: $input) {
-        id
-        name
-        envs {
-            id
-            name
-            value
-        }
-        cpu
-        memory
-        updatedAt
+        ...AppStateFragment
     }
+}
+
+query getApp($appID: UUID!) {
+    repo(id: $appID) {
+        ...AppStateFragment
+    }
+}
+
+mutation updateApp($input: UpdateProjectInput!) {
+    updateProject(input: $input) {
+        ...AppStateFragment
+    }
+}
+
+mutation deleteApp($appID: ID!) {
+    deleteRepo(id: $appID)
 }

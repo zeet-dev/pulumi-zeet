@@ -179,7 +179,21 @@ func (c *ZeetGraphqlClient) DeleteEnvironment(ctx provider.Context, environmentI
 	return nil
 }
 
+func NewCreateAppResponse(args model.CreateAppInput, state appStateResponse) CreateAppResponse {
+	return CreateAppResponse{
+		CreateAppInput: args,
+		ID:             state.GetId(),
+		UpdatedAt:      state.GetUpdatedAt(),
+	}
+}
+
+type appStateResponse interface {
+	GetId() string
+	GetUpdatedAt() time.Time
+}
+
 type CreateAppResponse struct {
+	model.CreateAppInput
 	ID        string
 	UpdatedAt time.Time
 }
@@ -194,7 +208,7 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 		Name:          &args.Name,
 		Build: &ProjectBuildInput{
 			BuildType:      &buildType,
-			DockerfilePath: &args.Build.DockerfilePath,
+			DockerfilePath: args.Build.DockerfilePath,
 		},
 		DeployTarget: &ProjectDeployInput{
 			DeployTarget: deployTarget,
@@ -204,7 +218,7 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 	}
 	if args.GithubInput != nil {
 		input.Url = args.GithubInput.Url
-		input.ProductionBranch = &args.GithubInput.ProductionBranch
+		input.ProductionBranch = args.GithubInput.ProductionBranch
 	} else {
 		return CreateAppResponse{}, fmt.Errorf("must specify one app spec")
 	}
@@ -212,10 +226,75 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 	if err != nil {
 		return CreateAppResponse{}, err
 	}
-	return CreateAppResponse{
-		ID:        resp.CreateProjectGit.Id,
-		UpdatedAt: resp.CreateProjectGit.UpdatedAt,
-	}, nil
+	return NewCreateAppResponse(args, resp.GetCreateProjectGit()), nil
+}
+
+func (c *ZeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateAppResponse, error) {
+	resp, err := getApp(ctx, c.client, appID)
+	if err != nil {
+		return CreateAppResponse{}, err
+	}
+	repo := resp.GetRepo()
+	var cpu string
+	if repo.GetCpu() != nil {
+		cpu = *repo.GetCpu()
+	} else {
+		cpu = ""
+	}
+	var memory string
+	if repo.GetMemory() != nil {
+		memory = *repo.GetMemory()
+	} else {
+		memory = ""
+	}
+	args := model.CreateAppInput{
+		UserID:        repo.GetOwner().GetId(),
+		ProjectID:     repo.GetProject().GetId(),
+		EnvironmentID: repo.GetProjectEnvironment().GetId(),
+		Name:          repo.GetName(),
+		GithubInput: &model.CreateAppGithubInput{
+			Url:              repo.GetGithubRepository().GetUrl(),
+			ProductionBranch: repo.GetProductionBranch(),
+		},
+		Enabled: repo.GetEnabled(),
+		Build: model.CreateAppBuildInput{
+			Type:           string(repo.GetBuildMethod().GetType()),
+			DockerfilePath: repo.GetBuildMethod().GetDockerfilePath(),
+		},
+		Resources: model.CreateAppResourcesInput{
+			Cpu:    cpu,
+			Memory: memory,
+		},
+		Deploy:               model.CreateAppDeployInput{},
+		EnvironmentVariables: environmentVariablesToModel(repo.GetEnvs()),
+	}
+	return NewCreateAppResponse(args, resp.GetRepo()), nil
+}
+
+func (c *ZeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args model.CreateAppInput) (CreateAppResponse, error) {
+	input := UpdateProjectInput{
+		Id:             appID,
+		Name:           &args.Name,
+		DockerfilePath: args.Build.DockerfilePath,
+		Cpu:            &args.Resources.Cpu,
+		Memory:         &args.Resources.Memory,
+	}
+	resp, err := updateApp(ctx, c.client, &input)
+	if err != nil {
+		return CreateAppResponse{}, err
+	}
+	return NewCreateAppResponse(args, resp.GetUpdateProject()), nil
+}
+
+func (c *ZeetGraphqlClient) DeleteApp(ctx provider.Context, appID string) error {
+	resp, err := deleteApp(ctx, c.client, appID)
+	if err != nil {
+		return err
+	}
+	if !resp.GetDeleteRepo() {
+		return fmt.Errorf("unable to delete app '%s'", appID)
+	}
+	return nil
 }
 
 func environmentVariablesToRequestInput(variables []model.CreateAppEnvironmentVariableInput) []*EnvVarInput {
@@ -227,6 +306,20 @@ func environmentVariablesToRequestInput(variables []model.CreateAppEnvironmentVa
 			Sealed: variable.Sealed,
 		}
 		out = append(out, input)
+	}
+	return out
+}
+
+func environmentVariablesToModel(variables []*AppStateFragmentEnvsEnvVar) []model.CreateAppEnvironmentVariableInput {
+	out := []model.CreateAppEnvironmentVariableInput{}
+	for _, variable := range variables {
+		sealed := variable.GetSealed()
+		envVar := model.CreateAppEnvironmentVariableInput{
+			Name:   variable.GetName(),
+			Value:  variable.GetValue(),
+			Sealed: &sealed,
+		}
+		out = append(out, envVar)
 	}
 	return out
 }

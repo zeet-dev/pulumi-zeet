@@ -4,9 +4,9 @@ import * as pulumi from "@pulumi/pulumi";
 
 let config = new pulumi.Config();
 
-let teamIdConfig = config.get("team-id");
-let clusterId = config.get("cluster-id");
-let githubRepoUrl = config.get("github-repo-url");
+let teamIdConfig = config.require("team-id");
+let clusterId = config.require("cluster-id");
+let githubRepoUrl = config.require("github-repo-url");
 
 const project = new zeet.resources.Project("my-project", {
     userId: teamIdConfig,
@@ -61,8 +61,8 @@ const app = new zeet.resources.App("github-app", {
         dockerfilePath: "Dockerfile",
     },
     resources: {
-        cpu: "1",
-        memory: "1"
+        cpu: "2",
+        memory: "2"
     },
     deploy: {
         deployTarget: "KUBERNETES",
