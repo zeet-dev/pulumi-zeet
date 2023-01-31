@@ -62,7 +62,7 @@ const app = new zeet.resources.App("github-app", {
     },
     resources: {
         cpu: 2.0,
-        memory: 2.0,
+        memory: "2G",
         ephemeralStorage: 10.0,
         spotInstance: true,
     },
@@ -87,6 +87,42 @@ const app = new zeet.resources.App("github-app", {
             sealed: true
         }
     ]
+}, {
+    ignoreChanges: ["docker"]
+})
+
+const dockerApp = new zeet.resources.App("docker-app", {
+    userId: teamIdConfig,
+    projectId: project.projectId,
+    environmentId: environment.environmentId,
+    name: "pulumi-docker-test-01",
+    enabled: true,
+    docker: {
+        dockerImage: "nginx:latest"
+    },
+    deploy: {
+        deployTarget: "KUBERNETES",
+        // deployType: "KUBERNETES",
+        // deployRuntime: "KUBERNETES",
+        clusterId: clusterId
+    },
+    resources: {
+        cpu: 2.0,
+        memory: "2G",
+        ephemeralStorage: 10.0,
+        spotInstance: true,
+    },
+    environmentVariables: [
+        {
+            name: "TEST_ENV",
+            value: "1"
+        },
+        {
+            name: "TEST_ENV_SEALED",
+            value: "xyz",
+            sealed: true
+        }
+    ]
 })
 
 export const output = "<obsolete>";
@@ -98,3 +134,4 @@ export const newProjectPreviewId = newProjectPreview.id;
 export const envDeleteId = "<deleted>";
 export const environmentId = environment.environmentId;
 export const appId = app.id;
+export const dockerAppId = dockerApp.id;

@@ -19,7 +19,7 @@ namespace Pulumi.ZeetNative.Model.Inputs
         public Input<double> EphemeralStorage { get; set; } = null!;
 
         [Input("memory", required: true)]
-        public Input<double> Memory { get; set; } = null!;
+        public Input<string> Memory { get; set; } = null!;
 
         [Input("spotInstance", required: true)]
         public Input<bool> SpotInstance { get; set; } = null!;

@@ -12,6 +12,7 @@ from .. import _utilities
 __all__ = [
     'CreateAppBuildInputArgs',
     'CreateAppDeployInputArgs',
+    'CreateAppDockerInputArgs',
     'CreateAppEnvironmentVariableInputArgs',
     'CreateAppGithubInputArgs',
     'CreateAppResourcesInputArgs',
@@ -71,6 +72,22 @@ class CreateAppDeployInputArgs:
     @cluster_id.setter
     def cluster_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "cluster_id", value)
+
+
+@pulumi.input_type
+class CreateAppDockerInputArgs:
+    def __init__(__self__, *,
+                 docker_image: pulumi.Input[str]):
+        pulumi.set(__self__, "docker_image", docker_image)
+
+    @property
+    @pulumi.getter(name="dockerImage")
+    def docker_image(self) -> pulumi.Input[str]:
+        return pulumi.get(self, "docker_image")
+
+    @docker_image.setter
+    def docker_image(self, value: pulumi.Input[str]):
+        pulumi.set(self, "docker_image", value)
 
 
 @pulumi.input_type
@@ -144,7 +161,7 @@ class CreateAppResourcesInputArgs:
     def __init__(__self__, *,
                  cpu: pulumi.Input[float],
                  ephemeral_storage: pulumi.Input[float],
-                 memory: pulumi.Input[float],
+                 memory: pulumi.Input[str],
                  spot_instance: pulumi.Input[bool]):
         pulumi.set(__self__, "cpu", cpu)
         pulumi.set(__self__, "ephemeral_storage", ephemeral_storage)
@@ -171,11 +188,11 @@ class CreateAppResourcesInputArgs:
 
     @property
     @pulumi.getter
-    def memory(self) -> pulumi.Input[float]:
+    def memory(self) -> pulumi.Input[str]:
         return pulumi.get(self, "memory")
 
     @memory.setter
-    def memory(self, value: pulumi.Input[float]):
+    def memory(self, value: pulumi.Input[str]):
         pulumi.set(self, "memory", value)
 
     @property

@@ -266,6 +266,81 @@ func (v *ContainerResourcesSpecInput) GetAccelerator() *AcceleratorSpecInput { r
 // GetSpot returns ContainerResourcesSpecInput.Spot, and is useful for accessing the field via an interface.
 func (v *ContainerResourcesSpecInput) GetSpot() *bool { return v.Spot }
 
+type CreateProjectDockerInput struct {
+	UserID          *string             `json:"userID"`
+	Name            *string             `json:"name"`
+	ProjectID       *string             `json:"projectID"`
+	EnvironmentID   *string             `json:"environmentID"`
+	ProjectName     *string             `json:"projectName"`
+	EnvironmentName *string             `json:"environmentName"`
+	DeployTarget    *ProjectDeployInput `json:"deployTarget,omitempty"`
+	DockerImage     string              `json:"dockerImage"`
+	Envs            []*EnvVarInput      `json:"envs,omitempty"`
+	Ports           *string             `json:"ports"`
+	Replication     []*ReplicationInput `json:"replication,omitempty"`
+	Volumes         *string             `json:"volumes"`
+	Cpu             *string             `json:"cpu"`
+	Memory          *string             `json:"memory"`
+	Dedicated       *bool               `json:"dedicated"`
+	Gpu             *string             `json:"gpu"`
+	Enabled         *bool               `json:"enabled"`
+	TeamID          *string             `json:"teamID"`
+}
+
+// GetUserID returns CreateProjectDockerInput.UserID, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetUserID() *string { return v.UserID }
+
+// GetName returns CreateProjectDockerInput.Name, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetName() *string { return v.Name }
+
+// GetProjectID returns CreateProjectDockerInput.ProjectID, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetProjectID() *string { return v.ProjectID }
+
+// GetEnvironmentID returns CreateProjectDockerInput.EnvironmentID, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetEnvironmentID() *string { return v.EnvironmentID }
+
+// GetProjectName returns CreateProjectDockerInput.ProjectName, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetProjectName() *string { return v.ProjectName }
+
+// GetEnvironmentName returns CreateProjectDockerInput.EnvironmentName, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetEnvironmentName() *string { return v.EnvironmentName }
+
+// GetDeployTarget returns CreateProjectDockerInput.DeployTarget, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetDeployTarget() *ProjectDeployInput { return v.DeployTarget }
+
+// GetDockerImage returns CreateProjectDockerInput.DockerImage, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetDockerImage() string { return v.DockerImage }
+
+// GetEnvs returns CreateProjectDockerInput.Envs, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetEnvs() []*EnvVarInput { return v.Envs }
+
+// GetPorts returns CreateProjectDockerInput.Ports, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetPorts() *string { return v.Ports }
+
+// GetReplication returns CreateProjectDockerInput.Replication, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetReplication() []*ReplicationInput { return v.Replication }
+
+// GetVolumes returns CreateProjectDockerInput.Volumes, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetVolumes() *string { return v.Volumes }
+
+// GetCpu returns CreateProjectDockerInput.Cpu, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetCpu() *string { return v.Cpu }
+
+// GetMemory returns CreateProjectDockerInput.Memory, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetMemory() *string { return v.Memory }
+
+// GetDedicated returns CreateProjectDockerInput.Dedicated, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetDedicated() *bool { return v.Dedicated }
+
+// GetGpu returns CreateProjectDockerInput.Gpu, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetGpu() *string { return v.Gpu }
+
+// GetEnabled returns CreateProjectDockerInput.Enabled, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetEnabled() *bool { return v.Enabled }
+
+// GetTeamID returns CreateProjectDockerInput.TeamID, and is useful for accessing the field via an interface.
+func (v *CreateProjectDockerInput) GetTeamID() *string { return v.TeamID }
+
 type CreateProjectGitInput struct {
 	UserID                        *string                      `json:"userID"`
 	Name                          *string                      `json:"name"`
@@ -1330,6 +1405,14 @@ func (v *VolumeInput) GetMountPath() string { return v.MountPath }
 // GetSize returns VolumeInput.Size, and is useful for accessing the field via an interface.
 func (v *VolumeInput) GetSize() int { return v.Size }
 
+// __createAppDockerInput is used internally by genqlient
+type __createAppDockerInput struct {
+	Input *CreateProjectDockerInput `json:"input,omitempty"`
+}
+
+// GetInput returns __createAppDockerInput.Input, and is useful for accessing the field via an interface.
+func (v *__createAppDockerInput) GetInput() *CreateProjectDockerInput { return v.Input }
+
 // __createAppGitInput is used internally by genqlient
 type __createAppGitInput struct {
 	Input *CreateProjectGitInput `json:"input,omitempty"`
@@ -1441,6 +1524,166 @@ func (v *__updateProjectInput) GetProjectID() string { return v.ProjectID }
 
 // GetName returns __updateProjectInput.Name, and is useful for accessing the field via an interface.
 func (v *__updateProjectInput) GetName() *string { return v.Name }
+
+// createAppDockerCreateProjectDockerRepo includes the requested fields of the GraphQL type Repo.
+type createAppDockerCreateProjectDockerRepo struct {
+	AppStateFragment `json:"-"`
+}
+
+// GetId returns createAppDockerCreateProjectDockerRepo.Id, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetId() string { return v.AppStateFragment.Id }
+
+// GetName returns createAppDockerCreateProjectDockerRepo.Name, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetName() string { return v.AppStateFragment.Name }
+
+// GetProject returns createAppDockerCreateProjectDockerRepo.Project, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetProject() *AppStateFragmentProject {
+	return v.AppStateFragment.Project
+}
+
+// GetProjectEnvironment returns createAppDockerCreateProjectDockerRepo.ProjectEnvironment, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetProjectEnvironment() *AppStateFragmentProjectEnvironment {
+	return v.AppStateFragment.ProjectEnvironment
+}
+
+// GetBuildMethod returns createAppDockerCreateProjectDockerRepo.BuildMethod, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
+	return v.AppStateFragment.BuildMethod
+}
+
+// GetDeployTarget returns createAppDockerCreateProjectDockerRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetDeployTarget() *DeployTarget {
+	return v.AppStateFragment.DeployTarget
+}
+
+// GetCluster returns createAppDockerCreateProjectDockerRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetCluster() *AppStateFragmentCluster {
+	return v.AppStateFragment.Cluster
+}
+
+// GetEnvs returns createAppDockerCreateProjectDockerRepo.Envs, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetEnvs() []*AppStateFragmentEnvsEnvVar {
+	return v.AppStateFragment.Envs
+}
+
+// GetCpu returns createAppDockerCreateProjectDockerRepo.Cpu, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetCpu() *string { return v.AppStateFragment.Cpu }
+
+// GetMemory returns createAppDockerCreateProjectDockerRepo.Memory, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetMemory() *string {
+	return v.AppStateFragment.Memory
+}
+
+// GetOwner returns createAppDockerCreateProjectDockerRepo.Owner, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetOwner() *AppStateFragmentOwnerUser {
+	return v.AppStateFragment.Owner
+}
+
+// GetEnabled returns createAppDockerCreateProjectDockerRepo.Enabled, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
+
+// GetProductionBranch returns createAppDockerCreateProjectDockerRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetProductionBranch() *string {
+	return v.AppStateFragment.ProductionBranch
+}
+
+// GetUpdatedAt returns createAppDockerCreateProjectDockerRepo.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetUpdatedAt() time.Time {
+	return v.AppStateFragment.UpdatedAt
+}
+
+func (v *createAppDockerCreateProjectDockerRepo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*createAppDockerCreateProjectDockerRepo
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.createAppDockerCreateProjectDockerRepo = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.AppStateFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalcreateAppDockerCreateProjectDockerRepo struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Project *AppStateFragmentProject `json:"project"`
+
+	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
+
+	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
+
+	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
+
+	Cpu *string `json:"cpu"`
+
+	Memory *string `json:"memory"`
+
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
+	Enabled bool `json:"enabled"`
+
+	ProductionBranch *string `json:"productionBranch"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (v *createAppDockerCreateProjectDockerRepo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *createAppDockerCreateProjectDockerRepo) __premarshalJSON() (*__premarshalcreateAppDockerCreateProjectDockerRepo, error) {
+	var retval __premarshalcreateAppDockerCreateProjectDockerRepo
+
+	retval.Id = v.AppStateFragment.Id
+	retval.Name = v.AppStateFragment.Name
+	retval.Project = v.AppStateFragment.Project
+	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.BuildMethod = v.AppStateFragment.BuildMethod
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
+	retval.Envs = v.AppStateFragment.Envs
+	retval.Cpu = v.AppStateFragment.Cpu
+	retval.Memory = v.AppStateFragment.Memory
+	retval.Owner = v.AppStateFragment.Owner
+	retval.Enabled = v.AppStateFragment.Enabled
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
+	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
+	return &retval, nil
+}
+
+// createAppDockerResponse is returned by createAppDocker on success.
+type createAppDockerResponse struct {
+	CreateProjectDocker *createAppDockerCreateProjectDockerRepo `json:"createProjectDocker"`
+}
+
+// GetCreateProjectDocker returns createAppDockerResponse.CreateProjectDocker, and is useful for accessing the field via an interface.
+func (v *createAppDockerResponse) GetCreateProjectDocker() *createAppDockerCreateProjectDockerRepo {
+	return v.CreateProjectDocker
+}
 
 // createAppGitCreateProjectGitRepo includes the requested fields of the GraphQL type Repo.
 type createAppGitCreateProjectGitRepo struct {
@@ -2465,6 +2708,70 @@ func (v *updateProjectUpdateProjectV2Project) __premarshalJSON() (*__premarshalu
 	retval.UpdatedAt = v.ProjectStateFragment.UpdatedAt
 	retval.Environments = v.ProjectStateFragment.Environments
 	return &retval, nil
+}
+
+func createAppDocker(
+	ctx context.Context,
+	client graphql.Client,
+	input *CreateProjectDockerInput,
+) (*createAppDockerResponse, error) {
+	req := &graphql.Request{
+		OpName: "createAppDocker",
+		Query: `
+mutation createAppDocker ($input: CreateProjectDockerInput!) {
+	createProjectDocker(input: $input) {
+		... AppStateFragment
+	}
+}
+fragment AppStateFragment on Repo {
+	id
+	name
+	project {
+		id
+	}
+	projectEnvironment {
+		id
+	}
+	buildMethod {
+		type
+		dockerfilePath
+	}
+	deployTarget
+	cluster {
+		id
+	}
+	envs {
+		id
+		name
+		value
+		sealed
+	}
+	cpu
+	memory
+	owner {
+		id
+	}
+	enabled
+	productionBranch
+	updatedAt
+}
+`,
+		Variables: &__createAppDockerInput{
+			Input: input,
+		},
+	}
+	var err error
+
+	var data createAppDockerResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
 }
 
 // ## Apps ###

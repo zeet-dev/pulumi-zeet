@@ -16,6 +16,10 @@ export namespace model {
         deployTarget: pulumi.Input<string>;
     }
 
+    export interface CreateAppDockerInputArgs {
+        dockerImage: pulumi.Input<string>;
+    }
+
     export interface CreateAppEnvironmentVariableInputArgs {
         name: pulumi.Input<string>;
         sealed?: pulumi.Input<boolean>;
@@ -30,7 +34,7 @@ export namespace model {
     export interface CreateAppResourcesInputArgs {
         cpu: pulumi.Input<number>;
         ephemeralStorage: pulumi.Input<number>;
-        memory: pulumi.Input<number>;
+        memory: pulumi.Input<string>;
         spotInstance: pulumi.Input<boolean>;
     }
 }

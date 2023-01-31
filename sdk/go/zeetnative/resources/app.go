@@ -17,8 +17,9 @@ type App struct {
 	pulumi.CustomResourceState
 
 	AppId                pulumi.StringOutput                                `pulumi:"appId"`
-	Build                model.CreateAppBuildInputOutput                    `pulumi:"build"`
+	Build                model.CreateAppBuildInputPtrOutput                 `pulumi:"build"`
 	Deploy               model.CreateAppDeployInputOutput                   `pulumi:"deploy"`
+	Docker               model.CreateAppDockerInputPtrOutput                `pulumi:"docker"`
 	Enabled              pulumi.BoolOutput                                  `pulumi:"enabled"`
 	EnvironmentId        pulumi.StringOutput                                `pulumi:"environmentId"`
 	EnvironmentVariables model.CreateAppEnvironmentVariableInputArrayOutput `pulumi:"environmentVariables"`
@@ -37,9 +38,6 @@ func NewApp(ctx *pulumi.Context,
 		return nil, errors.New("missing one or more required arguments")
 	}
 
-	if args.Build == nil {
-		return nil, errors.New("invalid value for required argument 'Build'")
-	}
 	if args.Deploy == nil {
 		return nil, errors.New("invalid value for required argument 'Deploy'")
 	}
@@ -93,8 +91,9 @@ func (AppState) ElementType() reflect.Type {
 }
 
 type appArgs struct {
-	Build                model.CreateAppBuildInput                 `pulumi:"build"`
+	Build                *model.CreateAppBuildInput                `pulumi:"build"`
 	Deploy               model.CreateAppDeployInput                `pulumi:"deploy"`
+	Docker               *model.CreateAppDockerInput               `pulumi:"docker"`
 	Enabled              bool                                      `pulumi:"enabled"`
 	EnvironmentId        string                                    `pulumi:"environmentId"`
 	EnvironmentVariables []model.CreateAppEnvironmentVariableInput `pulumi:"environmentVariables"`
@@ -107,8 +106,9 @@ type appArgs struct {
 
 // The set of arguments for constructing a App resource.
 type AppArgs struct {
-	Build                model.CreateAppBuildInputInput
+	Build                model.CreateAppBuildInputPtrInput
 	Deploy               model.CreateAppDeployInputInput
+	Docker               model.CreateAppDockerInputPtrInput
 	Enabled              pulumi.BoolInput
 	EnvironmentId        pulumi.StringInput
 	EnvironmentVariables model.CreateAppEnvironmentVariableInputArrayInput
@@ -160,12 +160,16 @@ func (o AppOutput) AppId() pulumi.StringOutput {
 	return o.ApplyT(func(v *App) pulumi.StringOutput { return v.AppId }).(pulumi.StringOutput)
 }
 
-func (o AppOutput) Build() model.CreateAppBuildInputOutput {
-	return o.ApplyT(func(v *App) model.CreateAppBuildInputOutput { return v.Build }).(model.CreateAppBuildInputOutput)
+func (o AppOutput) Build() model.CreateAppBuildInputPtrOutput {
+	return o.ApplyT(func(v *App) model.CreateAppBuildInputPtrOutput { return v.Build }).(model.CreateAppBuildInputPtrOutput)
 }
 
 func (o AppOutput) Deploy() model.CreateAppDeployInputOutput {
 	return o.ApplyT(func(v *App) model.CreateAppDeployInputOutput { return v.Deploy }).(model.CreateAppDeployInputOutput)
+}
+
+func (o AppOutput) Docker() model.CreateAppDockerInputPtrOutput {
+	return o.ApplyT(func(v *App) model.CreateAppDockerInputPtrOutput { return v.Docker }).(model.CreateAppDockerInputPtrOutput)
 }
 
 func (o AppOutput) Enabled() pulumi.BoolOutput {

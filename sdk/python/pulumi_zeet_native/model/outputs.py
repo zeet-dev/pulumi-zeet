@@ -12,6 +12,7 @@ from .. import _utilities
 __all__ = [
     'CreateAppBuildInput',
     'CreateAppDeployInput',
+    'CreateAppDockerInput',
     'CreateAppEnvironmentVariableInput',
     'CreateAppGithubInput',
     'CreateAppResourcesInput',
@@ -91,6 +92,35 @@ class CreateAppDeployInput(dict):
     @pulumi.getter(name="clusterId")
     def cluster_id(self) -> Optional[str]:
         return pulumi.get(self, "cluster_id")
+
+
+@pulumi.output_type
+class CreateAppDockerInput(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "dockerImage":
+            suggest = "docker_image"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CreateAppDockerInput. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CreateAppDockerInput.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CreateAppDockerInput.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 docker_image: str):
+        pulumi.set(__self__, "docker_image", docker_image)
+
+    @property
+    @pulumi.getter(name="dockerImage")
+    def docker_image(self) -> str:
+        return pulumi.get(self, "docker_image")
 
 
 @pulumi.output_type
@@ -180,7 +210,7 @@ class CreateAppResourcesInput(dict):
     def __init__(__self__, *,
                  cpu: float,
                  ephemeral_storage: float,
-                 memory: float,
+                 memory: str,
                  spot_instance: bool):
         pulumi.set(__self__, "cpu", cpu)
         pulumi.set(__self__, "ephemeral_storage", ephemeral_storage)
@@ -199,7 +229,7 @@ class CreateAppResourcesInput(dict):
 
     @property
     @pulumi.getter
-    def memory(self) -> float:
+    def memory(self) -> str:
         return pulumi.get(self, "memory")
 
     @property

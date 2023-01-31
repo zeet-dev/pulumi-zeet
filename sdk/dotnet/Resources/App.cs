@@ -16,10 +16,13 @@ namespace Pulumi.ZeetNative.Resources
         public Output<string> AppId { get; private set; } = null!;
 
         [Output("build")]
-        public Output<Pulumi.ZeetNative.Model.Outputs.CreateAppBuildInput> Build { get; private set; } = null!;
+        public Output<Pulumi.ZeetNative.Model.Outputs.CreateAppBuildInput?> Build { get; private set; } = null!;
 
         [Output("deploy")]
         public Output<Pulumi.ZeetNative.Model.Outputs.CreateAppDeployInput> Deploy { get; private set; } = null!;
+
+        [Output("docker")]
+        public Output<Pulumi.ZeetNative.Model.Outputs.CreateAppDockerInput?> Docker { get; private set; } = null!;
 
         [Output("enabled")]
         public Output<bool> Enabled { get; private set; } = null!;
@@ -93,11 +96,14 @@ namespace Pulumi.ZeetNative.Resources
 
     public sealed class AppArgs : global::Pulumi.ResourceArgs
     {
-        [Input("build", required: true)]
-        public Input<Pulumi.ZeetNative.Model.Inputs.CreateAppBuildInputArgs> Build { get; set; } = null!;
+        [Input("build")]
+        public Input<Pulumi.ZeetNative.Model.Inputs.CreateAppBuildInputArgs>? Build { get; set; }
 
         [Input("deploy", required: true)]
         public Input<Pulumi.ZeetNative.Model.Inputs.CreateAppDeployInputArgs> Deploy { get; set; } = null!;
+
+        [Input("docker")]
+        public Input<Pulumi.ZeetNative.Model.Inputs.CreateAppDockerInputArgs>? Docker { get; set; }
 
         [Input("enabled", required: true)]
         public Input<bool> Enabled { get; set; } = null!;

@@ -143,6 +143,12 @@ mutation createAppGit($input: CreateProjectGitInput!) {
     }
 }
 
+mutation createAppDocker($input: CreateProjectDockerInput!) {
+    createProjectDocker(input: $input) {
+        ...AppStateFragment
+    }
+}
+
 query getApp($appID: UUID!) {
     repo(id: $appID) {
         ...AppStateFragment

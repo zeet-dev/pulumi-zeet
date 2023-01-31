@@ -15,7 +15,7 @@ namespace Pulumi.ZeetNative.Model.Outputs
     {
         public readonly double Cpu;
         public readonly double EphemeralStorage;
-        public readonly double Memory;
+        public readonly string Memory;
         public readonly bool SpotInstance;
 
         [OutputConstructor]
@@ -24,7 +24,7 @@ namespace Pulumi.ZeetNative.Model.Outputs
 
             double ephemeralStorage,
 
-            double memory,
+            string memory,
 
             bool spotInstance)
         {
