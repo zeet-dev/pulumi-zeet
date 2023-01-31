@@ -142,27 +142,49 @@ class CreateAppGithubInputArgs:
 @pulumi.input_type
 class CreateAppResourcesInputArgs:
     def __init__(__self__, *,
-                 cpu: pulumi.Input[str],
-                 memory: pulumi.Input[str]):
+                 cpu: pulumi.Input[float],
+                 ephemeral_storage: pulumi.Input[float],
+                 memory: pulumi.Input[float],
+                 spot_instance: pulumi.Input[bool]):
         pulumi.set(__self__, "cpu", cpu)
+        pulumi.set(__self__, "ephemeral_storage", ephemeral_storage)
         pulumi.set(__self__, "memory", memory)
+        pulumi.set(__self__, "spot_instance", spot_instance)
 
     @property
     @pulumi.getter
-    def cpu(self) -> pulumi.Input[str]:
+    def cpu(self) -> pulumi.Input[float]:
         return pulumi.get(self, "cpu")
 
     @cpu.setter
-    def cpu(self, value: pulumi.Input[str]):
+    def cpu(self, value: pulumi.Input[float]):
         pulumi.set(self, "cpu", value)
 
     @property
+    @pulumi.getter(name="ephemeralStorage")
+    def ephemeral_storage(self) -> pulumi.Input[float]:
+        return pulumi.get(self, "ephemeral_storage")
+
+    @ephemeral_storage.setter
+    def ephemeral_storage(self, value: pulumi.Input[float]):
+        pulumi.set(self, "ephemeral_storage", value)
+
+    @property
     @pulumi.getter
-    def memory(self) -> pulumi.Input[str]:
+    def memory(self) -> pulumi.Input[float]:
         return pulumi.get(self, "memory")
 
     @memory.setter
-    def memory(self, value: pulumi.Input[str]):
+    def memory(self, value: pulumi.Input[float]):
         pulumi.set(self, "memory", value)
+
+    @property
+    @pulumi.getter(name="spotInstance")
+    def spot_instance(self) -> pulumi.Input[bool]:
+        return pulumi.get(self, "spot_instance")
+
+    @spot_instance.setter
+    def spot_instance(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "spot_instance", value)
 
 

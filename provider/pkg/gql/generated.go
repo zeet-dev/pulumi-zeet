@@ -25,6 +25,146 @@ func (v *AcceleratorSpecInput) GetCount() int { return v.Count }
 // GetTpuTfVersion returns AcceleratorSpecInput.TpuTfVersion, and is useful for accessing the field via an interface.
 func (v *AcceleratorSpecInput) GetTpuTfVersion() *string { return v.TpuTfVersion }
 
+// nput := CreateProjectGitInput{
+// UserID:        &args.UserID,
+// ProjectID:     &args.ProjectID,
+// EnvironmentID: &args.EnvironmentID,
+// Name:          &args.Name,
+// Build: &ProjectBuildInput{
+// BuildType:      &buildType,
+// DockerfilePath: &args.Build.DockerfilePath,
+// },
+// DeployTarget: &ProjectDeployInput{
+// DeployTarget: deployTarget,
+// ClusterID:    &args.Deploy.ClusterID,
+// },
+// Envs: environmentVariablesToRequestInput(args.EnvironmentVariables),
+// }
+type AppStateFragment struct {
+	Id                 string                              `json:"id"`
+	Name               string                              `json:"name"`
+	Project            *AppStateFragmentProject            `json:"project"`
+	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
+	BuildMethod        *AppStateFragmentBuildMethod        `json:"buildMethod"`
+	DeployTarget       *DeployTarget                       `json:"deployTarget"`
+	Cluster            *AppStateFragmentCluster            `json:"cluster"`
+	Envs               []*AppStateFragmentEnvsEnvVar       `json:"envs"`
+	Cpu                *string                             `json:"cpu"`
+	Memory             *string                             `json:"memory"`
+	Owner              *AppStateFragmentOwnerUser          `json:"owner"`
+	Enabled            bool                                `json:"enabled"`
+	ProductionBranch   *string                             `json:"productionBranch"`
+	UpdatedAt          time.Time                           `json:"updatedAt"`
+}
+
+// GetId returns AppStateFragment.Id, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetId() string { return v.Id }
+
+// GetName returns AppStateFragment.Name, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetName() string { return v.Name }
+
+// GetProject returns AppStateFragment.Project, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetProject() *AppStateFragmentProject { return v.Project }
+
+// GetProjectEnvironment returns AppStateFragment.ProjectEnvironment, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetProjectEnvironment() *AppStateFragmentProjectEnvironment {
+	return v.ProjectEnvironment
+}
+
+// GetBuildMethod returns AppStateFragment.BuildMethod, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetBuildMethod() *AppStateFragmentBuildMethod { return v.BuildMethod }
+
+// GetDeployTarget returns AppStateFragment.DeployTarget, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetDeployTarget() *DeployTarget { return v.DeployTarget }
+
+// GetCluster returns AppStateFragment.Cluster, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetCluster() *AppStateFragmentCluster { return v.Cluster }
+
+// GetEnvs returns AppStateFragment.Envs, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetEnvs() []*AppStateFragmentEnvsEnvVar { return v.Envs }
+
+// GetCpu returns AppStateFragment.Cpu, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetCpu() *string { return v.Cpu }
+
+// GetMemory returns AppStateFragment.Memory, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetMemory() *string { return v.Memory }
+
+// GetOwner returns AppStateFragment.Owner, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetOwner() *AppStateFragmentOwnerUser { return v.Owner }
+
+// GetEnabled returns AppStateFragment.Enabled, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetEnabled() bool { return v.Enabled }
+
+// GetProductionBranch returns AppStateFragment.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetProductionBranch() *string { return v.ProductionBranch }
+
+// GetUpdatedAt returns AppStateFragment.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetUpdatedAt() time.Time { return v.UpdatedAt }
+
+// AppStateFragmentBuildMethod includes the requested fields of the GraphQL type BuildMethod.
+type AppStateFragmentBuildMethod struct {
+	Type           BuildType `json:"type"`
+	DockerfilePath *string   `json:"dockerfilePath"`
+}
+
+// GetType returns AppStateFragmentBuildMethod.Type, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentBuildMethod) GetType() BuildType { return v.Type }
+
+// GetDockerfilePath returns AppStateFragmentBuildMethod.DockerfilePath, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentBuildMethod) GetDockerfilePath() *string { return v.DockerfilePath }
+
+// AppStateFragmentCluster includes the requested fields of the GraphQL type Cluster.
+type AppStateFragmentCluster struct {
+	Id string `json:"id"`
+}
+
+// GetId returns AppStateFragmentCluster.Id, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentCluster) GetId() string { return v.Id }
+
+// AppStateFragmentEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type AppStateFragmentEnvsEnvVar struct {
+	Id     string `json:"id"`
+	Name   string `json:"name"`
+	Value  string `json:"value"`
+	Sealed bool   `json:"sealed"`
+}
+
+// GetId returns AppStateFragmentEnvsEnvVar.Id, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentEnvsEnvVar) GetId() string { return v.Id }
+
+// GetName returns AppStateFragmentEnvsEnvVar.Name, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentEnvsEnvVar) GetName() string { return v.Name }
+
+// GetValue returns AppStateFragmentEnvsEnvVar.Value, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentEnvsEnvVar) GetValue() string { return v.Value }
+
+// GetSealed returns AppStateFragmentEnvsEnvVar.Sealed, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentEnvsEnvVar) GetSealed() bool { return v.Sealed }
+
+// AppStateFragmentOwnerUser includes the requested fields of the GraphQL type User.
+type AppStateFragmentOwnerUser struct {
+	Id string `json:"id"`
+}
+
+// GetId returns AppStateFragmentOwnerUser.Id, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentOwnerUser) GetId() string { return v.Id }
+
+// AppStateFragmentProject includes the requested fields of the GraphQL type Project.
+type AppStateFragmentProject struct {
+	Id string `json:"id"`
+}
+
+// GetId returns AppStateFragmentProject.Id, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentProject) GetId() string { return v.Id }
+
+// AppStateFragmentProjectEnvironment includes the requested fields of the GraphQL type ProjectEnvironment.
+type AppStateFragmentProjectEnvironment struct {
+	Id string `json:"id"`
+}
+
+// GetId returns AppStateFragmentProjectEnvironment.Id, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentProjectEnvironment) GetId() string { return v.Id }
+
 type AutoscalingInput struct {
 	MinReplicas          int                        `json:"minReplicas"`
 	MaxReplicas          int                        `json:"maxReplicas"`
@@ -427,12 +567,140 @@ type EnvironmentStateFragmentProject struct {
 // GetId returns EnvironmentStateFragmentProject.Id, and is useful for accessing the field via an interface.
 func (v *EnvironmentStateFragmentProject) GetId() string { return v.Id }
 
+type GPUInput struct {
+	Type  *string `json:"type"`
+	Count int     `json:"count"`
+}
+
+// GetType returns GPUInput.Type, and is useful for accessing the field via an interface.
+func (v *GPUInput) GetType() *string { return v.Type }
+
+// GetCount returns GPUInput.Count, and is useful for accessing the field via an interface.
+func (v *GPUInput) GetCount() int { return v.Count }
+
+type GitHubRepoIntegrationInput struct {
+	GithubConnectionID  *int    `json:"githubConnectionID"`
+	GithubOwner         *string `json:"githubOwner"`
+	GithubName          *string `json:"githubName"`
+	AutoDeployBranch    *bool   `json:"autoDeployBranch"`
+	AutoStopBranch      *bool   `json:"autoStopBranch"`
+	AutoStopPullRequest *bool   `json:"autoStopPullRequest"`
+	BranchIgnore        *string `json:"branchIgnore"`
+	BranchStopIgnore    *string `json:"branchStopIgnore"`
+}
+
+// GetGithubConnectionID returns GitHubRepoIntegrationInput.GithubConnectionID, and is useful for accessing the field via an interface.
+func (v *GitHubRepoIntegrationInput) GetGithubConnectionID() *int { return v.GithubConnectionID }
+
+// GetGithubOwner returns GitHubRepoIntegrationInput.GithubOwner, and is useful for accessing the field via an interface.
+func (v *GitHubRepoIntegrationInput) GetGithubOwner() *string { return v.GithubOwner }
+
+// GetGithubName returns GitHubRepoIntegrationInput.GithubName, and is useful for accessing the field via an interface.
+func (v *GitHubRepoIntegrationInput) GetGithubName() *string { return v.GithubName }
+
+// GetAutoDeployBranch returns GitHubRepoIntegrationInput.AutoDeployBranch, and is useful for accessing the field via an interface.
+func (v *GitHubRepoIntegrationInput) GetAutoDeployBranch() *bool { return v.AutoDeployBranch }
+
+// GetAutoStopBranch returns GitHubRepoIntegrationInput.AutoStopBranch, and is useful for accessing the field via an interface.
+func (v *GitHubRepoIntegrationInput) GetAutoStopBranch() *bool { return v.AutoStopBranch }
+
+// GetAutoStopPullRequest returns GitHubRepoIntegrationInput.AutoStopPullRequest, and is useful for accessing the field via an interface.
+func (v *GitHubRepoIntegrationInput) GetAutoStopPullRequest() *bool { return v.AutoStopPullRequest }
+
+// GetBranchIgnore returns GitHubRepoIntegrationInput.BranchIgnore, and is useful for accessing the field via an interface.
+func (v *GitHubRepoIntegrationInput) GetBranchIgnore() *string { return v.BranchIgnore }
+
+// GetBranchStopIgnore returns GitHubRepoIntegrationInput.BranchStopIgnore, and is useful for accessing the field via an interface.
+func (v *GitHubRepoIntegrationInput) GetBranchStopIgnore() *string { return v.BranchStopIgnore }
+
+type GitlabConnectionInput struct {
+	GitlabIntegrationID string  `json:"gitlabIntegrationID"`
+	ProjectPath         *string `json:"projectPath"`
+}
+
+// GetGitlabIntegrationID returns GitlabConnectionInput.GitlabIntegrationID, and is useful for accessing the field via an interface.
+func (v *GitlabConnectionInput) GetGitlabIntegrationID() string { return v.GitlabIntegrationID }
+
+// GetProjectPath returns GitlabConnectionInput.ProjectPath, and is useful for accessing the field via an interface.
+func (v *GitlabConnectionInput) GetProjectPath() *string { return v.ProjectPath }
+
+type GitlabRepoIntegrationInput struct {
+	GitlabConnection    *GitlabConnectionInput `json:"gitlabConnection,omitempty"`
+	AutoDeployBranch    *bool                  `json:"autoDeployBranch"`
+	AutoStopBranch      *bool                  `json:"autoStopBranch"`
+	AutoStopPullRequest *bool                  `json:"autoStopPullRequest"`
+	BranchIgnore        *string                `json:"branchIgnore"`
+	BranchStopIgnore    *string                `json:"branchStopIgnore"`
+}
+
+// GetGitlabConnection returns GitlabRepoIntegrationInput.GitlabConnection, and is useful for accessing the field via an interface.
+func (v *GitlabRepoIntegrationInput) GetGitlabConnection() *GitlabConnectionInput {
+	return v.GitlabConnection
+}
+
+// GetAutoDeployBranch returns GitlabRepoIntegrationInput.AutoDeployBranch, and is useful for accessing the field via an interface.
+func (v *GitlabRepoIntegrationInput) GetAutoDeployBranch() *bool { return v.AutoDeployBranch }
+
+// GetAutoStopBranch returns GitlabRepoIntegrationInput.AutoStopBranch, and is useful for accessing the field via an interface.
+func (v *GitlabRepoIntegrationInput) GetAutoStopBranch() *bool { return v.AutoStopBranch }
+
+// GetAutoStopPullRequest returns GitlabRepoIntegrationInput.AutoStopPullRequest, and is useful for accessing the field via an interface.
+func (v *GitlabRepoIntegrationInput) GetAutoStopPullRequest() *bool { return v.AutoStopPullRequest }
+
+// GetBranchIgnore returns GitlabRepoIntegrationInput.BranchIgnore, and is useful for accessing the field via an interface.
+func (v *GitlabRepoIntegrationInput) GetBranchIgnore() *string { return v.BranchIgnore }
+
+// GetBranchStopIgnore returns GitlabRepoIntegrationInput.BranchStopIgnore, and is useful for accessing the field via an interface.
+func (v *GitlabRepoIntegrationInput) GetBranchStopIgnore() *string { return v.BranchStopIgnore }
+
 type KanikoFlagsInput struct {
 	CompressedCaching *bool `json:"compressedCaching"`
 }
 
 // GetCompressedCaching returns KanikoFlagsInput.CompressedCaching, and is useful for accessing the field via an interface.
 func (v *KanikoFlagsInput) GetCompressedCaching() *bool { return v.CompressedCaching }
+
+type KubernetesCustomizationInput struct {
+	NodeSelector       *string `json:"nodeSelector"`
+	HostNetwork        *bool   `json:"hostNetwork"`
+	PodSpecPatch       *string `json:"podSpecPatch"`
+	PodAnnotations     *string `json:"podAnnotations"`
+	ServiceAnnotations *string `json:"serviceAnnotations"`
+	IngressAnnotations *string `json:"ingressAnnotations"`
+	ClusterIssuerName  *string `json:"clusterIssuerName"`
+}
+
+// GetNodeSelector returns KubernetesCustomizationInput.NodeSelector, and is useful for accessing the field via an interface.
+func (v *KubernetesCustomizationInput) GetNodeSelector() *string { return v.NodeSelector }
+
+// GetHostNetwork returns KubernetesCustomizationInput.HostNetwork, and is useful for accessing the field via an interface.
+func (v *KubernetesCustomizationInput) GetHostNetwork() *bool { return v.HostNetwork }
+
+// GetPodSpecPatch returns KubernetesCustomizationInput.PodSpecPatch, and is useful for accessing the field via an interface.
+func (v *KubernetesCustomizationInput) GetPodSpecPatch() *string { return v.PodSpecPatch }
+
+// GetPodAnnotations returns KubernetesCustomizationInput.PodAnnotations, and is useful for accessing the field via an interface.
+func (v *KubernetesCustomizationInput) GetPodAnnotations() *string { return v.PodAnnotations }
+
+// GetServiceAnnotations returns KubernetesCustomizationInput.ServiceAnnotations, and is useful for accessing the field via an interface.
+func (v *KubernetesCustomizationInput) GetServiceAnnotations() *string { return v.ServiceAnnotations }
+
+// GetIngressAnnotations returns KubernetesCustomizationInput.IngressAnnotations, and is useful for accessing the field via an interface.
+func (v *KubernetesCustomizationInput) GetIngressAnnotations() *string { return v.IngressAnnotations }
+
+// GetClusterIssuerName returns KubernetesCustomizationInput.ClusterIssuerName, and is useful for accessing the field via an interface.
+func (v *KubernetesCustomizationInput) GetClusterIssuerName() *string { return v.ClusterIssuerName }
+
+type KubernetesSecretMountInput struct {
+	SecretName string `json:"secretName"`
+	MountPath  string `json:"mountPath"`
+}
+
+// GetSecretName returns KubernetesSecretMountInput.SecretName, and is useful for accessing the field via an interface.
+func (v *KubernetesSecretMountInput) GetSecretName() string { return v.SecretName }
+
+// GetMountPath returns KubernetesSecretMountInput.MountPath, and is useful for accessing the field via an interface.
+func (v *KubernetesSecretMountInput) GetMountPath() string { return v.MountPath }
 
 type LogDNAIntegrationInput struct {
 	Key string `json:"key"`
@@ -693,6 +961,17 @@ func (v *ReplicationInput) GetReplicas() int { return v.Replicas }
 // GetClusterID returns ReplicationInput.ClusterID, and is useful for accessing the field via an interface.
 func (v *ReplicationInput) GetClusterID() *string { return v.ClusterID }
 
+type ServerlessResourcesSpecInput struct {
+	Cpu    *float64 `json:"cpu"`
+	Memory float64  `json:"memory"`
+}
+
+// GetCpu returns ServerlessResourcesSpecInput.Cpu, and is useful for accessing the field via an interface.
+func (v *ServerlessResourcesSpecInput) GetCpu() *float64 { return v.Cpu }
+
+// GetMemory returns ServerlessResourcesSpecInput.Memory, and is useful for accessing the field via an interface.
+func (v *ServerlessResourcesSpecInput) GetMemory() float64 { return v.Memory }
+
 type SyslogIntegrationInput struct {
 	Host string `json:"host"`
 	Port string `json:"port"`
@@ -707,6 +986,338 @@ func (v *SyslogIntegrationInput) GetPort() string { return v.Port }
 
 // GetMode returns SyslogIntegrationInput.Mode, and is useful for accessing the field via an interface.
 func (v *SyslogIntegrationInput) GetMode() string { return v.Mode }
+
+type TPUInput struct {
+	Type      string `json:"type"`
+	Cores     int    `json:"cores"`
+	TfVersion string `json:"tfVersion"`
+}
+
+// GetType returns TPUInput.Type, and is useful for accessing the field via an interface.
+func (v *TPUInput) GetType() string { return v.Type }
+
+// GetCores returns TPUInput.Cores, and is useful for accessing the field via an interface.
+func (v *TPUInput) GetCores() int { return v.Cores }
+
+// GetTfVersion returns TPUInput.TfVersion, and is useful for accessing the field via an interface.
+func (v *TPUInput) GetTfVersion() string { return v.TfVersion }
+
+type UpdateProjectInput struct {
+	Id                            string                        `json:"id"`
+	Path                          *string                       `json:"path"`
+	Name                          *string                       `json:"name"`
+	DockerImage                   *string                       `json:"dockerImage"`
+	GithubIntegration             *GitHubRepoIntegrationInput   `json:"githubIntegration,omitempty"`
+	GitlabIntegration             *GitlabRepoIntegrationInput   `json:"gitlabIntegration,omitempty"`
+	BuildType                     *string                       `json:"buildType"`
+	DockerfilePath                *string                       `json:"dockerfilePath"`
+	DockerfileText                *string                       `json:"dockerfileText"`
+	WorkingDirectory              *string                       `json:"workingDirectory"`
+	BuildCommand                  *string                       `json:"buildCommand"`
+	RunCommand                    *string                       `json:"runCommand"`
+	StaticPath                    *string                       `json:"staticPath"`
+	ReleaseCommand                *string                       `json:"releaseCommand"`
+	NodejsVersion                 *string                       `json:"nodejsVersion"`
+	PythonVersion                 *string                       `json:"pythonVersion"`
+	GolangVersion                 *string                       `json:"golangVersion"`
+	NoBuildCache                  *bool                         `json:"noBuildCache"`
+	KanikoFlags                   *KanikoFlagsInput             `json:"kanikoFlags,omitempty"`
+	Volumes                       *string                       `json:"volumes"`
+	Ports                         *string                       `json:"ports"`
+	Replication                   []*ReplicationInput           `json:"replication,omitempty"`
+	Resources                     *ContainerResourcesSpecInput  `json:"resources,omitempty"`
+	BuildResources                *ContainerResourcesSpecInput  `json:"buildResources,omitempty"`
+	BranchResources               *ContainerResourcesSpecInput  `json:"branchResources,omitempty"`
+	ServerlessResources           *ServerlessResourcesSpecInput `json:"serverlessResources,omitempty"`
+	ReadinessProbe                *ProbeInput                   `json:"readinessProbe,omitempty"`
+	LivenessProbe                 *ProbeInput                   `json:"livenessProbe,omitempty"`
+	StartupProbe                  *ProbeInput                   `json:"startupProbe,omitempty"`
+	Autoscaling                   *AutoscalingInput             `json:"autoscaling,omitempty"`
+	PreStopSleep                  *int                          `json:"preStopSleep"`
+	TerminationGracePeriodSeconds *int                          `json:"terminationGracePeriodSeconds"`
+	PrometheusScrape              *PrometheusScrapeInput        `json:"prometheusScrape,omitempty"`
+	HostNetwork                   *bool                         `json:"hostNetwork"`
+	StaticIP                      *bool                         `json:"staticIP"`
+	IamPolicies                   []string                      `json:"iamPolicies"`
+	ManualDeploy                  *bool                         `json:"manualDeploy"`
+	AutoRetry                     *bool                         `json:"autoRetry"`
+	AutoRollback                  *bool                         `json:"autoRollback"`
+	DeployStrategy                *DeployStrategy               `json:"deployStrategy"`
+	HelmVersion                   *string                       `json:"helmVersion"`
+	HelmValues                    *string                       `json:"helmValues"`
+	TerraformVersion              *string                       `json:"terraformVersion"`
+	TerraformVariables            *string                       `json:"terraformVariables"`
+	Manifests                     []string                      `json:"manifests"`
+	ManifestValue                 *string                       `json:"manifestValue"`
+	AwsIamRole                    *string                       `json:"awsIamRole"`
+	GcpServiceAccount             *string                       `json:"gcpServiceAccount"`
+	ClusterIssuerName             *string                       `json:"clusterIssuerName"`
+	LogShipper                    *LogShipperInput              `json:"logShipper,omitempty"`
+	DeployService                 *bool                         `json:"deployService"`
+	DeployJob                     *bool                         `json:"deployJob"`
+	CronJobSchedule               *string                       `json:"cronJobSchedule"`
+	ProductionBranch              *string                       `json:"productionBranch"`
+	ContainerRepository           *string                       `json:"containerRepository"`
+	ContainerCacheRepository      *string                       `json:"containerCacheRepository"`
+	ContainerRegistryID           *string                       `json:"containerRegistryID"`
+	NodeSelector                  *string                       `json:"nodeSelector"`
+	SecretMounts                  []*KubernetesSecretMountInput `json:"secretMounts,omitempty"`
+	KubernetesCustomization       *KubernetesCustomizationInput `json:"kubernetesCustomization,omitempty"`
+	BuildCPU                      *float64                      `json:"buildCPU"`
+	BuildMemory                   *float64                      `json:"buildMemory"`
+	Cpu                           *string                       `json:"cpu"`
+	Memory                        *string                       `json:"memory"`
+	EphemeralStorage              *float64                      `json:"ephemeralStorage"`
+	Gpu                           *GPUInput                     `json:"gpu,omitempty"`
+	Tpu                           *TPUInput                     `json:"tpu,omitempty"`
+	Dedicated                     *bool                         `json:"dedicated"`
+	GithubInstallationID          *string                       `json:"githubInstallationID"`
+	GithubRepository              *string                       `json:"githubRepository"`
+	DeployBranch                  *bool                         `json:"deployBranch"`
+	BranchIgnore                  *string                       `json:"branchIgnore"`
+	DatadogApmEnabled             *bool                         `json:"datadogApmEnabled"`
+	PipelineClusterID             *string                       `json:"pipelineClusterID"`
+	DeployTarget                  *ProjectDeployInput           `json:"deployTarget,omitempty"`
+}
+
+// GetId returns UpdateProjectInput.Id, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetId() string { return v.Id }
+
+// GetPath returns UpdateProjectInput.Path, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetPath() *string { return v.Path }
+
+// GetName returns UpdateProjectInput.Name, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetName() *string { return v.Name }
+
+// GetDockerImage returns UpdateProjectInput.DockerImage, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetDockerImage() *string { return v.DockerImage }
+
+// GetGithubIntegration returns UpdateProjectInput.GithubIntegration, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetGithubIntegration() *GitHubRepoIntegrationInput {
+	return v.GithubIntegration
+}
+
+// GetGitlabIntegration returns UpdateProjectInput.GitlabIntegration, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetGitlabIntegration() *GitlabRepoIntegrationInput {
+	return v.GitlabIntegration
+}
+
+// GetBuildType returns UpdateProjectInput.BuildType, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetBuildType() *string { return v.BuildType }
+
+// GetDockerfilePath returns UpdateProjectInput.DockerfilePath, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetDockerfilePath() *string { return v.DockerfilePath }
+
+// GetDockerfileText returns UpdateProjectInput.DockerfileText, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetDockerfileText() *string { return v.DockerfileText }
+
+// GetWorkingDirectory returns UpdateProjectInput.WorkingDirectory, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetWorkingDirectory() *string { return v.WorkingDirectory }
+
+// GetBuildCommand returns UpdateProjectInput.BuildCommand, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetBuildCommand() *string { return v.BuildCommand }
+
+// GetRunCommand returns UpdateProjectInput.RunCommand, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetRunCommand() *string { return v.RunCommand }
+
+// GetStaticPath returns UpdateProjectInput.StaticPath, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetStaticPath() *string { return v.StaticPath }
+
+// GetReleaseCommand returns UpdateProjectInput.ReleaseCommand, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetReleaseCommand() *string { return v.ReleaseCommand }
+
+// GetNodejsVersion returns UpdateProjectInput.NodejsVersion, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetNodejsVersion() *string { return v.NodejsVersion }
+
+// GetPythonVersion returns UpdateProjectInput.PythonVersion, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetPythonVersion() *string { return v.PythonVersion }
+
+// GetGolangVersion returns UpdateProjectInput.GolangVersion, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetGolangVersion() *string { return v.GolangVersion }
+
+// GetNoBuildCache returns UpdateProjectInput.NoBuildCache, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetNoBuildCache() *bool { return v.NoBuildCache }
+
+// GetKanikoFlags returns UpdateProjectInput.KanikoFlags, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetKanikoFlags() *KanikoFlagsInput { return v.KanikoFlags }
+
+// GetVolumes returns UpdateProjectInput.Volumes, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetVolumes() *string { return v.Volumes }
+
+// GetPorts returns UpdateProjectInput.Ports, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetPorts() *string { return v.Ports }
+
+// GetReplication returns UpdateProjectInput.Replication, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetReplication() []*ReplicationInput { return v.Replication }
+
+// GetResources returns UpdateProjectInput.Resources, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetResources() *ContainerResourcesSpecInput { return v.Resources }
+
+// GetBuildResources returns UpdateProjectInput.BuildResources, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetBuildResources() *ContainerResourcesSpecInput {
+	return v.BuildResources
+}
+
+// GetBranchResources returns UpdateProjectInput.BranchResources, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetBranchResources() *ContainerResourcesSpecInput {
+	return v.BranchResources
+}
+
+// GetServerlessResources returns UpdateProjectInput.ServerlessResources, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetServerlessResources() *ServerlessResourcesSpecInput {
+	return v.ServerlessResources
+}
+
+// GetReadinessProbe returns UpdateProjectInput.ReadinessProbe, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetReadinessProbe() *ProbeInput { return v.ReadinessProbe }
+
+// GetLivenessProbe returns UpdateProjectInput.LivenessProbe, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetLivenessProbe() *ProbeInput { return v.LivenessProbe }
+
+// GetStartupProbe returns UpdateProjectInput.StartupProbe, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetStartupProbe() *ProbeInput { return v.StartupProbe }
+
+// GetAutoscaling returns UpdateProjectInput.Autoscaling, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetAutoscaling() *AutoscalingInput { return v.Autoscaling }
+
+// GetPreStopSleep returns UpdateProjectInput.PreStopSleep, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetPreStopSleep() *int { return v.PreStopSleep }
+
+// GetTerminationGracePeriodSeconds returns UpdateProjectInput.TerminationGracePeriodSeconds, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetTerminationGracePeriodSeconds() *int {
+	return v.TerminationGracePeriodSeconds
+}
+
+// GetPrometheusScrape returns UpdateProjectInput.PrometheusScrape, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetPrometheusScrape() *PrometheusScrapeInput { return v.PrometheusScrape }
+
+// GetHostNetwork returns UpdateProjectInput.HostNetwork, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetHostNetwork() *bool { return v.HostNetwork }
+
+// GetStaticIP returns UpdateProjectInput.StaticIP, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetStaticIP() *bool { return v.StaticIP }
+
+// GetIamPolicies returns UpdateProjectInput.IamPolicies, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetIamPolicies() []string { return v.IamPolicies }
+
+// GetManualDeploy returns UpdateProjectInput.ManualDeploy, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetManualDeploy() *bool { return v.ManualDeploy }
+
+// GetAutoRetry returns UpdateProjectInput.AutoRetry, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetAutoRetry() *bool { return v.AutoRetry }
+
+// GetAutoRollback returns UpdateProjectInput.AutoRollback, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetAutoRollback() *bool { return v.AutoRollback }
+
+// GetDeployStrategy returns UpdateProjectInput.DeployStrategy, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetDeployStrategy() *DeployStrategy { return v.DeployStrategy }
+
+// GetHelmVersion returns UpdateProjectInput.HelmVersion, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetHelmVersion() *string { return v.HelmVersion }
+
+// GetHelmValues returns UpdateProjectInput.HelmValues, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetHelmValues() *string { return v.HelmValues }
+
+// GetTerraformVersion returns UpdateProjectInput.TerraformVersion, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetTerraformVersion() *string { return v.TerraformVersion }
+
+// GetTerraformVariables returns UpdateProjectInput.TerraformVariables, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetTerraformVariables() *string { return v.TerraformVariables }
+
+// GetManifests returns UpdateProjectInput.Manifests, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetManifests() []string { return v.Manifests }
+
+// GetManifestValue returns UpdateProjectInput.ManifestValue, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetManifestValue() *string { return v.ManifestValue }
+
+// GetAwsIamRole returns UpdateProjectInput.AwsIamRole, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetAwsIamRole() *string { return v.AwsIamRole }
+
+// GetGcpServiceAccount returns UpdateProjectInput.GcpServiceAccount, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetGcpServiceAccount() *string { return v.GcpServiceAccount }
+
+// GetClusterIssuerName returns UpdateProjectInput.ClusterIssuerName, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetClusterIssuerName() *string { return v.ClusterIssuerName }
+
+// GetLogShipper returns UpdateProjectInput.LogShipper, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetLogShipper() *LogShipperInput { return v.LogShipper }
+
+// GetDeployService returns UpdateProjectInput.DeployService, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetDeployService() *bool { return v.DeployService }
+
+// GetDeployJob returns UpdateProjectInput.DeployJob, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetDeployJob() *bool { return v.DeployJob }
+
+// GetCronJobSchedule returns UpdateProjectInput.CronJobSchedule, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetCronJobSchedule() *string { return v.CronJobSchedule }
+
+// GetProductionBranch returns UpdateProjectInput.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetProductionBranch() *string { return v.ProductionBranch }
+
+// GetContainerRepository returns UpdateProjectInput.ContainerRepository, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetContainerRepository() *string { return v.ContainerRepository }
+
+// GetContainerCacheRepository returns UpdateProjectInput.ContainerCacheRepository, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetContainerCacheRepository() *string { return v.ContainerCacheRepository }
+
+// GetContainerRegistryID returns UpdateProjectInput.ContainerRegistryID, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetContainerRegistryID() *string { return v.ContainerRegistryID }
+
+// GetNodeSelector returns UpdateProjectInput.NodeSelector, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetNodeSelector() *string { return v.NodeSelector }
+
+// GetSecretMounts returns UpdateProjectInput.SecretMounts, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetSecretMounts() []*KubernetesSecretMountInput { return v.SecretMounts }
+
+// GetKubernetesCustomization returns UpdateProjectInput.KubernetesCustomization, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetKubernetesCustomization() *KubernetesCustomizationInput {
+	return v.KubernetesCustomization
+}
+
+// GetBuildCPU returns UpdateProjectInput.BuildCPU, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetBuildCPU() *float64 { return v.BuildCPU }
+
+// GetBuildMemory returns UpdateProjectInput.BuildMemory, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetBuildMemory() *float64 { return v.BuildMemory }
+
+// GetCpu returns UpdateProjectInput.Cpu, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetCpu() *string { return v.Cpu }
+
+// GetMemory returns UpdateProjectInput.Memory, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetMemory() *string { return v.Memory }
+
+// GetEphemeralStorage returns UpdateProjectInput.EphemeralStorage, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetEphemeralStorage() *float64 { return v.EphemeralStorage }
+
+// GetGpu returns UpdateProjectInput.Gpu, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetGpu() *GPUInput { return v.Gpu }
+
+// GetTpu returns UpdateProjectInput.Tpu, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetTpu() *TPUInput { return v.Tpu }
+
+// GetDedicated returns UpdateProjectInput.Dedicated, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetDedicated() *bool { return v.Dedicated }
+
+// GetGithubInstallationID returns UpdateProjectInput.GithubInstallationID, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetGithubInstallationID() *string { return v.GithubInstallationID }
+
+// GetGithubRepository returns UpdateProjectInput.GithubRepository, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetGithubRepository() *string { return v.GithubRepository }
+
+// GetDeployBranch returns UpdateProjectInput.DeployBranch, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetDeployBranch() *bool { return v.DeployBranch }
+
+// GetBranchIgnore returns UpdateProjectInput.BranchIgnore, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetBranchIgnore() *string { return v.BranchIgnore }
+
+// GetDatadogApmEnabled returns UpdateProjectInput.DatadogApmEnabled, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetDatadogApmEnabled() *bool { return v.DatadogApmEnabled }
+
+// GetPipelineClusterID returns UpdateProjectInput.PipelineClusterID, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetPipelineClusterID() *string { return v.PipelineClusterID }
+
+// GetDeployTarget returns UpdateProjectInput.DeployTarget, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetDeployTarget() *ProjectDeployInput { return v.DeployTarget }
 
 type VolumeInput struct {
 	MountPath string `json:"mountPath"`
@@ -751,6 +1362,14 @@ func (v *__createProjectInput) GetUserID() string { return v.UserID }
 // GetName returns __createProjectInput.Name, and is useful for accessing the field via an interface.
 func (v *__createProjectInput) GetName() string { return v.Name }
 
+// __deleteAppInput is used internally by genqlient
+type __deleteAppInput struct {
+	AppID string `json:"appID"`
+}
+
+// GetAppID returns __deleteAppInput.AppID, and is useful for accessing the field via an interface.
+func (v *__deleteAppInput) GetAppID() string { return v.AppID }
+
 // __deleteEnvironmentInput is used internally by genqlient
 type __deleteEnvironmentInput struct {
 	EnvironmentID string `json:"environmentID"`
@@ -767,6 +1386,14 @@ type __deleteProjectInput struct {
 // GetProjectID returns __deleteProjectInput.ProjectID, and is useful for accessing the field via an interface.
 func (v *__deleteProjectInput) GetProjectID() string { return v.ProjectID }
 
+// __getAppInput is used internally by genqlient
+type __getAppInput struct {
+	AppID string `json:"appID"`
+}
+
+// GetAppID returns __getAppInput.AppID, and is useful for accessing the field via an interface.
+func (v *__getAppInput) GetAppID() string { return v.AppID }
+
 // __getProjectByIDInput is used internally by genqlient
 type __getProjectByIDInput struct {
 	ProjectID string `json:"projectID"`
@@ -782,6 +1409,14 @@ type __getProjectEnvironmentsInput struct {
 
 // GetProjectID returns __getProjectEnvironmentsInput.ProjectID, and is useful for accessing the field via an interface.
 func (v *__getProjectEnvironmentsInput) GetProjectID() string { return v.ProjectID }
+
+// __updateAppInput is used internally by genqlient
+type __updateAppInput struct {
+	Input *UpdateProjectInput `json:"input,omitempty"`
+}
+
+// GetInput returns __updateAppInput.Input, and is useful for accessing the field via an interface.
+func (v *__updateAppInput) GetInput() *UpdateProjectInput { return v.Input }
 
 // __updateEnvironmentInput is used internally by genqlient
 type __updateEnvironmentInput struct {
@@ -809,49 +1444,151 @@ func (v *__updateProjectInput) GetName() *string { return v.Name }
 
 // createAppGitCreateProjectGitRepo includes the requested fields of the GraphQL type Repo.
 type createAppGitCreateProjectGitRepo struct {
-	Id        string                                        `json:"id"`
-	Name      string                                        `json:"name"`
-	Envs      []*createAppGitCreateProjectGitRepoEnvsEnvVar `json:"envs"`
-	Cpu       *string                                       `json:"cpu"`
-	Memory    *string                                       `json:"memory"`
-	UpdatedAt time.Time                                     `json:"updatedAt"`
+	AppStateFragment `json:"-"`
 }
 
 // GetId returns createAppGitCreateProjectGitRepo.Id, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetId() string { return v.Id }
+func (v *createAppGitCreateProjectGitRepo) GetId() string { return v.AppStateFragment.Id }
 
 // GetName returns createAppGitCreateProjectGitRepo.Name, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetName() string { return v.Name }
+func (v *createAppGitCreateProjectGitRepo) GetName() string { return v.AppStateFragment.Name }
+
+// GetProject returns createAppGitCreateProjectGitRepo.Project, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetProject() *AppStateFragmentProject {
+	return v.AppStateFragment.Project
+}
+
+// GetProjectEnvironment returns createAppGitCreateProjectGitRepo.ProjectEnvironment, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetProjectEnvironment() *AppStateFragmentProjectEnvironment {
+	return v.AppStateFragment.ProjectEnvironment
+}
+
+// GetBuildMethod returns createAppGitCreateProjectGitRepo.BuildMethod, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
+	return v.AppStateFragment.BuildMethod
+}
+
+// GetDeployTarget returns createAppGitCreateProjectGitRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetDeployTarget() *DeployTarget {
+	return v.AppStateFragment.DeployTarget
+}
+
+// GetCluster returns createAppGitCreateProjectGitRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetCluster() *AppStateFragmentCluster {
+	return v.AppStateFragment.Cluster
+}
 
 // GetEnvs returns createAppGitCreateProjectGitRepo.Envs, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetEnvs() []*createAppGitCreateProjectGitRepoEnvsEnvVar {
-	return v.Envs
+func (v *createAppGitCreateProjectGitRepo) GetEnvs() []*AppStateFragmentEnvsEnvVar {
+	return v.AppStateFragment.Envs
 }
 
 // GetCpu returns createAppGitCreateProjectGitRepo.Cpu, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetCpu() *string { return v.Cpu }
+func (v *createAppGitCreateProjectGitRepo) GetCpu() *string { return v.AppStateFragment.Cpu }
 
 // GetMemory returns createAppGitCreateProjectGitRepo.Memory, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetMemory() *string { return v.Memory }
+func (v *createAppGitCreateProjectGitRepo) GetMemory() *string { return v.AppStateFragment.Memory }
 
-// GetUpdatedAt returns createAppGitCreateProjectGitRepo.UpdatedAt, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetUpdatedAt() time.Time { return v.UpdatedAt }
-
-// createAppGitCreateProjectGitRepoEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
-type createAppGitCreateProjectGitRepoEnvsEnvVar struct {
-	Id    string `json:"id"`
-	Name  string `json:"name"`
-	Value string `json:"value"`
+// GetOwner returns createAppGitCreateProjectGitRepo.Owner, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetOwner() *AppStateFragmentOwnerUser {
+	return v.AppStateFragment.Owner
 }
 
-// GetId returns createAppGitCreateProjectGitRepoEnvsEnvVar.Id, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepoEnvsEnvVar) GetId() string { return v.Id }
+// GetEnabled returns createAppGitCreateProjectGitRepo.Enabled, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
 
-// GetName returns createAppGitCreateProjectGitRepoEnvsEnvVar.Name, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepoEnvsEnvVar) GetName() string { return v.Name }
+// GetProductionBranch returns createAppGitCreateProjectGitRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetProductionBranch() *string {
+	return v.AppStateFragment.ProductionBranch
+}
 
-// GetValue returns createAppGitCreateProjectGitRepoEnvsEnvVar.Value, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepoEnvsEnvVar) GetValue() string { return v.Value }
+// GetUpdatedAt returns createAppGitCreateProjectGitRepo.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetUpdatedAt() time.Time {
+	return v.AppStateFragment.UpdatedAt
+}
+
+func (v *createAppGitCreateProjectGitRepo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*createAppGitCreateProjectGitRepo
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.createAppGitCreateProjectGitRepo = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.AppStateFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalcreateAppGitCreateProjectGitRepo struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Project *AppStateFragmentProject `json:"project"`
+
+	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
+
+	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
+
+	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
+
+	Cpu *string `json:"cpu"`
+
+	Memory *string `json:"memory"`
+
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
+	Enabled bool `json:"enabled"`
+
+	ProductionBranch *string `json:"productionBranch"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (v *createAppGitCreateProjectGitRepo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *createAppGitCreateProjectGitRepo) __premarshalJSON() (*__premarshalcreateAppGitCreateProjectGitRepo, error) {
+	var retval __premarshalcreateAppGitCreateProjectGitRepo
+
+	retval.Id = v.AppStateFragment.Id
+	retval.Name = v.AppStateFragment.Name
+	retval.Project = v.AppStateFragment.Project
+	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.BuildMethod = v.AppStateFragment.BuildMethod
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
+	retval.Envs = v.AppStateFragment.Envs
+	retval.Cpu = v.AppStateFragment.Cpu
+	retval.Memory = v.AppStateFragment.Memory
+	retval.Owner = v.AppStateFragment.Owner
+	retval.Enabled = v.AppStateFragment.Enabled
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
+	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
+	return &retval, nil
+}
 
 // createAppGitResponse is returned by createAppGit on success.
 type createAppGitResponse struct {
@@ -993,6 +1730,14 @@ type currentUserIDResponse struct {
 // GetCurrentUser returns currentUserIDResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *currentUserIDResponse) GetCurrentUser() *currentUserIDCurrentUser { return v.CurrentUser }
 
+// deleteAppResponse is returned by deleteApp on success.
+type deleteAppResponse struct {
+	DeleteRepo bool `json:"deleteRepo"`
+}
+
+// GetDeleteRepo returns deleteAppResponse.DeleteRepo, and is useful for accessing the field via an interface.
+func (v *deleteAppResponse) GetDeleteRepo() bool { return v.DeleteRepo }
+
 // deleteEnvironmentResponse is returned by deleteEnvironment on success.
 type deleteEnvironmentResponse struct {
 	DeleteProjectEnvironment bool `json:"deleteProjectEnvironment"`
@@ -1010,6 +1755,148 @@ type deleteProjectResponse struct {
 
 // GetDeleteProjectV2 returns deleteProjectResponse.DeleteProjectV2, and is useful for accessing the field via an interface.
 func (v *deleteProjectResponse) GetDeleteProjectV2() bool { return v.DeleteProjectV2 }
+
+// getAppRepo includes the requested fields of the GraphQL type Repo.
+type getAppRepo struct {
+	AppStateFragment `json:"-"`
+}
+
+// GetId returns getAppRepo.Id, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetId() string { return v.AppStateFragment.Id }
+
+// GetName returns getAppRepo.Name, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetName() string { return v.AppStateFragment.Name }
+
+// GetProject returns getAppRepo.Project, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetProject() *AppStateFragmentProject { return v.AppStateFragment.Project }
+
+// GetProjectEnvironment returns getAppRepo.ProjectEnvironment, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetProjectEnvironment() *AppStateFragmentProjectEnvironment {
+	return v.AppStateFragment.ProjectEnvironment
+}
+
+// GetBuildMethod returns getAppRepo.BuildMethod, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
+	return v.AppStateFragment.BuildMethod
+}
+
+// GetDeployTarget returns getAppRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetDeployTarget() *DeployTarget { return v.AppStateFragment.DeployTarget }
+
+// GetCluster returns getAppRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetCluster() *AppStateFragmentCluster { return v.AppStateFragment.Cluster }
+
+// GetEnvs returns getAppRepo.Envs, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetEnvs() []*AppStateFragmentEnvsEnvVar { return v.AppStateFragment.Envs }
+
+// GetCpu returns getAppRepo.Cpu, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetCpu() *string { return v.AppStateFragment.Cpu }
+
+// GetMemory returns getAppRepo.Memory, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetMemory() *string { return v.AppStateFragment.Memory }
+
+// GetOwner returns getAppRepo.Owner, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetOwner() *AppStateFragmentOwnerUser { return v.AppStateFragment.Owner }
+
+// GetEnabled returns getAppRepo.Enabled, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
+
+// GetProductionBranch returns getAppRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetProductionBranch() *string { return v.AppStateFragment.ProductionBranch }
+
+// GetUpdatedAt returns getAppRepo.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetUpdatedAt() time.Time { return v.AppStateFragment.UpdatedAt }
+
+func (v *getAppRepo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*getAppRepo
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.getAppRepo = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.AppStateFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalgetAppRepo struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Project *AppStateFragmentProject `json:"project"`
+
+	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
+
+	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
+
+	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
+
+	Cpu *string `json:"cpu"`
+
+	Memory *string `json:"memory"`
+
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
+	Enabled bool `json:"enabled"`
+
+	ProductionBranch *string `json:"productionBranch"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (v *getAppRepo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *getAppRepo) __premarshalJSON() (*__premarshalgetAppRepo, error) {
+	var retval __premarshalgetAppRepo
+
+	retval.Id = v.AppStateFragment.Id
+	retval.Name = v.AppStateFragment.Name
+	retval.Project = v.AppStateFragment.Project
+	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.BuildMethod = v.AppStateFragment.BuildMethod
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
+	retval.Envs = v.AppStateFragment.Envs
+	retval.Cpu = v.AppStateFragment.Cpu
+	retval.Memory = v.AppStateFragment.Memory
+	retval.Owner = v.AppStateFragment.Owner
+	retval.Enabled = v.AppStateFragment.Enabled
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
+	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
+	return &retval, nil
+}
+
+// getAppResponse is returned by getApp on success.
+type getAppResponse struct {
+	Repo *getAppRepo `json:"repo"`
+}
+
+// GetRepo returns getAppResponse.Repo, and is useful for accessing the field via an interface.
+func (v *getAppResponse) GetRepo() *getAppRepo { return v.Repo }
 
 // getProjectByIDProject includes the requested fields of the GraphQL type Project.
 type getProjectByIDProject struct {
@@ -1254,6 +2141,160 @@ func (v *getProjectEnvironmentsResponse) GetProject() *getProjectEnvironmentsPro
 	return v.Project
 }
 
+// updateAppResponse is returned by updateApp on success.
+type updateAppResponse struct {
+	UpdateProject *updateAppUpdateProjectRepo `json:"updateProject"`
+}
+
+// GetUpdateProject returns updateAppResponse.UpdateProject, and is useful for accessing the field via an interface.
+func (v *updateAppResponse) GetUpdateProject() *updateAppUpdateProjectRepo { return v.UpdateProject }
+
+// updateAppUpdateProjectRepo includes the requested fields of the GraphQL type Repo.
+type updateAppUpdateProjectRepo struct {
+	AppStateFragment `json:"-"`
+}
+
+// GetId returns updateAppUpdateProjectRepo.Id, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetId() string { return v.AppStateFragment.Id }
+
+// GetName returns updateAppUpdateProjectRepo.Name, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetName() string { return v.AppStateFragment.Name }
+
+// GetProject returns updateAppUpdateProjectRepo.Project, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetProject() *AppStateFragmentProject {
+	return v.AppStateFragment.Project
+}
+
+// GetProjectEnvironment returns updateAppUpdateProjectRepo.ProjectEnvironment, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetProjectEnvironment() *AppStateFragmentProjectEnvironment {
+	return v.AppStateFragment.ProjectEnvironment
+}
+
+// GetBuildMethod returns updateAppUpdateProjectRepo.BuildMethod, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
+	return v.AppStateFragment.BuildMethod
+}
+
+// GetDeployTarget returns updateAppUpdateProjectRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetDeployTarget() *DeployTarget {
+	return v.AppStateFragment.DeployTarget
+}
+
+// GetCluster returns updateAppUpdateProjectRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetCluster() *AppStateFragmentCluster {
+	return v.AppStateFragment.Cluster
+}
+
+// GetEnvs returns updateAppUpdateProjectRepo.Envs, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetEnvs() []*AppStateFragmentEnvsEnvVar {
+	return v.AppStateFragment.Envs
+}
+
+// GetCpu returns updateAppUpdateProjectRepo.Cpu, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetCpu() *string { return v.AppStateFragment.Cpu }
+
+// GetMemory returns updateAppUpdateProjectRepo.Memory, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetMemory() *string { return v.AppStateFragment.Memory }
+
+// GetOwner returns updateAppUpdateProjectRepo.Owner, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetOwner() *AppStateFragmentOwnerUser {
+	return v.AppStateFragment.Owner
+}
+
+// GetEnabled returns updateAppUpdateProjectRepo.Enabled, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
+
+// GetProductionBranch returns updateAppUpdateProjectRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetProductionBranch() *string {
+	return v.AppStateFragment.ProductionBranch
+}
+
+// GetUpdatedAt returns updateAppUpdateProjectRepo.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetUpdatedAt() time.Time { return v.AppStateFragment.UpdatedAt }
+
+func (v *updateAppUpdateProjectRepo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*updateAppUpdateProjectRepo
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.updateAppUpdateProjectRepo = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.AppStateFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalupdateAppUpdateProjectRepo struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Project *AppStateFragmentProject `json:"project"`
+
+	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
+
+	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
+
+	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
+
+	Cpu *string `json:"cpu"`
+
+	Memory *string `json:"memory"`
+
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
+	Enabled bool `json:"enabled"`
+
+	ProductionBranch *string `json:"productionBranch"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (v *updateAppUpdateProjectRepo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *updateAppUpdateProjectRepo) __premarshalJSON() (*__premarshalupdateAppUpdateProjectRepo, error) {
+	var retval __premarshalupdateAppUpdateProjectRepo
+
+	retval.Id = v.AppStateFragment.Id
+	retval.Name = v.AppStateFragment.Name
+	retval.Project = v.AppStateFragment.Project
+	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.BuildMethod = v.AppStateFragment.BuildMethod
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
+	retval.Envs = v.AppStateFragment.Envs
+	retval.Cpu = v.AppStateFragment.Cpu
+	retval.Memory = v.AppStateFragment.Memory
+	retval.Owner = v.AppStateFragment.Owner
+	retval.Enabled = v.AppStateFragment.Enabled
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
+	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
+	return &retval, nil
+}
+
 // updateEnvironmentResponse is returned by updateEnvironment on success.
 type updateEnvironmentResponse struct {
 	UpdateProjectEnvironment *updateEnvironmentUpdateProjectEnvironment `json:"updateProjectEnvironment"`
@@ -1439,17 +2480,40 @@ func createAppGit(
 		Query: `
 mutation createAppGit ($input: CreateProjectGitInput!) {
 	createProjectGit(input: $input) {
+		... AppStateFragment
+	}
+}
+fragment AppStateFragment on Repo {
+	id
+	name
+	project {
+		id
+	}
+	projectEnvironment {
+		id
+	}
+	buildMethod {
+		type
+		dockerfilePath
+	}
+	deployTarget
+	cluster {
+		id
+	}
+	envs {
 		id
 		name
-		envs {
-			id
-			name
-			value
-		}
-		cpu
-		memory
-		updatedAt
+		value
+		sealed
 	}
+	cpu
+	memory
+	owner {
+		id
+	}
+	enabled
+	productionBranch
+	updatedAt
 }
 `,
 		Variables: &__createAppGitInput{
@@ -1577,6 +2641,36 @@ query currentUserID {
 	return &data, err
 }
 
+func deleteApp(
+	ctx context.Context,
+	client graphql.Client,
+	appID string,
+) (*deleteAppResponse, error) {
+	req := &graphql.Request{
+		OpName: "deleteApp",
+		Query: `
+mutation deleteApp ($appID: ID!) {
+	deleteRepo(id: $appID)
+}
+`,
+		Variables: &__deleteAppInput{
+			AppID: appID,
+		},
+	}
+	var err error
+
+	var data deleteAppResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 func deleteEnvironment(
 	ctx context.Context,
 	client graphql.Client,
@@ -1626,6 +2720,70 @@ mutation deleteProject ($projectID: UUID!) {
 	var err error
 
 	var data deleteProjectResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func getApp(
+	ctx context.Context,
+	client graphql.Client,
+	appID string,
+) (*getAppResponse, error) {
+	req := &graphql.Request{
+		OpName: "getApp",
+		Query: `
+query getApp ($appID: UUID!) {
+	repo(id: $appID) {
+		... AppStateFragment
+	}
+}
+fragment AppStateFragment on Repo {
+	id
+	name
+	project {
+		id
+	}
+	projectEnvironment {
+		id
+	}
+	buildMethod {
+		type
+		dockerfilePath
+	}
+	deployTarget
+	cluster {
+		id
+	}
+	envs {
+		id
+		name
+		value
+		sealed
+	}
+	cpu
+	memory
+	owner {
+		id
+	}
+	enabled
+	productionBranch
+	updatedAt
+}
+`,
+		Variables: &__getAppInput{
+			AppID: appID,
+		},
+	}
+	var err error
+
+	var data getAppResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -1721,6 +2879,70 @@ fragment EnvironmentStateFragment on ProjectEnvironment {
 	var err error
 
 	var data getProjectEnvironmentsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func updateApp(
+	ctx context.Context,
+	client graphql.Client,
+	input *UpdateProjectInput,
+) (*updateAppResponse, error) {
+	req := &graphql.Request{
+		OpName: "updateApp",
+		Query: `
+mutation updateApp ($input: UpdateProjectInput!) {
+	updateProject(input: $input) {
+		... AppStateFragment
+	}
+}
+fragment AppStateFragment on Repo {
+	id
+	name
+	project {
+		id
+	}
+	projectEnvironment {
+		id
+	}
+	buildMethod {
+		type
+		dockerfilePath
+	}
+	deployTarget
+	cluster {
+		id
+	}
+	envs {
+		id
+		name
+		value
+		sealed
+	}
+	cpu
+	memory
+	owner {
+		id
+	}
+	enabled
+	productionBranch
+	updatedAt
+}
+`,
+		Variables: &__updateAppInput{
+			Input: input,
+		},
+	}
+	var err error
+
+	var data updateAppResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

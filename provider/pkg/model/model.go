@@ -1,13 +1,15 @@
 package model
 
 type CreateAppResourcesInput struct {
-	Cpu    string `pulumi:"cpu"`
-	Memory string `pulumi:"memory"`
+	Cpu              float64  `pulumi:"cpu"`
+	Memory           float64  `pulumi:"memory"`
+	EphemeralStorage *float64 `pulumi:"ephemeralStorage"`
+	SpotInstance     *bool    `pulumi:"spotInstance"`
 }
 
 type CreateAppBuildInput struct {
-	Type           string `pulumi:"type"` // DOCKER
-	DockerfilePath string `pulumi:"dockerfilePath,optional"`
+	Type           string  `pulumi:"type"` // DOCKER
+	DockerfilePath *string `pulumi:"dockerfilePath,optional"`
 }
 
 type CreateAppDeployInput struct {
@@ -18,8 +20,8 @@ type CreateAppDeployInput struct {
 }
 
 type CreateAppGithubInput struct {
-	Url              string `pulumi:"url"`
-	ProductionBranch string `pulumi:"productionBranch"`
+	Url              string  `pulumi:"url"`
+	ProductionBranch *string `pulumi:"productionBranch"`
 }
 
 type CreateAppEnvironmentVariableInput struct {

@@ -28,8 +28,10 @@ export namespace model {
     }
 
     export interface CreateAppResourcesInputArgs {
-        cpu: pulumi.Input<string>;
-        memory: pulumi.Input<string>;
+        cpu: pulumi.Input<number>;
+        ephemeralStorage: pulumi.Input<number>;
+        memory: pulumi.Input<number>;
+        spotInstance: pulumi.Input<boolean>;
     }
 }
 

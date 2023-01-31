@@ -4,9 +4,9 @@ import * as pulumi from "@pulumi/pulumi";
 
 let config = new pulumi.Config();
 
-let teamIdConfig = config.get("team-id");
-let clusterId = config.get("cluster-id");
-let githubRepoUrl = config.get("github-repo-url");
+let teamIdConfig = config.require("team-id");
+let clusterId = config.require("cluster-id");
+let githubRepoUrl = config.require("github-repo-url");
 
 const project = new zeet.resources.Project("my-project", {
     userId: teamIdConfig,
@@ -22,8 +22,8 @@ const project = new zeet.resources.Project("my-project", {
 
 let existingProjectIdConfig = config.get("existing-project-id");
 
-const existingProject = zeet.resources.Project.get("existing-project", existingProjectIdConfig)
-const existingProject2 = zeet.resources.Project.get("existing-project2", existingProjectIdConfig)
+// const existingProject = zeet.resources.Project.get("existing-project", existingProjectIdConfig)
+// const existingProject2 = zeet.resources.Project.get("existing-project2", existingProjectIdConfig)
 
 const newProjectPreview = new zeet.resources.Project("new-project-for-preview", {
     userId: teamIdConfig,
@@ -48,7 +48,7 @@ let existingEnvProjectIdConfig = config.get("existing-env-project-id");
 // NB: .get() doesn't work when the resource id is insufficient to fetch the resource
 // const existingEnvironment = zeet.resources.Environment.get("existing-env", existingEnvIdConfig, {
 //     projectId: existingEnvProjectIdConfig
-// })
+// } as any)
 
 const app = new zeet.resources.App("github-app", {
     userId: teamIdConfig,
@@ -61,8 +61,10 @@ const app = new zeet.resources.App("github-app", {
         dockerfilePath: "Dockerfile",
     },
     resources: {
-        cpu: "1",
-        memory: "1"
+        cpu: 2.0,
+        memory: 2.0,
+        ephemeralStorage: 10.0,
+        spotInstance: true,
     },
     deploy: {
         deployTarget: "KUBERNETES",
@@ -92,8 +94,7 @@ export const output = "<obsolete>";
 export const projectId = project.projectId;
 export const projectPulumiId = project.id;
 export const newProjectPulumiId = "<deleted>";
-export const existingProjectName = existingProject.name;
-export const existingProjectId = existingProject2.id;
 export const newProjectPreviewId = newProjectPreview.id;
 export const envDeleteId = "<deleted>";
 export const environmentId = environment.environmentId;
+export const appId = app.id;

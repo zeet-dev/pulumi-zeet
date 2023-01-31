@@ -158,20 +158,53 @@ class CreateAppGithubInput(dict):
 
 @pulumi.output_type
 class CreateAppResourcesInput(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "ephemeralStorage":
+            suggest = "ephemeral_storage"
+        elif key == "spotInstance":
+            suggest = "spot_instance"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in CreateAppResourcesInput. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        CreateAppResourcesInput.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        CreateAppResourcesInput.__key_warning(key)
+        return super().get(key, default)
+
     def __init__(__self__, *,
-                 cpu: str,
-                 memory: str):
+                 cpu: float,
+                 ephemeral_storage: float,
+                 memory: float,
+                 spot_instance: bool):
         pulumi.set(__self__, "cpu", cpu)
+        pulumi.set(__self__, "ephemeral_storage", ephemeral_storage)
         pulumi.set(__self__, "memory", memory)
+        pulumi.set(__self__, "spot_instance", spot_instance)
 
     @property
     @pulumi.getter
-    def cpu(self) -> str:
+    def cpu(self) -> float:
         return pulumi.get(self, "cpu")
 
     @property
+    @pulumi.getter(name="ephemeralStorage")
+    def ephemeral_storage(self) -> float:
+        return pulumi.get(self, "ephemeral_storage")
+
+    @property
     @pulumi.getter
-    def memory(self) -> str:
+    def memory(self) -> float:
         return pulumi.get(self, "memory")
+
+    @property
+    @pulumi.getter(name="spotInstance")
+    def spot_instance(self) -> bool:
+        return pulumi.get(self, "spot_instance")
 
 

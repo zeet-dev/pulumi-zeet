@@ -375,8 +375,10 @@ func (o CreateAppGithubInputPtrOutput) Url() pulumi.StringPtrOutput {
 }
 
 type CreateAppResourcesInput struct {
-	Cpu    string `pulumi:"cpu"`
-	Memory string `pulumi:"memory"`
+	Cpu              float64 `pulumi:"cpu"`
+	EphemeralStorage float64 `pulumi:"ephemeralStorage"`
+	Memory           float64 `pulumi:"memory"`
+	SpotInstance     bool    `pulumi:"spotInstance"`
 }
 
 // CreateAppResourcesInputInput is an input type that accepts CreateAppResourcesInputArgs and CreateAppResourcesInputOutput values.
@@ -391,8 +393,10 @@ type CreateAppResourcesInputInput interface {
 }
 
 type CreateAppResourcesInputArgs struct {
-	Cpu    pulumi.StringInput `pulumi:"cpu"`
-	Memory pulumi.StringInput `pulumi:"memory"`
+	Cpu              pulumi.Float64Input `pulumi:"cpu"`
+	EphemeralStorage pulumi.Float64Input `pulumi:"ephemeralStorage"`
+	Memory           pulumi.Float64Input `pulumi:"memory"`
+	SpotInstance     pulumi.BoolInput    `pulumi:"spotInstance"`
 }
 
 func (CreateAppResourcesInputArgs) ElementType() reflect.Type {
@@ -421,12 +425,20 @@ func (o CreateAppResourcesInputOutput) ToCreateAppResourcesInputOutputWithContex
 	return o
 }
 
-func (o CreateAppResourcesInputOutput) Cpu() pulumi.StringOutput {
-	return o.ApplyT(func(v CreateAppResourcesInput) string { return v.Cpu }).(pulumi.StringOutput)
+func (o CreateAppResourcesInputOutput) Cpu() pulumi.Float64Output {
+	return o.ApplyT(func(v CreateAppResourcesInput) float64 { return v.Cpu }).(pulumi.Float64Output)
 }
 
-func (o CreateAppResourcesInputOutput) Memory() pulumi.StringOutput {
-	return o.ApplyT(func(v CreateAppResourcesInput) string { return v.Memory }).(pulumi.StringOutput)
+func (o CreateAppResourcesInputOutput) EphemeralStorage() pulumi.Float64Output {
+	return o.ApplyT(func(v CreateAppResourcesInput) float64 { return v.EphemeralStorage }).(pulumi.Float64Output)
+}
+
+func (o CreateAppResourcesInputOutput) Memory() pulumi.Float64Output {
+	return o.ApplyT(func(v CreateAppResourcesInput) float64 { return v.Memory }).(pulumi.Float64Output)
+}
+
+func (o CreateAppResourcesInputOutput) SpotInstance() pulumi.BoolOutput {
+	return o.ApplyT(func(v CreateAppResourcesInput) bool { return v.SpotInstance }).(pulumi.BoolOutput)
 }
 
 func init() {

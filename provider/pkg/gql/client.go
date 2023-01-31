@@ -7,6 +7,7 @@ import (
 	"github.com/pulumi/pulumi-go-provider"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/model"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -179,7 +180,21 @@ func (c *ZeetGraphqlClient) DeleteEnvironment(ctx provider.Context, environmentI
 	return nil
 }
 
+func NewCreateAppResponse(args model.CreateAppInput, state appStateResponse) CreateAppResponse {
+	return CreateAppResponse{
+		CreateAppInput: args,
+		ID:             state.GetId(),
+		UpdatedAt:      state.GetUpdatedAt(),
+	}
+}
+
+type appStateResponse interface {
+	GetId() string
+	GetUpdatedAt() time.Time
+}
+
 type CreateAppResponse struct {
+	model.CreateAppInput
 	ID        string
 	UpdatedAt time.Time
 }
@@ -194,17 +209,23 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 		Name:          &args.Name,
 		Build: &ProjectBuildInput{
 			BuildType:      &buildType,
-			DockerfilePath: &args.Build.DockerfilePath,
+			DockerfilePath: args.Build.DockerfilePath,
 		},
 		DeployTarget: &ProjectDeployInput{
 			DeployTarget: deployTarget,
 			ClusterID:    &args.Deploy.ClusterID,
 		},
 		Envs: environmentVariablesToRequestInput(args.EnvironmentVariables),
+		Resources: &ContainerResourcesSpecInput{
+			Cpu:              args.Resources.Cpu,
+			Memory:           args.Resources.Memory,
+			EphemeralStorage: args.Resources.EphemeralStorage,
+			Spot:             args.Resources.SpotInstance,
+		},
 	}
 	if args.GithubInput != nil {
 		input.Url = args.GithubInput.Url
-		input.ProductionBranch = &args.GithubInput.ProductionBranch
+		input.ProductionBranch = args.GithubInput.ProductionBranch
 	} else {
 		return CreateAppResponse{}, fmt.Errorf("must specify one app spec")
 	}
@@ -212,10 +233,86 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 	if err != nil {
 		return CreateAppResponse{}, err
 	}
-	return CreateAppResponse{
-		ID:        resp.CreateProjectGit.Id,
-		UpdatedAt: resp.CreateProjectGit.UpdatedAt,
-	}, nil
+	return NewCreateAppResponse(args, resp.GetCreateProjectGit()), nil
+}
+
+func (c *ZeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateAppResponse, error) {
+	resp, err := getApp(ctx, c.client, appID)
+	if err != nil {
+		return CreateAppResponse{}, err
+	}
+	repo := resp.GetRepo()
+	var cpu float64
+	if repo.GetCpu() != nil {
+		cpu, err = strconv.ParseFloat(*repo.GetCpu(), 64)
+		if err != nil {
+			return CreateAppResponse{}, fmt.Errorf("unable to parse float for cpu value '%s'", *repo.GetCpu())
+		}
+	} else {
+		cpu = *new(float64)
+	}
+	var memory float64
+	if repo.GetMemory() != nil {
+		memory, err = strconv.ParseFloat(*repo.GetMemory(), 64)
+		if err != nil {
+			return CreateAppResponse{}, fmt.Errorf("unable to parse float for memory value '%s'", *repo.GetMemory())
+		}
+	} else {
+		memory = *new(float64)
+	}
+	args := model.CreateAppInput{
+		UserID:        repo.GetOwner().GetId(),
+		ProjectID:     repo.GetProject().GetId(),
+		EnvironmentID: repo.GetProjectEnvironment().GetId(),
+		Name:          repo.GetName(),
+		GithubInput: &model.CreateAppGithubInput{
+			// NB: anchor cannot resolve githubRepository for Repo's created with x-access-token:
+			// ZEET-1480: https://linear.app/zeet/issue/ZEET-1480/anchor-or-createprojectgitgithubrepository-error-not-found
+			ProductionBranch: repo.GetProductionBranch(),
+		},
+		Enabled: repo.GetEnabled(),
+		Build: model.CreateAppBuildInput{
+			Type:           string(repo.GetBuildMethod().GetType()),
+			DockerfilePath: repo.GetBuildMethod().GetDockerfilePath(),
+		},
+		Resources: model.CreateAppResourcesInput{
+			Cpu:    cpu,
+			Memory: memory,
+		},
+		Deploy:               model.CreateAppDeployInput{},
+		EnvironmentVariables: environmentVariablesToModel(repo.GetEnvs()),
+	}
+	return NewCreateAppResponse(args, resp.GetRepo()), nil
+}
+
+func (c *ZeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args model.CreateAppInput) (CreateAppResponse, error) {
+	cpuString := strconv.FormatFloat(args.Resources.Cpu, 'f', -1, 64)
+	memoryString := strconv.FormatFloat(args.Resources.Memory, 'f', -1, 64)
+	input := UpdateProjectInput{
+		Id:               appID,
+		Name:             &args.Name,
+		DockerfilePath:   args.Build.DockerfilePath,
+		Cpu:              &cpuString,
+		Memory:           &memoryString,
+		EphemeralStorage: args.Resources.EphemeralStorage,
+		// TODO: can 'Spot' bool be updated?
+	}
+	resp, err := updateApp(ctx, c.client, &input)
+	if err != nil {
+		return CreateAppResponse{}, err
+	}
+	return NewCreateAppResponse(args, resp.GetUpdateProject()), nil
+}
+
+func (c *ZeetGraphqlClient) DeleteApp(ctx provider.Context, appID string) error {
+	resp, err := deleteApp(ctx, c.client, appID)
+	if err != nil {
+		return err
+	}
+	if !resp.GetDeleteRepo() {
+		return fmt.Errorf("unable to delete app '%s'", appID)
+	}
+	return nil
 }
 
 func environmentVariablesToRequestInput(variables []model.CreateAppEnvironmentVariableInput) []*EnvVarInput {
@@ -227,6 +324,20 @@ func environmentVariablesToRequestInput(variables []model.CreateAppEnvironmentVa
 			Sealed: variable.Sealed,
 		}
 		out = append(out, input)
+	}
+	return out
+}
+
+func environmentVariablesToModel(variables []*AppStateFragmentEnvsEnvVar) []model.CreateAppEnvironmentVariableInput {
+	out := []model.CreateAppEnvironmentVariableInput{}
+	for _, variable := range variables {
+		sealed := variable.GetSealed()
+		envVar := model.CreateAppEnvironmentVariableInput{
+			Name:   variable.GetName(),
+			Value:  variable.GetValue(),
+			Sealed: &sealed,
+		}
+		out = append(out, envVar)
 	}
 	return out
 }
