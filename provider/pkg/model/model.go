@@ -1,8 +1,10 @@
 package model
 
 type CreateAppResourcesInput struct {
-	Cpu    string `pulumi:"cpu"`
-	Memory string `pulumi:"memory"`
+	Cpu              float64  `pulumi:"cpu"`
+	Memory           float64  `pulumi:"memory"`
+	EphemeralStorage *float64 `pulumi:"ephemeralStorage"`
+	SpotInstance     *bool    `pulumi:"spotInstance"`
 }
 
 type CreateAppBuildInput struct {

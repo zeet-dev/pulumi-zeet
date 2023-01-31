@@ -13,17 +13,25 @@ namespace Pulumi.ZeetNative.Model.Outputs
     [OutputType]
     public sealed class CreateAppResourcesInput
     {
-        public readonly string Cpu;
-        public readonly string Memory;
+        public readonly double Cpu;
+        public readonly double EphemeralStorage;
+        public readonly double Memory;
+        public readonly bool SpotInstance;
 
         [OutputConstructor]
         private CreateAppResourcesInput(
-            string cpu,
+            double cpu,
 
-            string memory)
+            double ephemeralStorage,
+
+            double memory,
+
+            bool spotInstance)
         {
             Cpu = cpu;
+            EphemeralStorage = ephemeralStorage;
             Memory = memory;
+            SpotInstance = spotInstance;
         }
     }
 }

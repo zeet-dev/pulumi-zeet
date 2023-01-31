@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
+	"github.com/pulumi/pulumi/sdk/v3/go/common/diag"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/resource"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/gql"
@@ -72,8 +73,11 @@ type AppState struct {
 func (App) Create(ctx provider.Context, name string, input AppArgs, preview bool) (string, AppState, error) {
 	state := AppState{AppArgs: input}
 	if preview {
-		return name, state, nil
+		return state.AppID, state, nil
 	}
+
+	ctx.Log(diag.Warning,
+		"app resources configuration is not currently supported, app wil default to 'tiny' instance size")
 
 	args := model.CreateAppInput{
 		UserID:               input.UserID,
@@ -93,7 +97,7 @@ func (App) Create(ctx provider.Context, name string, input AppArgs, preview bool
 	}
 	state.AppID = newApp.ID
 	state.UpdatedAt = newApp.UpdatedAt
-	return name, state, nil
+	return state.AppID, state, nil
 }
 
 func (a App) Read(ctx provider.Context, id string, inputs AppArgs, state AppState) (canonicalID string, normalizedInputs AppArgs, normalizedState AppState, err error) {
@@ -142,31 +146,32 @@ func (a App) Update(ctx provider.Context, id string, olds AppState, news AppArgs
 		newState.AppArgs = news
 		return newState, nil
 	}
-	resp, err := config.ZeetClient.UpdateApp(ctx, id, model.CreateAppInput{
-		UserID:        olds.UserID,
-		ProjectID:     olds.ProjectID,
-		EnvironmentID: olds.EnvironmentID,
-		Name:          news.Name,
-		GithubInput: &model.CreateAppGithubInput{
-			Url:              olds.GithubInput.Url,
-			ProductionBranch: olds.GithubInput.ProductionBranch,
-		},
-		Enabled: news.Enabled,
-		Build:   news.BuildInput,
-		Resources: model.CreateAppResourcesInput{
-			Cpu:    news.ResourcesInput.Cpu,
-			Memory: news.ResourcesInput.Memory,
-		},
-		Deploy: model.CreateAppDeployInput{
-			DeployTarget: olds.DeployInput.DeployTarget,
-			ClusterID:    olds.DeployInput.ClusterID,
-		},
-		EnvironmentVariables: olds.EnvironmentVariables,
-	})
-	if err != nil {
-		return AppState{}, err
-	}
-	return responseToAppState(resp), nil
+	return AppState{}, fmt.Errorf("app update is not yet supported")
+	//resp, err := config.ZeetClient.UpdateApp(ctx, id, model.CreateAppInput{
+	//	UserID:        olds.UserID,
+	//	ProjectID:     olds.ProjectID,
+	//	EnvironmentID: olds.EnvironmentID,
+	//	Name:          news.Name,
+	//	GithubInput: &model.CreateAppGithubInput{
+	//		Url:              olds.GithubInput.Url,
+	//		ProductionBranch: olds.GithubInput.ProductionBranch,
+	//	},
+	//	Enabled: news.Enabled,
+	//	Build:   news.BuildInput,
+	//	Resources: model.CreateAppResourcesInput{
+	//		Cpu:    news.ResourcesInput.Cpu,
+	//		Memory: news.ResourcesInput.Memory,
+	//	},
+	//	Deploy: model.CreateAppDeployInput{
+	//		DeployTarget: olds.DeployInput.DeployTarget,
+	//		ClusterID:    olds.DeployInput.ClusterID,
+	//	},
+	//	EnvironmentVariables: olds.EnvironmentVariables,
+	//})
+	//if err != nil {
+	//	return AppState{}, err
+	//}
+	//return responseToAppState(resp), nil
 }
 
 func (a App) Delete(ctx provider.Context, id string, props AppState) error {

@@ -13,10 +13,16 @@ namespace Pulumi.ZeetNative.Model.Inputs
     public sealed class CreateAppResourcesInputArgs : global::Pulumi.ResourceArgs
     {
         [Input("cpu", required: true)]
-        public Input<string> Cpu { get; set; } = null!;
+        public Input<double> Cpu { get; set; } = null!;
+
+        [Input("ephemeralStorage", required: true)]
+        public Input<double> EphemeralStorage { get; set; } = null!;
 
         [Input("memory", required: true)]
-        public Input<string> Memory { get; set; } = null!;
+        public Input<double> Memory { get; set; } = null!;
+
+        [Input("spotInstance", required: true)]
+        public Input<bool> SpotInstance { get; set; } = null!;
 
         public CreateAppResourcesInputArgs()
         {

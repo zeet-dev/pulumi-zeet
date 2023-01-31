@@ -130,9 +130,6 @@ fragment AppStateFragment on Repo {
         id
     }
     enabled
-    githubRepository {
-        url
-    }
     productionBranch
     updatedAt
 }

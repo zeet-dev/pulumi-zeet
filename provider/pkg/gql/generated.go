@@ -41,21 +41,20 @@ func (v *AcceleratorSpecInput) GetTpuTfVersion() *string { return v.TpuTfVersion
 // Envs: environmentVariablesToRequestInput(args.EnvironmentVariables),
 // }
 type AppStateFragment struct {
-	Id                 string                                            `json:"id"`
-	Name               string                                            `json:"name"`
-	Project            *AppStateFragmentProject                          `json:"project"`
-	ProjectEnvironment *AppStateFragmentProjectEnvironment               `json:"projectEnvironment"`
-	BuildMethod        *AppStateFragmentBuildMethod                      `json:"buildMethod"`
-	DeployTarget       *DeployTarget                                     `json:"deployTarget"`
-	Cluster            *AppStateFragmentCluster                          `json:"cluster"`
-	Envs               []*AppStateFragmentEnvsEnvVar                     `json:"envs"`
-	Cpu                *string                                           `json:"cpu"`
-	Memory             *string                                           `json:"memory"`
-	Owner              *AppStateFragmentOwnerUser                        `json:"owner"`
-	Enabled            bool                                              `json:"enabled"`
-	GithubRepository   *AppStateFragmentGithubRepositoryGitHubRepository `json:"githubRepository"`
-	ProductionBranch   *string                                           `json:"productionBranch"`
-	UpdatedAt          time.Time                                         `json:"updatedAt"`
+	Id                 string                              `json:"id"`
+	Name               string                              `json:"name"`
+	Project            *AppStateFragmentProject            `json:"project"`
+	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
+	BuildMethod        *AppStateFragmentBuildMethod        `json:"buildMethod"`
+	DeployTarget       *DeployTarget                       `json:"deployTarget"`
+	Cluster            *AppStateFragmentCluster            `json:"cluster"`
+	Envs               []*AppStateFragmentEnvsEnvVar       `json:"envs"`
+	Cpu                *string                             `json:"cpu"`
+	Memory             *string                             `json:"memory"`
+	Owner              *AppStateFragmentOwnerUser          `json:"owner"`
+	Enabled            bool                                `json:"enabled"`
+	ProductionBranch   *string                             `json:"productionBranch"`
+	UpdatedAt          time.Time                           `json:"updatedAt"`
 }
 
 // GetId returns AppStateFragment.Id, and is useful for accessing the field via an interface.
@@ -95,11 +94,6 @@ func (v *AppStateFragment) GetOwner() *AppStateFragmentOwnerUser { return v.Owne
 
 // GetEnabled returns AppStateFragment.Enabled, and is useful for accessing the field via an interface.
 func (v *AppStateFragment) GetEnabled() bool { return v.Enabled }
-
-// GetGithubRepository returns AppStateFragment.GithubRepository, and is useful for accessing the field via an interface.
-func (v *AppStateFragment) GetGithubRepository() *AppStateFragmentGithubRepositoryGitHubRepository {
-	return v.GithubRepository
-}
 
 // GetProductionBranch returns AppStateFragment.ProductionBranch, and is useful for accessing the field via an interface.
 func (v *AppStateFragment) GetProductionBranch() *string { return v.ProductionBranch }
@@ -146,14 +140,6 @@ func (v *AppStateFragmentEnvsEnvVar) GetValue() string { return v.Value }
 
 // GetSealed returns AppStateFragmentEnvsEnvVar.Sealed, and is useful for accessing the field via an interface.
 func (v *AppStateFragmentEnvsEnvVar) GetSealed() bool { return v.Sealed }
-
-// AppStateFragmentGithubRepositoryGitHubRepository includes the requested fields of the GraphQL type GitHubRepository.
-type AppStateFragmentGithubRepositoryGitHubRepository struct {
-	Url string `json:"url"`
-}
-
-// GetUrl returns AppStateFragmentGithubRepositoryGitHubRepository.Url, and is useful for accessing the field via an interface.
-func (v *AppStateFragmentGithubRepositoryGitHubRepository) GetUrl() string { return v.Url }
 
 // AppStateFragmentOwnerUser includes the requested fields of the GraphQL type User.
 type AppStateFragmentOwnerUser struct {
@@ -1511,11 +1497,6 @@ func (v *createAppGitCreateProjectGitRepo) GetOwner() *AppStateFragmentOwnerUser
 // GetEnabled returns createAppGitCreateProjectGitRepo.Enabled, and is useful for accessing the field via an interface.
 func (v *createAppGitCreateProjectGitRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
 
-// GetGithubRepository returns createAppGitCreateProjectGitRepo.GithubRepository, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetGithubRepository() *AppStateFragmentGithubRepositoryGitHubRepository {
-	return v.AppStateFragment.GithubRepository
-}
-
 // GetProductionBranch returns createAppGitCreateProjectGitRepo.ProductionBranch, and is useful for accessing the field via an interface.
 func (v *createAppGitCreateProjectGitRepo) GetProductionBranch() *string {
 	return v.AppStateFragment.ProductionBranch
@@ -1576,8 +1557,6 @@ type __premarshalcreateAppGitCreateProjectGitRepo struct {
 
 	Enabled bool `json:"enabled"`
 
-	GithubRepository *AppStateFragmentGithubRepositoryGitHubRepository `json:"githubRepository"`
-
 	ProductionBranch *string `json:"productionBranch"`
 
 	UpdatedAt time.Time `json:"updatedAt"`
@@ -1606,7 +1585,6 @@ func (v *createAppGitCreateProjectGitRepo) __premarshalJSON() (*__premarshalcrea
 	retval.Memory = v.AppStateFragment.Memory
 	retval.Owner = v.AppStateFragment.Owner
 	retval.Enabled = v.AppStateFragment.Enabled
-	retval.GithubRepository = v.AppStateFragment.GithubRepository
 	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
 	return &retval, nil
@@ -1823,11 +1801,6 @@ func (v *getAppRepo) GetOwner() *AppStateFragmentOwnerUser { return v.AppStateFr
 // GetEnabled returns getAppRepo.Enabled, and is useful for accessing the field via an interface.
 func (v *getAppRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
 
-// GetGithubRepository returns getAppRepo.GithubRepository, and is useful for accessing the field via an interface.
-func (v *getAppRepo) GetGithubRepository() *AppStateFragmentGithubRepositoryGitHubRepository {
-	return v.AppStateFragment.GithubRepository
-}
-
 // GetProductionBranch returns getAppRepo.ProductionBranch, and is useful for accessing the field via an interface.
 func (v *getAppRepo) GetProductionBranch() *string { return v.AppStateFragment.ProductionBranch }
 
@@ -1884,8 +1857,6 @@ type __premarshalgetAppRepo struct {
 
 	Enabled bool `json:"enabled"`
 
-	GithubRepository *AppStateFragmentGithubRepositoryGitHubRepository `json:"githubRepository"`
-
 	ProductionBranch *string `json:"productionBranch"`
 
 	UpdatedAt time.Time `json:"updatedAt"`
@@ -1914,7 +1885,6 @@ func (v *getAppRepo) __premarshalJSON() (*__premarshalgetAppRepo, error) {
 	retval.Memory = v.AppStateFragment.Memory
 	retval.Owner = v.AppStateFragment.Owner
 	retval.Enabled = v.AppStateFragment.Enabled
-	retval.GithubRepository = v.AppStateFragment.GithubRepository
 	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
 	return &retval, nil
@@ -2234,11 +2204,6 @@ func (v *updateAppUpdateProjectRepo) GetOwner() *AppStateFragmentOwnerUser {
 // GetEnabled returns updateAppUpdateProjectRepo.Enabled, and is useful for accessing the field via an interface.
 func (v *updateAppUpdateProjectRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
 
-// GetGithubRepository returns updateAppUpdateProjectRepo.GithubRepository, and is useful for accessing the field via an interface.
-func (v *updateAppUpdateProjectRepo) GetGithubRepository() *AppStateFragmentGithubRepositoryGitHubRepository {
-	return v.AppStateFragment.GithubRepository
-}
-
 // GetProductionBranch returns updateAppUpdateProjectRepo.ProductionBranch, and is useful for accessing the field via an interface.
 func (v *updateAppUpdateProjectRepo) GetProductionBranch() *string {
 	return v.AppStateFragment.ProductionBranch
@@ -2297,8 +2262,6 @@ type __premarshalupdateAppUpdateProjectRepo struct {
 
 	Enabled bool `json:"enabled"`
 
-	GithubRepository *AppStateFragmentGithubRepositoryGitHubRepository `json:"githubRepository"`
-
 	ProductionBranch *string `json:"productionBranch"`
 
 	UpdatedAt time.Time `json:"updatedAt"`
@@ -2327,7 +2290,6 @@ func (v *updateAppUpdateProjectRepo) __premarshalJSON() (*__premarshalupdateAppU
 	retval.Memory = v.AppStateFragment.Memory
 	retval.Owner = v.AppStateFragment.Owner
 	retval.Enabled = v.AppStateFragment.Enabled
-	retval.GithubRepository = v.AppStateFragment.GithubRepository
 	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
 	return &retval, nil
@@ -2550,9 +2512,6 @@ fragment AppStateFragment on Repo {
 		id
 	}
 	enabled
-	githubRepository {
-		url
-	}
 	productionBranch
 	updatedAt
 }
@@ -2814,9 +2773,6 @@ fragment AppStateFragment on Repo {
 		id
 	}
 	enabled
-	githubRepository {
-		url
-	}
 	productionBranch
 	updatedAt
 }
@@ -2976,9 +2932,6 @@ fragment AppStateFragment on Repo {
 		id
 	}
 	enabled
-	githubRepository {
-		url
-	}
 	productionBranch
 	updatedAt
 }

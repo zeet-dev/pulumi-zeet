@@ -7,6 +7,7 @@ import (
 	"github.com/pulumi/pulumi-go-provider"
 	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/model"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -215,6 +216,12 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 			ClusterID:    &args.Deploy.ClusterID,
 		},
 		Envs: environmentVariablesToRequestInput(args.EnvironmentVariables),
+		Resources: &ContainerResourcesSpecInput{
+			Cpu:              args.Resources.Cpu,
+			Memory:           args.Resources.Memory,
+			EphemeralStorage: args.Resources.EphemeralStorage,
+			Spot:             args.Resources.SpotInstance,
+		},
 	}
 	if args.GithubInput != nil {
 		input.Url = args.GithubInput.Url
@@ -235,17 +242,23 @@ func (c *ZeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateA
 		return CreateAppResponse{}, err
 	}
 	repo := resp.GetRepo()
-	var cpu string
+	var cpu float64
 	if repo.GetCpu() != nil {
-		cpu = *repo.GetCpu()
+		cpu, err = strconv.ParseFloat(*repo.GetCpu(), 64)
+		if err != nil {
+			return CreateAppResponse{}, fmt.Errorf("unable to parse float for cpu value '%s'", *repo.GetCpu())
+		}
 	} else {
-		cpu = ""
+		cpu = *new(float64)
 	}
-	var memory string
+	var memory float64
 	if repo.GetMemory() != nil {
-		memory = *repo.GetMemory()
+		memory, err = strconv.ParseFloat(*repo.GetMemory(), 64)
+		if err != nil {
+			return CreateAppResponse{}, fmt.Errorf("unable to parse float for memory value '%s'", *repo.GetMemory())
+		}
 	} else {
-		memory = ""
+		memory = *new(float64)
 	}
 	args := model.CreateAppInput{
 		UserID:        repo.GetOwner().GetId(),
@@ -253,7 +266,8 @@ func (c *ZeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateA
 		EnvironmentID: repo.GetProjectEnvironment().GetId(),
 		Name:          repo.GetName(),
 		GithubInput: &model.CreateAppGithubInput{
-			Url:              repo.GetGithubRepository().GetUrl(),
+			// NB: anchor cannot resolve githubRepository for Repo's created with x-access-token:
+			// ZEET-1480: https://linear.app/zeet/issue/ZEET-1480/anchor-or-createprojectgitgithubrepository-error-not-found
 			ProductionBranch: repo.GetProductionBranch(),
 		},
 		Enabled: repo.GetEnabled(),
@@ -272,12 +286,16 @@ func (c *ZeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateA
 }
 
 func (c *ZeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args model.CreateAppInput) (CreateAppResponse, error) {
+	cpuString := strconv.FormatFloat(args.Resources.Cpu, 'f', -1, 64)
+	memoryString := strconv.FormatFloat(args.Resources.Memory, 'f', -1, 64)
 	input := UpdateProjectInput{
-		Id:             appID,
-		Name:           &args.Name,
-		DockerfilePath: args.Build.DockerfilePath,
-		Cpu:            &args.Resources.Cpu,
-		Memory:         &args.Resources.Memory,
+		Id:               appID,
+		Name:             &args.Name,
+		DockerfilePath:   args.Build.DockerfilePath,
+		Cpu:              &cpuString,
+		Memory:           &memoryString,
+		EphemeralStorage: args.Resources.EphemeralStorage,
+		// TODO: can 'Spot' bool be updated?
 	}
 	resp, err := updateApp(ctx, c.client, &input)
 	if err != nil {

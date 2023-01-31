@@ -28,8 +28,10 @@ export namespace model {
     }
 
     export interface CreateAppResourcesInput {
-        cpu: string;
-        memory: string;
+        cpu: number;
+        ephemeralStorage: number;
+        memory: number;
+        spotInstance: boolean;
     }
 
 }
