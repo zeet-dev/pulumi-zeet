@@ -200,8 +200,59 @@ type CreateAppResponse struct {
 }
 
 func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateAppInput) (CreateAppResponse, error) {
-	buildType := BuildType(args.Build.Type)
-	deployTarget := DeployTarget(args.Deploy.DeployTarget)
+	var response appStateResponse
+	if args.GithubInput != nil {
+		input, err := newCreateProjectGitInput(args, *args.GithubInput)
+		if err != nil {
+			return CreateAppResponse{}, err
+		}
+		resp, err := createAppGit(ctx, c.client, &input)
+		if err != nil {
+			return CreateAppResponse{}, err
+		}
+		response = resp.GetCreateProjectGit()
+	} else if args.DockerInput != nil {
+		input := newCreateProjectDockerInput(args, *args.DockerInput)
+		resp, err := createAppDocker(ctx, c.client, &input)
+		if err != nil {
+			return CreateAppResponse{}, err
+		}
+		response = resp.GetCreateProjectDocker()
+	} else {
+		return CreateAppResponse{}, fmt.Errorf("must specify one app spec")
+	}
+	return NewCreateAppResponse(args, response), nil
+}
+
+func newCreateProjectDockerInput(args model.CreateAppInput, dockerInput model.CreateAppDockerInput) CreateProjectDockerInput {
+	input := CreateProjectDockerInput{
+		Enabled:       &args.Enabled,
+		UserID:        &args.UserID,
+		ProjectID:     &args.ProjectID,
+		EnvironmentID: &args.EnvironmentID,
+		Name:          &args.Name,
+		DeployTarget: &ProjectDeployInput{
+			DeployTarget: getDeployTarget(args.Deploy),
+			ClusterID:    &args.Deploy.ClusterID,
+		},
+		Envs:        environmentVariablesToRequestInput(args.EnvironmentVariables),
+		DockerImage: dockerInput.DockerImage,
+		Cpu:         args.GetCpuString(),
+		Memory:      args.GetMemoryString(),
+		Dedicated:   nil,
+		Gpu:         nil,
+		TeamID:      nil,
+	}
+	return input
+}
+
+func newCreateProjectGitInput(args model.CreateAppInput, githubInput model.CreateAppGithubInput) (CreateProjectGitInput, error) {
+	buildType := getBuildType(args.Build)
+	deployTarget := getDeployTarget(args.Deploy)
+	memory, err := args.Resources.GetMemoryFloat()
+	if err != nil {
+		return CreateProjectGitInput{}, err
+	}
 	input := CreateProjectGitInput{
 		UserID:        &args.UserID,
 		ProjectID:     &args.ProjectID,
@@ -217,23 +268,24 @@ func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 		},
 		Envs: environmentVariablesToRequestInput(args.EnvironmentVariables),
 		Resources: &ContainerResourcesSpecInput{
-			Cpu:              args.Resources.Cpu,
-			Memory:           args.Resources.Memory,
+			Cpu: args.Resources.Cpu,
+			// TODO: what kind of float is CreateProjectGitInput expecting? bytes?
+			Memory:           memory,
 			EphemeralStorage: args.Resources.EphemeralStorage,
 			Spot:             args.Resources.SpotInstance,
 		},
+		Url:              githubInput.Url,
+		ProductionBranch: githubInput.ProductionBranch,
 	}
-	if args.GithubInput != nil {
-		input.Url = args.GithubInput.Url
-		input.ProductionBranch = args.GithubInput.ProductionBranch
-	} else {
-		return CreateAppResponse{}, fmt.Errorf("must specify one app spec")
-	}
-	resp, err := createAppGit(ctx, c.client, &input)
-	if err != nil {
-		return CreateAppResponse{}, err
-	}
-	return NewCreateAppResponse(args, resp.GetCreateProjectGit()), nil
+	return input, nil
+}
+
+func getDeployTarget(deployInput model.CreateAppDeployInput) DeployTarget {
+	return DeployTarget(deployInput.DeployTarget)
+}
+
+func getBuildType(buildInput model.CreateAppBuildInput) BuildType {
+	return BuildType(buildInput.Type)
 }
 
 func (c *ZeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateAppResponse, error) {
@@ -251,14 +303,11 @@ func (c *ZeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateA
 	} else {
 		cpu = *new(float64)
 	}
-	var memory float64
+	var memory string
 	if repo.GetMemory() != nil {
-		memory, err = strconv.ParseFloat(*repo.GetMemory(), 64)
-		if err != nil {
-			return CreateAppResponse{}, fmt.Errorf("unable to parse float for memory value '%s'", *repo.GetMemory())
-		}
+		memory = *repo.GetMemory()
 	} else {
-		memory = *new(float64)
+		memory = ""
 	}
 	args := model.CreateAppInput{
 		UserID:        repo.GetOwner().GetId(),
@@ -286,14 +335,14 @@ func (c *ZeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateA
 }
 
 func (c *ZeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args model.CreateAppInput) (CreateAppResponse, error) {
-	cpuString := strconv.FormatFloat(args.Resources.Cpu, 'f', -1, 64)
-	memoryString := strconv.FormatFloat(args.Resources.Memory, 'f', -1, 64)
+	cpuString := args.GetCpuString()
+	memoryString := args.GetMemoryString()
 	input := UpdateProjectInput{
 		Id:               appID,
 		Name:             &args.Name,
 		DockerfilePath:   args.Build.DockerfilePath,
-		Cpu:              &cpuString,
-		Memory:           &memoryString,
+		Cpu:              cpuString,
+		Memory:           memoryString,
 		EphemeralStorage: args.Resources.EphemeralStorage,
 		// TODO: can 'Spot' bool be updated?
 	}

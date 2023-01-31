@@ -43,6 +43,47 @@ func (i CreateAppBuildInputArgs) ToCreateAppBuildInputOutputWithContext(ctx cont
 	return pulumi.ToOutputWithContext(ctx, i).(CreateAppBuildInputOutput)
 }
 
+func (i CreateAppBuildInputArgs) ToCreateAppBuildInputPtrOutput() CreateAppBuildInputPtrOutput {
+	return i.ToCreateAppBuildInputPtrOutputWithContext(context.Background())
+}
+
+func (i CreateAppBuildInputArgs) ToCreateAppBuildInputPtrOutputWithContext(ctx context.Context) CreateAppBuildInputPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(CreateAppBuildInputOutput).ToCreateAppBuildInputPtrOutputWithContext(ctx)
+}
+
+// CreateAppBuildInputPtrInput is an input type that accepts CreateAppBuildInputArgs, CreateAppBuildInputPtr and CreateAppBuildInputPtrOutput values.
+// You can construct a concrete instance of `CreateAppBuildInputPtrInput` via:
+//
+//	        CreateAppBuildInputArgs{...}
+//
+//	or:
+//
+//	        nil
+type CreateAppBuildInputPtrInput interface {
+	pulumi.Input
+
+	ToCreateAppBuildInputPtrOutput() CreateAppBuildInputPtrOutput
+	ToCreateAppBuildInputPtrOutputWithContext(context.Context) CreateAppBuildInputPtrOutput
+}
+
+type createAppBuildInputPtrType CreateAppBuildInputArgs
+
+func CreateAppBuildInputPtr(v *CreateAppBuildInputArgs) CreateAppBuildInputPtrInput {
+	return (*createAppBuildInputPtrType)(v)
+}
+
+func (*createAppBuildInputPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**CreateAppBuildInput)(nil)).Elem()
+}
+
+func (i *createAppBuildInputPtrType) ToCreateAppBuildInputPtrOutput() CreateAppBuildInputPtrOutput {
+	return i.ToCreateAppBuildInputPtrOutputWithContext(context.Background())
+}
+
+func (i *createAppBuildInputPtrType) ToCreateAppBuildInputPtrOutputWithContext(ctx context.Context) CreateAppBuildInputPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(CreateAppBuildInputPtrOutput)
+}
+
 type CreateAppBuildInputOutput struct{ *pulumi.OutputState }
 
 func (CreateAppBuildInputOutput) ElementType() reflect.Type {
@@ -57,12 +98,64 @@ func (o CreateAppBuildInputOutput) ToCreateAppBuildInputOutputWithContext(ctx co
 	return o
 }
 
+func (o CreateAppBuildInputOutput) ToCreateAppBuildInputPtrOutput() CreateAppBuildInputPtrOutput {
+	return o.ToCreateAppBuildInputPtrOutputWithContext(context.Background())
+}
+
+func (o CreateAppBuildInputOutput) ToCreateAppBuildInputPtrOutputWithContext(ctx context.Context) CreateAppBuildInputPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v CreateAppBuildInput) *CreateAppBuildInput {
+		return &v
+	}).(CreateAppBuildInputPtrOutput)
+}
+
 func (o CreateAppBuildInputOutput) DockerfilePath() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v CreateAppBuildInput) *string { return v.DockerfilePath }).(pulumi.StringPtrOutput)
 }
 
 func (o CreateAppBuildInputOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v CreateAppBuildInput) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type CreateAppBuildInputPtrOutput struct{ *pulumi.OutputState }
+
+func (CreateAppBuildInputPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**CreateAppBuildInput)(nil)).Elem()
+}
+
+func (o CreateAppBuildInputPtrOutput) ToCreateAppBuildInputPtrOutput() CreateAppBuildInputPtrOutput {
+	return o
+}
+
+func (o CreateAppBuildInputPtrOutput) ToCreateAppBuildInputPtrOutputWithContext(ctx context.Context) CreateAppBuildInputPtrOutput {
+	return o
+}
+
+func (o CreateAppBuildInputPtrOutput) Elem() CreateAppBuildInputOutput {
+	return o.ApplyT(func(v *CreateAppBuildInput) CreateAppBuildInput {
+		if v != nil {
+			return *v
+		}
+		var ret CreateAppBuildInput
+		return ret
+	}).(CreateAppBuildInputOutput)
+}
+
+func (o CreateAppBuildInputPtrOutput) DockerfilePath() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *CreateAppBuildInput) *string {
+		if v == nil {
+			return nil
+		}
+		return v.DockerfilePath
+	}).(pulumi.StringPtrOutput)
+}
+
+func (o CreateAppBuildInputPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *CreateAppBuildInput) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Type
+	}).(pulumi.StringPtrOutput)
 }
 
 type CreateAppDeployInput struct {
@@ -118,6 +211,139 @@ func (o CreateAppDeployInputOutput) ClusterId() pulumi.StringPtrOutput {
 
 func (o CreateAppDeployInputOutput) DeployTarget() pulumi.StringOutput {
 	return o.ApplyT(func(v CreateAppDeployInput) string { return v.DeployTarget }).(pulumi.StringOutput)
+}
+
+type CreateAppDockerInput struct {
+	DockerImage string `pulumi:"dockerImage"`
+}
+
+// CreateAppDockerInputInput is an input type that accepts CreateAppDockerInputArgs and CreateAppDockerInputOutput values.
+// You can construct a concrete instance of `CreateAppDockerInputInput` via:
+//
+//	CreateAppDockerInputArgs{...}
+type CreateAppDockerInputInput interface {
+	pulumi.Input
+
+	ToCreateAppDockerInputOutput() CreateAppDockerInputOutput
+	ToCreateAppDockerInputOutputWithContext(context.Context) CreateAppDockerInputOutput
+}
+
+type CreateAppDockerInputArgs struct {
+	DockerImage pulumi.StringInput `pulumi:"dockerImage"`
+}
+
+func (CreateAppDockerInputArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*CreateAppDockerInput)(nil)).Elem()
+}
+
+func (i CreateAppDockerInputArgs) ToCreateAppDockerInputOutput() CreateAppDockerInputOutput {
+	return i.ToCreateAppDockerInputOutputWithContext(context.Background())
+}
+
+func (i CreateAppDockerInputArgs) ToCreateAppDockerInputOutputWithContext(ctx context.Context) CreateAppDockerInputOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(CreateAppDockerInputOutput)
+}
+
+func (i CreateAppDockerInputArgs) ToCreateAppDockerInputPtrOutput() CreateAppDockerInputPtrOutput {
+	return i.ToCreateAppDockerInputPtrOutputWithContext(context.Background())
+}
+
+func (i CreateAppDockerInputArgs) ToCreateAppDockerInputPtrOutputWithContext(ctx context.Context) CreateAppDockerInputPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(CreateAppDockerInputOutput).ToCreateAppDockerInputPtrOutputWithContext(ctx)
+}
+
+// CreateAppDockerInputPtrInput is an input type that accepts CreateAppDockerInputArgs, CreateAppDockerInputPtr and CreateAppDockerInputPtrOutput values.
+// You can construct a concrete instance of `CreateAppDockerInputPtrInput` via:
+//
+//	        CreateAppDockerInputArgs{...}
+//
+//	or:
+//
+//	        nil
+type CreateAppDockerInputPtrInput interface {
+	pulumi.Input
+
+	ToCreateAppDockerInputPtrOutput() CreateAppDockerInputPtrOutput
+	ToCreateAppDockerInputPtrOutputWithContext(context.Context) CreateAppDockerInputPtrOutput
+}
+
+type createAppDockerInputPtrType CreateAppDockerInputArgs
+
+func CreateAppDockerInputPtr(v *CreateAppDockerInputArgs) CreateAppDockerInputPtrInput {
+	return (*createAppDockerInputPtrType)(v)
+}
+
+func (*createAppDockerInputPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**CreateAppDockerInput)(nil)).Elem()
+}
+
+func (i *createAppDockerInputPtrType) ToCreateAppDockerInputPtrOutput() CreateAppDockerInputPtrOutput {
+	return i.ToCreateAppDockerInputPtrOutputWithContext(context.Background())
+}
+
+func (i *createAppDockerInputPtrType) ToCreateAppDockerInputPtrOutputWithContext(ctx context.Context) CreateAppDockerInputPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(CreateAppDockerInputPtrOutput)
+}
+
+type CreateAppDockerInputOutput struct{ *pulumi.OutputState }
+
+func (CreateAppDockerInputOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*CreateAppDockerInput)(nil)).Elem()
+}
+
+func (o CreateAppDockerInputOutput) ToCreateAppDockerInputOutput() CreateAppDockerInputOutput {
+	return o
+}
+
+func (o CreateAppDockerInputOutput) ToCreateAppDockerInputOutputWithContext(ctx context.Context) CreateAppDockerInputOutput {
+	return o
+}
+
+func (o CreateAppDockerInputOutput) ToCreateAppDockerInputPtrOutput() CreateAppDockerInputPtrOutput {
+	return o.ToCreateAppDockerInputPtrOutputWithContext(context.Background())
+}
+
+func (o CreateAppDockerInputOutput) ToCreateAppDockerInputPtrOutputWithContext(ctx context.Context) CreateAppDockerInputPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v CreateAppDockerInput) *CreateAppDockerInput {
+		return &v
+	}).(CreateAppDockerInputPtrOutput)
+}
+
+func (o CreateAppDockerInputOutput) DockerImage() pulumi.StringOutput {
+	return o.ApplyT(func(v CreateAppDockerInput) string { return v.DockerImage }).(pulumi.StringOutput)
+}
+
+type CreateAppDockerInputPtrOutput struct{ *pulumi.OutputState }
+
+func (CreateAppDockerInputPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**CreateAppDockerInput)(nil)).Elem()
+}
+
+func (o CreateAppDockerInputPtrOutput) ToCreateAppDockerInputPtrOutput() CreateAppDockerInputPtrOutput {
+	return o
+}
+
+func (o CreateAppDockerInputPtrOutput) ToCreateAppDockerInputPtrOutputWithContext(ctx context.Context) CreateAppDockerInputPtrOutput {
+	return o
+}
+
+func (o CreateAppDockerInputPtrOutput) Elem() CreateAppDockerInputOutput {
+	return o.ApplyT(func(v *CreateAppDockerInput) CreateAppDockerInput {
+		if v != nil {
+			return *v
+		}
+		var ret CreateAppDockerInput
+		return ret
+	}).(CreateAppDockerInputOutput)
+}
+
+func (o CreateAppDockerInputPtrOutput) DockerImage() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *CreateAppDockerInput) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.DockerImage
+	}).(pulumi.StringPtrOutput)
 }
 
 type CreateAppEnvironmentVariableInput struct {
@@ -377,7 +603,7 @@ func (o CreateAppGithubInputPtrOutput) Url() pulumi.StringPtrOutput {
 type CreateAppResourcesInput struct {
 	Cpu              float64 `pulumi:"cpu"`
 	EphemeralStorage float64 `pulumi:"ephemeralStorage"`
-	Memory           float64 `pulumi:"memory"`
+	Memory           string  `pulumi:"memory"`
 	SpotInstance     bool    `pulumi:"spotInstance"`
 }
 
@@ -395,7 +621,7 @@ type CreateAppResourcesInputInput interface {
 type CreateAppResourcesInputArgs struct {
 	Cpu              pulumi.Float64Input `pulumi:"cpu"`
 	EphemeralStorage pulumi.Float64Input `pulumi:"ephemeralStorage"`
-	Memory           pulumi.Float64Input `pulumi:"memory"`
+	Memory           pulumi.StringInput  `pulumi:"memory"`
 	SpotInstance     pulumi.BoolInput    `pulumi:"spotInstance"`
 }
 
@@ -433,8 +659,8 @@ func (o CreateAppResourcesInputOutput) EphemeralStorage() pulumi.Float64Output {
 	return o.ApplyT(func(v CreateAppResourcesInput) float64 { return v.EphemeralStorage }).(pulumi.Float64Output)
 }
 
-func (o CreateAppResourcesInputOutput) Memory() pulumi.Float64Output {
-	return o.ApplyT(func(v CreateAppResourcesInput) float64 { return v.Memory }).(pulumi.Float64Output)
+func (o CreateAppResourcesInputOutput) Memory() pulumi.StringOutput {
+	return o.ApplyT(func(v CreateAppResourcesInput) string { return v.Memory }).(pulumi.StringOutput)
 }
 
 func (o CreateAppResourcesInputOutput) SpotInstance() pulumi.BoolOutput {
@@ -443,14 +669,20 @@ func (o CreateAppResourcesInputOutput) SpotInstance() pulumi.BoolOutput {
 
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppBuildInputInput)(nil)).Elem(), CreateAppBuildInputArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppBuildInputPtrInput)(nil)).Elem(), CreateAppBuildInputArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppDeployInputInput)(nil)).Elem(), CreateAppDeployInputArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppDockerInputInput)(nil)).Elem(), CreateAppDockerInputArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppDockerInputPtrInput)(nil)).Elem(), CreateAppDockerInputArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppEnvironmentVariableInputInput)(nil)).Elem(), CreateAppEnvironmentVariableInputArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppEnvironmentVariableInputArrayInput)(nil)).Elem(), CreateAppEnvironmentVariableInputArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppGithubInputInput)(nil)).Elem(), CreateAppGithubInputArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppGithubInputPtrInput)(nil)).Elem(), CreateAppGithubInputArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*CreateAppResourcesInputInput)(nil)).Elem(), CreateAppResourcesInputArgs{})
 	pulumi.RegisterOutputType(CreateAppBuildInputOutput{})
+	pulumi.RegisterOutputType(CreateAppBuildInputPtrOutput{})
 	pulumi.RegisterOutputType(CreateAppDeployInputOutput{})
+	pulumi.RegisterOutputType(CreateAppDockerInputOutput{})
+	pulumi.RegisterOutputType(CreateAppDockerInputPtrOutput{})
 	pulumi.RegisterOutputType(CreateAppEnvironmentVariableInputOutput{})
 	pulumi.RegisterOutputType(CreateAppEnvironmentVariableInputArrayOutput{})
 	pulumi.RegisterOutputType(CreateAppGithubInputOutput{})

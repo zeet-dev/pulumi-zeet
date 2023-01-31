@@ -16,7 +16,6 @@ __all__ = ['AppArgs', 'App']
 @pulumi.input_type
 class AppArgs:
     def __init__(__self__, *,
-                 build: pulumi.Input['_model.CreateAppBuildInputArgs'],
                  deploy: pulumi.Input['_model.CreateAppDeployInputArgs'],
                  enabled: pulumi.Input[bool],
                  environment_id: pulumi.Input[str],
@@ -24,12 +23,13 @@ class AppArgs:
                  project_id: pulumi.Input[str],
                  resources: pulumi.Input['_model.CreateAppResourcesInputArgs'],
                  user_id: pulumi.Input[str],
+                 build: Optional[pulumi.Input['_model.CreateAppBuildInputArgs']] = None,
+                 docker: Optional[pulumi.Input['_model.CreateAppDockerInputArgs']] = None,
                  environment_variables: Optional[pulumi.Input[Sequence[pulumi.Input['_model.CreateAppEnvironmentVariableInputArgs']]]] = None,
                  github: Optional[pulumi.Input['_model.CreateAppGithubInputArgs']] = None):
         """
         The set of arguments for constructing a App resource.
         """
-        pulumi.set(__self__, "build", build)
         pulumi.set(__self__, "deploy", deploy)
         pulumi.set(__self__, "enabled", enabled)
         pulumi.set(__self__, "environment_id", environment_id)
@@ -37,19 +37,14 @@ class AppArgs:
         pulumi.set(__self__, "project_id", project_id)
         pulumi.set(__self__, "resources", resources)
         pulumi.set(__self__, "user_id", user_id)
+        if build is not None:
+            pulumi.set(__self__, "build", build)
+        if docker is not None:
+            pulumi.set(__self__, "docker", docker)
         if environment_variables is not None:
             pulumi.set(__self__, "environment_variables", environment_variables)
         if github is not None:
             pulumi.set(__self__, "github", github)
-
-    @property
-    @pulumi.getter
-    def build(self) -> pulumi.Input['_model.CreateAppBuildInputArgs']:
-        return pulumi.get(self, "build")
-
-    @build.setter
-    def build(self, value: pulumi.Input['_model.CreateAppBuildInputArgs']):
-        pulumi.set(self, "build", value)
 
     @property
     @pulumi.getter
@@ -115,6 +110,24 @@ class AppArgs:
         pulumi.set(self, "user_id", value)
 
     @property
+    @pulumi.getter
+    def build(self) -> Optional[pulumi.Input['_model.CreateAppBuildInputArgs']]:
+        return pulumi.get(self, "build")
+
+    @build.setter
+    def build(self, value: Optional[pulumi.Input['_model.CreateAppBuildInputArgs']]):
+        pulumi.set(self, "build", value)
+
+    @property
+    @pulumi.getter
+    def docker(self) -> Optional[pulumi.Input['_model.CreateAppDockerInputArgs']]:
+        return pulumi.get(self, "docker")
+
+    @docker.setter
+    def docker(self, value: Optional[pulumi.Input['_model.CreateAppDockerInputArgs']]):
+        pulumi.set(self, "docker", value)
+
+    @property
     @pulumi.getter(name="environmentVariables")
     def environment_variables(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['_model.CreateAppEnvironmentVariableInputArgs']]]]:
         return pulumi.get(self, "environment_variables")
@@ -140,6 +153,7 @@ class App(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  build: Optional[pulumi.Input[pulumi.InputType['_model.CreateAppBuildInputArgs']]] = None,
                  deploy: Optional[pulumi.Input[pulumi.InputType['_model.CreateAppDeployInputArgs']]] = None,
+                 docker: Optional[pulumi.Input[pulumi.InputType['_model.CreateAppDockerInputArgs']]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
                  environment_id: Optional[pulumi.Input[str]] = None,
                  environment_variables: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['_model.CreateAppEnvironmentVariableInputArgs']]]]] = None,
@@ -179,6 +193,7 @@ class App(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  build: Optional[pulumi.Input[pulumi.InputType['_model.CreateAppBuildInputArgs']]] = None,
                  deploy: Optional[pulumi.Input[pulumi.InputType['_model.CreateAppDeployInputArgs']]] = None,
+                 docker: Optional[pulumi.Input[pulumi.InputType['_model.CreateAppDockerInputArgs']]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
                  environment_id: Optional[pulumi.Input[str]] = None,
                  environment_variables: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['_model.CreateAppEnvironmentVariableInputArgs']]]]] = None,
@@ -196,12 +211,11 @@ class App(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = AppArgs.__new__(AppArgs)
 
-            if build is None and not opts.urn:
-                raise TypeError("Missing required property 'build'")
             __props__.__dict__["build"] = build
             if deploy is None and not opts.urn:
                 raise TypeError("Missing required property 'deploy'")
             __props__.__dict__["deploy"] = deploy
+            __props__.__dict__["docker"] = docker
             if enabled is None and not opts.urn:
                 raise TypeError("Missing required property 'enabled'")
             __props__.__dict__["enabled"] = enabled
@@ -249,6 +263,7 @@ class App(pulumi.CustomResource):
         __props__.__dict__["app_id"] = None
         __props__.__dict__["build"] = None
         __props__.__dict__["deploy"] = None
+        __props__.__dict__["docker"] = None
         __props__.__dict__["enabled"] = None
         __props__.__dict__["environment_id"] = None
         __props__.__dict__["environment_variables"] = None
@@ -267,13 +282,18 @@ class App(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def build(self) -> pulumi.Output['_model.outputs.CreateAppBuildInput']:
+    def build(self) -> pulumi.Output[Optional['_model.outputs.CreateAppBuildInput']]:
         return pulumi.get(self, "build")
 
     @property
     @pulumi.getter
     def deploy(self) -> pulumi.Output['_model.outputs.CreateAppDeployInput']:
         return pulumi.get(self, "deploy")
+
+    @property
+    @pulumi.getter
+    def docker(self) -> pulumi.Output[Optional['_model.outputs.CreateAppDockerInput']]:
+        return pulumi.get(self, "docker")
 
     @property
     @pulumi.getter

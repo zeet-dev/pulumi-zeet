@@ -39,8 +39,10 @@ func (a App) Check(ctx provider.Context, name string, oldInputs resource.Propert
 func checkAppArgs(newInputs resource.PropertyMap) error {
 	if _, ok := newInputs["github"]; ok {
 		return nil
+	} else if _, ok := newInputs["docker"]; ok {
+		return nil
 	} else {
-		return fmt.Errorf("must specify one of: github")
+		return fmt.Errorf("must specify one of: github, docker")
 	}
 }
 
@@ -55,9 +57,10 @@ type AppArgs struct {
 	Name                 string                                    `pulumi:"name"`
 	Enabled              bool                                      `pulumi:"enabled"`
 	ResourcesInput       model.CreateAppResourcesInput             `pulumi:"resources"`
-	BuildInput           model.CreateAppBuildInput                 `pulumi:"build"`
+	BuildInput           model.CreateAppBuildInput                 `pulumi:"build,optional"`
 	DeployInput          model.CreateAppDeployInput                `pulumi:"deploy"`
-	GithubInput          model.CreateAppGithubInput                `pulumi:"github,optional"`
+	GithubInput          *model.CreateAppGithubInput               `pulumi:"github,optional"`
+	DockerInput          *model.CreateAppDockerInput               `pulumi:"docker,optional"`
 	EnvironmentVariables []model.CreateAppEnvironmentVariableInput `pulumi:"environmentVariables,optional"`
 }
 
@@ -76,8 +79,10 @@ func (App) Create(ctx provider.Context, name string, input AppArgs, preview bool
 		return state.AppID, state, nil
 	}
 
-	ctx.Log(diag.Warning,
-		"app resources configuration is not currently supported, app wil default to 'tiny' instance size")
+	if input.GithubInput != nil {
+		ctx.Log(diag.Warning,
+			"app resources configuration is not currently functional for github-based apps, app wil default to 'tiny' instance size")
+	}
 
 	args := model.CreateAppInput{
 		UserID:               input.UserID,
@@ -88,7 +93,8 @@ func (App) Create(ctx provider.Context, name string, input AppArgs, preview bool
 		Resources:            input.ResourcesInput,
 		Build:                input.BuildInput,
 		Deploy:               input.DeployInput,
-		GithubInput:          &input.GithubInput,
+		GithubInput:          input.GithubInput,
+		DockerInput:          input.DockerInput,
 		EnvironmentVariables: input.EnvironmentVariables,
 	}
 	newApp, err := config.ZeetClient.CreateApp(ctx, args)
@@ -129,7 +135,7 @@ func responseToAppState(resp gql.CreateAppResponse) AppState {
 				DeployTarget: resp.Deploy.DeployTarget,
 				ClusterID:    resp.Deploy.ClusterID,
 			},
-			GithubInput: model.CreateAppGithubInput{
+			GithubInput: &model.CreateAppGithubInput{
 				Url:              resp.GithubInput.Url,
 				ProductionBranch: resp.GithubInput.ProductionBranch,
 			},

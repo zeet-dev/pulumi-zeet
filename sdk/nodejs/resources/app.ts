@@ -34,8 +34,9 @@ export class App extends pulumi.CustomResource {
     }
 
     public /*out*/ readonly appId!: pulumi.Output<string>;
-    public readonly build!: pulumi.Output<outputs.model.CreateAppBuildInput>;
+    public readonly build!: pulumi.Output<outputs.model.CreateAppBuildInput | undefined>;
     public readonly deploy!: pulumi.Output<outputs.model.CreateAppDeployInput>;
+    public readonly docker!: pulumi.Output<outputs.model.CreateAppDockerInput | undefined>;
     public readonly enabled!: pulumi.Output<boolean>;
     public readonly environmentId!: pulumi.Output<string>;
     public readonly environmentVariables!: pulumi.Output<outputs.model.CreateAppEnvironmentVariableInput[] | undefined>;
@@ -57,9 +58,6 @@ export class App extends pulumi.CustomResource {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         if (!opts.id) {
-            if ((!args || args.build === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'build'");
-            }
             if ((!args || args.deploy === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'deploy'");
             }
@@ -83,6 +81,7 @@ export class App extends pulumi.CustomResource {
             }
             resourceInputs["build"] = args ? args.build : undefined;
             resourceInputs["deploy"] = args ? args.deploy : undefined;
+            resourceInputs["docker"] = args ? args.docker : undefined;
             resourceInputs["enabled"] = args ? args.enabled : undefined;
             resourceInputs["environmentId"] = args ? args.environmentId : undefined;
             resourceInputs["environmentVariables"] = args ? args.environmentVariables : undefined;
@@ -97,6 +96,7 @@ export class App extends pulumi.CustomResource {
             resourceInputs["appId"] = undefined /*out*/;
             resourceInputs["build"] = undefined /*out*/;
             resourceInputs["deploy"] = undefined /*out*/;
+            resourceInputs["docker"] = undefined /*out*/;
             resourceInputs["enabled"] = undefined /*out*/;
             resourceInputs["environmentId"] = undefined /*out*/;
             resourceInputs["environmentVariables"] = undefined /*out*/;
@@ -116,8 +116,9 @@ export class App extends pulumi.CustomResource {
  * The set of arguments for constructing a App resource.
  */
 export interface AppArgs {
-    build: pulumi.Input<inputs.model.CreateAppBuildInputArgs>;
+    build?: pulumi.Input<inputs.model.CreateAppBuildInputArgs>;
     deploy: pulumi.Input<inputs.model.CreateAppDeployInputArgs>;
+    docker?: pulumi.Input<inputs.model.CreateAppDockerInputArgs>;
     enabled: pulumi.Input<boolean>;
     environmentId: pulumi.Input<string>;
     environmentVariables?: pulumi.Input<pulumi.Input<inputs.model.CreateAppEnvironmentVariableInputArgs>[]>;

@@ -16,6 +16,10 @@ export namespace model {
         deployTarget: string;
     }
 
+    export interface CreateAppDockerInput {
+        dockerImage: string;
+    }
+
     export interface CreateAppEnvironmentVariableInput {
         name: string;
         sealed?: boolean;
@@ -30,7 +34,7 @@ export namespace model {
     export interface CreateAppResourcesInput {
         cpu: number;
         ephemeralStorage: number;
-        memory: number;
+        memory: string;
         spotInstance: boolean;
     }
 
