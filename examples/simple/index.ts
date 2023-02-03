@@ -30,6 +30,11 @@ const newProjectPreview = new zeet.resources.Project("new-project-for-preview", 
     name: "pulumi-test-preview"
 })
 
+const newProjectPreview2 = new zeet.resources.Project("new-project-for-preview2", {
+    userId: teamIdConfig,
+    name: "pulumi-test-preview234"
+})
+
 const environment = new zeet.resources.Environment("my-environment", {
     projectId: project.projectId,
     name: "pulumi-test-environment-02-renamed",

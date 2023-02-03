@@ -9,7 +9,7 @@ NUGET_PKG_NAME   := Pulumi.ZeetNative
 PROVIDER        := pulumi-resource-${PACK}
 VERSION         ?= $(shell pulumictl get version)
 PROVIDER_PATH   := provider
-VERSION_PATH     := ${PROVIDER_PATH}/cmd/main.Version
+VERSION_PATH    := ${PROVIDER_PATH}/cmd/main.Version
 
 GOPATH			:= $(shell go env GOPATH)
 

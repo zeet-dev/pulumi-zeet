@@ -11,32 +11,37 @@ import (
 	"time"
 )
 
-type ZeetGraphqlClient struct {
-	endpoint string
-	apiToken string
-	client   graphql.Client
+type zeetGraphqlClient struct {
+	endpoint  string
+	apiToken  string
+	client    graphql.Client
+	userAgent string
 }
 
-func NewZeetGraphqlClient(endpoint string, apiToken string) ZeetGraphqlClient {
-	return ZeetGraphqlClient{
+func NewZeetGraphqlClient(endpoint string, apiToken string, version string) ZeetClient {
+	userAgent := fmt.Sprintf("Pulumi/3.0 (https://www.pulumi.com) pulumi-zeet-native/%s", version)
+	transport := authedTransport{apiToken: apiToken, wrapped: http.DefaultTransport, userAgent: userAgent}
+	println("version", version, "ua", userAgent)
+	return &zeetGraphqlClient{
 		endpoint: endpoint,
 		apiToken: apiToken,
-		client: graphql.NewClient(endpoint,
-			&http.Client{Transport: &authedTransport{apiToken: apiToken, wrapped: http.DefaultTransport}}),
+		client:   graphql.NewClient(endpoint, &http.Client{Transport: &transport}),
 	}
 }
 
 type authedTransport struct {
-	apiToken string
-	wrapped  http.RoundTripper
+	apiToken  string
+	wrapped   http.RoundTripper
+	userAgent string
 }
 
 func (t *authedTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	req.Header.Set("Authorization", "bearer "+t.apiToken)
+	req.Header.Set("User-Agent", t.userAgent)
 	return t.wrapped.RoundTrip(req)
 }
 
-func (c *ZeetGraphqlClient) GetCurrentUserID(ctx context.Context) (string, error) {
+func (c *zeetGraphqlClient) GetCurrentUserID(ctx context.Context) (string, error) {
 	resp, err := currentUserID(ctx, c.client)
 	if err != nil {
 		return "", err
@@ -50,7 +55,7 @@ type CreateProjectResponse struct {
 	UpdatedAt time.Time
 }
 
-func (c *ZeetGraphqlClient) CreateProject(ctx context.Context, userID string, name string) (CreateProjectResponse, error) {
+func (c *zeetGraphqlClient) CreateProject(ctx context.Context, userID string, name string) (CreateProjectResponse, error) {
 	resp, err := createProject(ctx, c.client, userID, name)
 	if err != nil {
 		return CreateProjectResponse{}, err
@@ -63,7 +68,7 @@ func (c *ZeetGraphqlClient) CreateProject(ctx context.Context, userID string, na
 	}, nil
 }
 
-func (c *ZeetGraphqlClient) ReadProject(ctx context.Context, projectID string) (CreateProjectResponse, error) {
+func (c *zeetGraphqlClient) ReadProject(ctx context.Context, projectID string) (CreateProjectResponse, error) {
 	resp, err := getProjectByID(ctx, c.client, projectID)
 	if err != nil {
 		return CreateProjectResponse{}, err
@@ -75,7 +80,7 @@ func (c *ZeetGraphqlClient) ReadProject(ctx context.Context, projectID string) (
 	}, nil
 }
 
-func (c *ZeetGraphqlClient) UpdateProject(ctx context.Context, projectID string, name *string) (CreateProjectResponse, error) {
+func (c *zeetGraphqlClient) UpdateProject(ctx context.Context, projectID string, name *string) (CreateProjectResponse, error) {
 	resp, err := updateProject(ctx, c.client, projectID, name)
 	if err != nil {
 		return CreateProjectResponse{}, err
@@ -87,7 +92,7 @@ func (c *ZeetGraphqlClient) UpdateProject(ctx context.Context, projectID string,
 	}, nil
 }
 
-func (c *ZeetGraphqlClient) DeleteProject(ctx provider.Context, projectID string) error {
+func (c *zeetGraphqlClient) DeleteProject(ctx provider.Context, projectID string) error {
 	resp, err := deleteProject(ctx, c.client, projectID)
 	// graphql error
 	if err != nil {
@@ -108,7 +113,7 @@ type CreateEnvironmentResponse struct {
 	UpdatedAt time.Time
 }
 
-func (c *ZeetGraphqlClient) CreateEnvironment(ctx provider.Context, projectID string, name string) (CreateEnvironmentResponse, error) {
+func (c *zeetGraphqlClient) CreateEnvironment(ctx provider.Context, projectID string, name string) (CreateEnvironmentResponse, error) {
 	resp, err := createEnvironment(ctx, c.client, projectID, name)
 	if err != nil {
 		return CreateEnvironmentResponse{}, err
@@ -126,7 +131,7 @@ func (c *ZeetGraphqlClient) CreateEnvironment(ctx provider.Context, projectID st
 	}, nil
 }
 
-func (c *ZeetGraphqlClient) ReadEnvironment(ctx context.Context, projectID string, environmentID string) (CreateEnvironmentResponse, error) {
+func (c *zeetGraphqlClient) ReadEnvironment(ctx context.Context, projectID string, environmentID string) (CreateEnvironmentResponse, error) {
 	resp, err := getProjectEnvironments(ctx, c.client, projectID)
 	if err != nil {
 		return CreateEnvironmentResponse{}, err
@@ -153,7 +158,7 @@ func (c *ZeetGraphqlClient) ReadEnvironment(ctx context.Context, projectID strin
 	return CreateEnvironmentResponse{}, fmt.Errorf("no environment with id '%s' found in project '%s'", environmentID, projectID)
 }
 
-func (c *ZeetGraphqlClient) UpdateEnvironment(ctx context.Context, environmentID string, name *string) (CreateEnvironmentResponse, error) {
+func (c *zeetGraphqlClient) UpdateEnvironment(ctx context.Context, environmentID string, name *string) (CreateEnvironmentResponse, error) {
 	resp, err := updateEnvironment(ctx, c.client, environmentID, name)
 	if err != nil {
 		return CreateEnvironmentResponse{}, err
@@ -166,7 +171,7 @@ func (c *ZeetGraphqlClient) UpdateEnvironment(ctx context.Context, environmentID
 	}, nil
 }
 
-func (c *ZeetGraphqlClient) DeleteEnvironment(ctx provider.Context, environmentID string) error {
+func (c *zeetGraphqlClient) DeleteEnvironment(ctx provider.Context, environmentID string) error {
 	resp, err := deleteEnvironment(ctx, c.client, environmentID)
 	// graphql error
 	if err != nil {
@@ -199,7 +204,7 @@ type CreateAppResponse struct {
 	UpdatedAt time.Time
 }
 
-func (c *ZeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateAppInput) (CreateAppResponse, error) {
+func (c *zeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateAppInput) (CreateAppResponse, error) {
 	var response appStateResponse
 	if args.GithubInput != nil {
 		input, err := newCreateProjectGitInput(args, *args.GithubInput)
@@ -288,7 +293,7 @@ func getBuildType(buildInput model.CreateAppBuildInput) BuildType {
 	return BuildType(buildInput.Type)
 }
 
-func (c *ZeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateAppResponse, error) {
+func (c *zeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateAppResponse, error) {
 	resp, err := getApp(ctx, c.client, appID)
 	if err != nil {
 		return CreateAppResponse{}, err
@@ -334,7 +339,7 @@ func (c *ZeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateA
 	return NewCreateAppResponse(args, resp.GetRepo()), nil
 }
 
-func (c *ZeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args model.CreateAppInput) (CreateAppResponse, error) {
+func (c *zeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args model.CreateAppInput) (CreateAppResponse, error) {
 	cpuString := args.GetCpuString()
 	memoryString := args.GetMemoryString()
 	input := UpdateProjectInput{
@@ -353,7 +358,7 @@ func (c *ZeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args m
 	return NewCreateAppResponse(args, resp.GetUpdateProject()), nil
 }
 
-func (c *ZeetGraphqlClient) DeleteApp(ctx provider.Context, appID string) error {
+func (c *zeetGraphqlClient) DeleteApp(ctx provider.Context, appID string) error {
 	resp, err := deleteApp(ctx, c.client, appID)
 	if err != nil {
 		return err
