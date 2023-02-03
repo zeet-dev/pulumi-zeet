@@ -3,7 +3,7 @@ package gql
 import (
 	"context"
 	"github.com/pulumi/pulumi-go-provider"
-	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/model"
+	"github.com/zeet-dev/pulumi-zeet/provider/pkg/model"
 )
 
 type ZeetClient interface {

@@ -18,8 +18,8 @@ import (
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
 	"github.com/pulumi/pulumi-go-provider/middleware/schema"
-	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"
-	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/resources"
+	"github.com/zeet-dev/pulumi-zeet/provider/pkg/config"
+	"github.com/zeet-dev/pulumi-zeet/provider/pkg/resources"
 )
 
 // Version is initialized by the Go linker to contain the semver of this build.
@@ -37,12 +37,12 @@ func main() {
 		Metadata: schema.Metadata{
 			LanguageMap: map[string]any{
 				"go": map[string]any{
-					"importBasePath": "github.com/zeet-dev/pulumi-zeet-native/sdk/go/zeetnative",
+					"importBasePath": "github.com/zeet-dev/pulumi-zeet/sdk/go/zeet",
 				},
 			},
 		},
 	}
 	provider := infer.Provider(providerOptions)
 	provider.Configure = config.MakeConfigureFunc(Version)
-	p.RunProvider("zeet-native", Version, provider)
+	p.RunProvider("zeet", Version, provider)
 }
