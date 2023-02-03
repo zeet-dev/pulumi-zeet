@@ -239,7 +239,7 @@ class App(pulumi.CustomResource):
             __props__.__dict__["app_id"] = None
             __props__.__dict__["updated_at"] = None
         super(App, __self__).__init__(
-            'zeet-native:resources:App',
+            'zeet:resources:App',
             resource_name,
             __props__,
             opts)

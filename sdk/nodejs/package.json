@@ -1,9 +1,9 @@
 {
-    "name": "@zeet-dev/pulumi-zeet",
+    "name": "@pulumi/zeet",
     "version": "${VERSION}",
     "scripts": {
         "build": "tsc",
-        "install": "node scripts/install-pulumi-plugin.js resource zeet-native ${VERSION}"
+        "install": "node scripts/install-pulumi-plugin.js resource zeet ${VERSION}"
     },
     "dependencies": {
         "@pulumi/pulumi": "^3.42.0"
@@ -14,6 +14,6 @@
     },
     "pulumi": {
         "resource": true,
-        "name": "zeet-native"
+        "name": "zeet"
     }
 }

@@ -7,9 +7,9 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Pulumi.Serialization;
 
-namespace Pulumi.ZeetNative
+namespace Pulumi.Zeet
 {
-    [ZeetNativeResourceType("pulumi:providers:zeet-native")]
+    [ZeetResourceType("pulumi:providers:zeet")]
     public partial class Provider : global::Pulumi.ProviderResource
     {
         /// <summary>
@@ -20,7 +20,7 @@ namespace Pulumi.ZeetNative
         /// <param name="args">The arguments used to populate this resource's properties</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
         public Provider(string name, ProviderArgs? args = null, CustomResourceOptions? options = null)
-            : base("zeet-native", name, args ?? new ProviderArgs(), MakeResourceOptions(options, ""))
+            : base("zeet", name, args ?? new ProviderArgs(), MakeResourceOptions(options, ""))
         {
         }
 

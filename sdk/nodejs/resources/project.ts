@@ -20,7 +20,7 @@ export class Project extends pulumi.CustomResource {
     }
 
     /** @internal */
-    public static readonly __pulumiType = 'zeet-native:resources:Project';
+    public static readonly __pulumiType = 'zeet:resources:Project';
 
     /**
      * Returns true if the given object is an instance of Project.  This is designed to work even

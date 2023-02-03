@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Pulumi.Serialization;
 
-namespace Pulumi.ZeetNative.Model.Inputs
+namespace Pulumi.Zeet.Model.Inputs
 {
 
     public sealed class CreateAppDeployInputArgs : global::Pulumi.ResourceArgs

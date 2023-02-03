@@ -8,7 +8,7 @@ import (
 
 	"github.com/blang/semver"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"github.com/zeet-dev/pulumi-zeet-native/sdk/go/zeetnative"
+	"github.com/zeet-dev/pulumi-zeet/sdk/go/zeet"
 )
 
 type module struct {
@@ -21,11 +21,11 @@ func (m *module) Version() semver.Version {
 
 func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi.Resource, err error) {
 	switch typ {
-	case "zeet-native:resources:App":
+	case "zeet:resources:App":
 		r = &App{}
-	case "zeet-native:resources:Environment":
+	case "zeet:resources:Environment":
 		r = &Environment{}
-	case "zeet-native:resources:Project":
+	case "zeet:resources:Project":
 		r = &Project{}
 	default:
 		return nil, fmt.Errorf("unknown resource type: %s", typ)
@@ -36,12 +36,12 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 }
 
 func init() {
-	version, err := zeetnative.PkgVersion()
+	version, err := zeet.PkgVersion()
 	if err != nil {
 		version = semver.Version{Major: 1}
 	}
 	pulumi.RegisterResourceModule(
-		"zeet-native",
+		"zeet",
 		"resources",
 		&module{version},
 	)

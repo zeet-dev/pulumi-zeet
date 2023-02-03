@@ -10,18 +10,18 @@ from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 from .. import time as _time
 
-__all__ = ['ProjectArgs', 'Project']
+__all__ = ['EnvironmentArgs', 'Environment']
 
 @pulumi.input_type
-class ProjectArgs:
+class EnvironmentArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[str],
-                 user_id: pulumi.Input[str]):
+                 project_id: pulumi.Input[str]):
         """
-        The set of arguments for constructing a Project resource.
+        The set of arguments for constructing a Environment resource.
         """
         pulumi.set(__self__, "name", name)
-        pulumi.set(__self__, "user_id", user_id)
+        pulumi.set(__self__, "project_id", project_id)
 
     @property
     @pulumi.getter
@@ -33,25 +33,25 @@ class ProjectArgs:
         pulumi.set(self, "name", value)
 
     @property
-    @pulumi.getter(name="userId")
-    def user_id(self) -> pulumi.Input[str]:
-        return pulumi.get(self, "user_id")
+    @pulumi.getter(name="projectId")
+    def project_id(self) -> pulumi.Input[str]:
+        return pulumi.get(self, "project_id")
 
-    @user_id.setter
-    def user_id(self, value: pulumi.Input[str]):
-        pulumi.set(self, "user_id", value)
+    @project_id.setter
+    def project_id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "project_id", value)
 
 
-class Project(pulumi.CustomResource):
+class Environment(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 user_id: Optional[pulumi.Input[str]] = None,
+                 project_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Create a Project resource with the given unique name, props, and options.
+        Create a Environment resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         """
@@ -59,17 +59,17 @@ class Project(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
-                 args: ProjectArgs,
+                 args: EnvironmentArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a Project resource with the given unique name, props, and options.
+        Create a Environment resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
-        :param ProjectArgs args: The arguments to use to populate this resource's properties.
+        :param EnvironmentArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
         """
         ...
     def __init__(__self__, resource_name: str, *args, **kwargs):
-        resource_args, opts = _utilities.get_resource_args_opts(ProjectArgs, pulumi.ResourceOptions, *args, **kwargs)
+        resource_args, opts = _utilities.get_resource_args_opts(EnvironmentArgs, pulumi.ResourceOptions, *args, **kwargs)
         if resource_args is not None:
             __self__._internal_init(resource_name, opts, **resource_args.__dict__)
         else:
@@ -79,7 +79,7 @@ class Project(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 user_id: Optional[pulumi.Input[str]] = None,
+                 project_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -87,18 +87,18 @@ class Project(pulumi.CustomResource):
         if opts.id is None:
             if __props__ is not None:
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
-            __props__ = ProjectArgs.__new__(ProjectArgs)
+            __props__ = EnvironmentArgs.__new__(EnvironmentArgs)
 
             if name is None and not opts.urn:
                 raise TypeError("Missing required property 'name'")
             __props__.__dict__["name"] = name
-            if user_id is None and not opts.urn:
-                raise TypeError("Missing required property 'user_id'")
-            __props__.__dict__["user_id"] = user_id
-            __props__.__dict__["project_id"] = None
+            if project_id is None and not opts.urn:
+                raise TypeError("Missing required property 'project_id'")
+            __props__.__dict__["project_id"] = project_id
+            __props__.__dict__["environment_id"] = None
             __props__.__dict__["updated_at"] = None
-        super(Project, __self__).__init__(
-            'zeet-native:resources:Project',
+        super(Environment, __self__).__init__(
+            'zeet:resources:Environment',
             resource_name,
             __props__,
             opts)
@@ -106,9 +106,9 @@ class Project(pulumi.CustomResource):
     @staticmethod
     def get(resource_name: str,
             id: pulumi.Input[str],
-            opts: Optional[pulumi.ResourceOptions] = None) -> 'Project':
+            opts: Optional[pulumi.ResourceOptions] = None) -> 'Environment':
         """
-        Get an existing Project resource's state with the given name, id, and optional extra
+        Get an existing Environment resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
 
         :param str resource_name: The unique name of the resulting resource.
@@ -117,13 +117,18 @@ class Project(pulumi.CustomResource):
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
-        __props__ = ProjectArgs.__new__(ProjectArgs)
+        __props__ = EnvironmentArgs.__new__(EnvironmentArgs)
 
+        __props__.__dict__["environment_id"] = None
         __props__.__dict__["name"] = None
         __props__.__dict__["project_id"] = None
         __props__.__dict__["updated_at"] = None
-        __props__.__dict__["user_id"] = None
-        return Project(resource_name, opts=opts, __props__=__props__)
+        return Environment(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="environmentId")
+    def environment_id(self) -> pulumi.Output[str]:
+        return pulumi.get(self, "environment_id")
 
     @property
     @pulumi.getter
@@ -139,9 +144,4 @@ class Project(pulumi.CustomResource):
     @pulumi.getter(name="updatedAt")
     def updated_at(self) -> pulumi.Output['_time.outputs.Time']:
         return pulumi.get(self, "updated_at")
-
-    @property
-    @pulumi.getter(name="userId")
-    def user_id(self) -> pulumi.Output[str]:
-        return pulumi.get(self, "user_id")
 

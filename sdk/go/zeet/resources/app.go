@@ -9,8 +9,8 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"github.com/zeet-dev/pulumi-zeet-native/sdk/go/zeetnative/model"
-	"github.com/zeet-dev/pulumi-zeet-native/sdk/go/zeetnative/time"
+	"github.com/zeet-dev/pulumi-zeet/sdk/go/zeet/model"
+	"github.com/zeet-dev/pulumi-zeet/sdk/go/zeet/time"
 )
 
 type App struct {
@@ -60,7 +60,7 @@ func NewApp(ctx *pulumi.Context,
 		return nil, errors.New("invalid value for required argument 'UserId'")
 	}
 	var resource App
-	err := ctx.RegisterResource("zeet-native:resources:App", name, args, &resource, opts...)
+	err := ctx.RegisterResource("zeet:resources:App", name, args, &resource, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func NewApp(ctx *pulumi.Context,
 func GetApp(ctx *pulumi.Context,
 	name string, id pulumi.IDInput, state *AppState, opts ...pulumi.ResourceOption) (*App, error) {
 	var resource App
-	err := ctx.ReadResource("zeet-native:resources:App", name, id, state, &resource, opts...)
+	err := ctx.ReadResource("zeet:resources:App", name, id, state, &resource, opts...)
 	if err != nil {
 		return nil, err
 	}
