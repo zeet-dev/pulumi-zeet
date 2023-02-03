@@ -1,4 +1,4 @@
-name: release
+# name: release
 on:
   push:
     tags:
@@ -12,8 +12,8 @@ env:
   # AND PUBLISH_NPM: TRUE. IF YOU WANT TO PUBLISH TO A PRIVATE NPM REGISTRY
   # THEN ENSURE THE NPM_REGISTRY_URL IS CHANGED
 #  NODE_AUTH_TOKEN: ${{ YOUR NPM TOKEN HERE }}
-#  NPM_TOKEN: ${{ YOUR NPM TOKEN HERE }}
-  PUBLISH_NPM: false
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  PUBLISH_NPM: true
 #  NPM_REGISTRY_URL: https://registry.npmjs.org
   # IF YOU NEED TO PUBLISH A NUGET PACKAGE THEN ENSURE AN NUGET_PUBLISH_KEY
   # SECRET IS SET AND PUBLISH_NUGET: TRUE. IF YOU WANT TO PUBLISH TO AN ALTERNATIVE
@@ -133,7 +133,7 @@ jobs:
         goversion:
           - 1.18.x
         language:
-#          - nodejs
+          - nodejs
 #          - python
 #          - dotnet
           - go
