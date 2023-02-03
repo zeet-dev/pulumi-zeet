@@ -18,7 +18,7 @@ builds:
       - linux
     ldflags:
       # The line below MUST align with the module in current provider/go.mod
-      - -X github.com/zeet-dev/pulumi-zeet-native/provider/cmd/main.Version={{.Tag }}
+      - -X github.com/zeet-dev/pulumi-zeet-native/provider/cmd/pulumi-resource-zeet-native/main.Version={{.Tag }}
     main: ./cmd/pulumi-resource-zeet-native/
 changelog:
   skip: true
