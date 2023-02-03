@@ -9,7 +9,6 @@ import (
 var ZeetClient gql.ZeetClient
 
 func MakeConfigureFunc(version string) func(ctx p.Context, request p.ConfigureRequest) error {
-	println("configure func", version)
 	return func(ctx p.Context, request p.ConfigureRequest) error {
 		endpoint, err := getConfigValue(request, "endpoint")
 		if err != nil {

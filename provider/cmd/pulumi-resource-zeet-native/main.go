@@ -42,7 +42,6 @@ func main() {
 			},
 		},
 	}
-	println("Version", Version)
 	provider := infer.Provider(providerOptions)
 	provider.Configure = config.MakeConfigureFunc(Version)
 	p.RunProvider("zeet-native", Version, provider)

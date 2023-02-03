@@ -21,7 +21,6 @@ type zeetGraphqlClient struct {
 func NewZeetGraphqlClient(endpoint string, apiToken string, version string) ZeetClient {
 	userAgent := fmt.Sprintf("Pulumi/3.0 (https://www.pulumi.com) pulumi-zeet-native/%s", version)
 	transport := authedTransport{apiToken: apiToken, wrapped: http.DefaultTransport, userAgent: userAgent}
-	println("version", version, "ua", userAgent)
 	return &zeetGraphqlClient{
 		endpoint: endpoint,
 		apiToken: apiToken,
