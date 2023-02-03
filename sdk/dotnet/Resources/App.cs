@@ -7,22 +7,22 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Pulumi.Serialization;
 
-namespace Pulumi.ZeetNative.Resources
+namespace Pulumi.Zeet.Resources
 {
-    [ZeetNativeResourceType("zeet-native:resources:App")]
+    [ZeetResourceType("zeet:resources:App")]
     public partial class App : global::Pulumi.CustomResource
     {
         [Output("appId")]
         public Output<string> AppId { get; private set; } = null!;
 
         [Output("build")]
-        public Output<Pulumi.ZeetNative.Model.Outputs.CreateAppBuildInput?> Build { get; private set; } = null!;
+        public Output<Pulumi.Zeet.Model.Outputs.CreateAppBuildInput?> Build { get; private set; } = null!;
 
         [Output("deploy")]
-        public Output<Pulumi.ZeetNative.Model.Outputs.CreateAppDeployInput> Deploy { get; private set; } = null!;
+        public Output<Pulumi.Zeet.Model.Outputs.CreateAppDeployInput> Deploy { get; private set; } = null!;
 
         [Output("docker")]
-        public Output<Pulumi.ZeetNative.Model.Outputs.CreateAppDockerInput?> Docker { get; private set; } = null!;
+        public Output<Pulumi.Zeet.Model.Outputs.CreateAppDockerInput?> Docker { get; private set; } = null!;
 
         [Output("enabled")]
         public Output<bool> Enabled { get; private set; } = null!;
@@ -31,10 +31,10 @@ namespace Pulumi.ZeetNative.Resources
         public Output<string> EnvironmentId { get; private set; } = null!;
 
         [Output("environmentVariables")]
-        public Output<ImmutableArray<Pulumi.ZeetNative.Model.Outputs.CreateAppEnvironmentVariableInput>> EnvironmentVariables { get; private set; } = null!;
+        public Output<ImmutableArray<Pulumi.Zeet.Model.Outputs.CreateAppEnvironmentVariableInput>> EnvironmentVariables { get; private set; } = null!;
 
         [Output("github")]
-        public Output<Pulumi.ZeetNative.Model.Outputs.CreateAppGithubInput?> Github { get; private set; } = null!;
+        public Output<Pulumi.Zeet.Model.Outputs.CreateAppGithubInput?> Github { get; private set; } = null!;
 
         [Output("name")]
         public Output<string> Name { get; private set; } = null!;
@@ -43,10 +43,10 @@ namespace Pulumi.ZeetNative.Resources
         public Output<string> ProjectId { get; private set; } = null!;
 
         [Output("resources")]
-        public Output<Pulumi.ZeetNative.Model.Outputs.CreateAppResourcesInput> Resources { get; private set; } = null!;
+        public Output<Pulumi.Zeet.Model.Outputs.CreateAppResourcesInput> Resources { get; private set; } = null!;
 
         [Output("updatedAt")]
-        public Output<Pulumi.ZeetNative.Time.Outputs.Time> UpdatedAt { get; private set; } = null!;
+        public Output<Pulumi.Zeet.Time.Outputs.Time> UpdatedAt { get; private set; } = null!;
 
         [Output("userId")]
         public Output<string> UserId { get; private set; } = null!;
@@ -60,12 +60,12 @@ namespace Pulumi.ZeetNative.Resources
         /// <param name="args">The arguments used to populate this resource's properties</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
         public App(string name, AppArgs args, CustomResourceOptions? options = null)
-            : base("zeet-native:resources:App", name, args ?? new AppArgs(), MakeResourceOptions(options, ""))
+            : base("zeet:resources:App", name, args ?? new AppArgs(), MakeResourceOptions(options, ""))
         {
         }
 
         private App(string name, Input<string> id, CustomResourceOptions? options = null)
-            : base("zeet-native:resources:App", name, null, MakeResourceOptions(options, id))
+            : base("zeet:resources:App", name, null, MakeResourceOptions(options, id))
         {
         }
 
@@ -97,13 +97,13 @@ namespace Pulumi.ZeetNative.Resources
     public sealed class AppArgs : global::Pulumi.ResourceArgs
     {
         [Input("build")]
-        public Input<Pulumi.ZeetNative.Model.Inputs.CreateAppBuildInputArgs>? Build { get; set; }
+        public Input<Pulumi.Zeet.Model.Inputs.CreateAppBuildInputArgs>? Build { get; set; }
 
         [Input("deploy", required: true)]
-        public Input<Pulumi.ZeetNative.Model.Inputs.CreateAppDeployInputArgs> Deploy { get; set; } = null!;
+        public Input<Pulumi.Zeet.Model.Inputs.CreateAppDeployInputArgs> Deploy { get; set; } = null!;
 
         [Input("docker")]
-        public Input<Pulumi.ZeetNative.Model.Inputs.CreateAppDockerInputArgs>? Docker { get; set; }
+        public Input<Pulumi.Zeet.Model.Inputs.CreateAppDockerInputArgs>? Docker { get; set; }
 
         [Input("enabled", required: true)]
         public Input<bool> Enabled { get; set; } = null!;
@@ -112,15 +112,15 @@ namespace Pulumi.ZeetNative.Resources
         public Input<string> EnvironmentId { get; set; } = null!;
 
         [Input("environmentVariables")]
-        private InputList<Pulumi.ZeetNative.Model.Inputs.CreateAppEnvironmentVariableInputArgs>? _environmentVariables;
-        public InputList<Pulumi.ZeetNative.Model.Inputs.CreateAppEnvironmentVariableInputArgs> EnvironmentVariables
+        private InputList<Pulumi.Zeet.Model.Inputs.CreateAppEnvironmentVariableInputArgs>? _environmentVariables;
+        public InputList<Pulumi.Zeet.Model.Inputs.CreateAppEnvironmentVariableInputArgs> EnvironmentVariables
         {
-            get => _environmentVariables ?? (_environmentVariables = new InputList<Pulumi.ZeetNative.Model.Inputs.CreateAppEnvironmentVariableInputArgs>());
+            get => _environmentVariables ?? (_environmentVariables = new InputList<Pulumi.Zeet.Model.Inputs.CreateAppEnvironmentVariableInputArgs>());
             set => _environmentVariables = value;
         }
 
         [Input("github")]
-        public Input<Pulumi.ZeetNative.Model.Inputs.CreateAppGithubInputArgs>? Github { get; set; }
+        public Input<Pulumi.Zeet.Model.Inputs.CreateAppGithubInputArgs>? Github { get; set; }
 
         [Input("name", required: true)]
         public Input<string> Name { get; set; } = null!;
@@ -129,7 +129,7 @@ namespace Pulumi.ZeetNative.Resources
         public Input<string> ProjectId { get; set; } = null!;
 
         [Input("resources", required: true)]
-        public Input<Pulumi.ZeetNative.Model.Inputs.CreateAppResourcesInputArgs> Resources { get; set; } = null!;
+        public Input<Pulumi.Zeet.Model.Inputs.CreateAppResourcesInputArgs> Resources { get; set; } = null!;
 
         [Input("userId", required: true)]
         public Input<string> UserId { get; set; } = null!;

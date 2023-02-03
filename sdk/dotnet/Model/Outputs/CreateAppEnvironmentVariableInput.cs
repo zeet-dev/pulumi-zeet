@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Pulumi.Serialization;
 
-namespace Pulumi.ZeetNative.Model.Outputs
+namespace Pulumi.Zeet.Model.Outputs
 {
 
     [OutputType]

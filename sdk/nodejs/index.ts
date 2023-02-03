@@ -19,10 +19,10 @@ export {
     resources,
     types,
 };
-pulumi.runtime.registerResourcePackage("zeet-native", {
+pulumi.runtime.registerResourcePackage("zeet", {
     version: utilities.getVersion(),
     constructProvider: (name: string, type: string, urn: string): pulumi.ProviderResource => {
-        if (type !== "pulumi:providers:zeet-native") {
+        if (type !== "pulumi:providers:zeet") {
             throw new Error(`unknown provider type ${type}`);
         }
         return new Provider(name, <any>undefined, { urn });

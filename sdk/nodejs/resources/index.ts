@@ -25,15 +25,15 @@ const _module = {
     version: utilities.getVersion(),
     construct: (name: string, type: string, urn: string): pulumi.Resource => {
         switch (type) {
-            case "zeet-native:resources:App":
+            case "zeet:resources:App":
                 return new App(name, <any>undefined, { urn })
-            case "zeet-native:resources:Environment":
+            case "zeet:resources:Environment":
                 return new Environment(name, <any>undefined, { urn })
-            case "zeet-native:resources:Project":
+            case "zeet:resources:Project":
                 return new Project(name, <any>undefined, { urn })
             default:
                 throw new Error(`unknown resource type ${type}`);
         }
     },
 };
-pulumi.runtime.registerResourceModule("zeet-native", "resources", _module)
+pulumi.runtime.registerResourceModule("zeet", "resources", _module)

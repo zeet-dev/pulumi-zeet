@@ -1,4 +1,4 @@
-module github.com/zeet-dev/pulumi-zeet-native/provider
+module github.com/zeet-dev/pulumi-zeet/provider
 
 go 1.18
 

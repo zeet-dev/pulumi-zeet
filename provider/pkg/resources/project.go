@@ -3,7 +3,7 @@ package resources
 import (
 	"github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
-	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"
+	"github.com/zeet-dev/pulumi-zeet/provider/pkg/config"
 	"time"
 )
 

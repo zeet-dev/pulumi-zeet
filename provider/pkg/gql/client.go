@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/Khan/genqlient/graphql"
 	"github.com/pulumi/pulumi-go-provider"
-	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/model"
+	"github.com/zeet-dev/pulumi-zeet/provider/pkg/model"
 	"net/http"
 	"strconv"
 	"time"
@@ -19,7 +19,7 @@ type zeetGraphqlClient struct {
 }
 
 func NewZeetGraphqlClient(endpoint string, apiToken string, version string) ZeetClient {
-	userAgent := fmt.Sprintf("Pulumi/3.0 (https://www.pulumi.com) pulumi-zeet-native/%s", version)
+	userAgent := fmt.Sprintf("Pulumi/3.0 (https://www.pulumi.com) pulumi-zeet/%s", version)
 	transport := authedTransport{apiToken: apiToken, wrapped: http.DefaultTransport, userAgent: userAgent}
 	return &zeetGraphqlClient{
 		endpoint: endpoint,

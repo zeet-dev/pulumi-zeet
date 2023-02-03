@@ -15,15 +15,15 @@ class InstallPluginCommand(install):
     def run(self):
         install.run(self)
         try:
-            check_call(['pulumi', 'plugin', 'install', 'resource', 'zeet-native', PLUGIN_VERSION])
+            check_call(['pulumi', 'plugin', 'install', 'resource', 'zeet', PLUGIN_VERSION])
         except OSError as error:
             if error.errno == errno.ENOENT:
                 print(f"""
-                There was an error installing the zeet-native resource provider plugin.
+                There was an error installing the zeet resource provider plugin.
                 It looks like `pulumi` is not installed on your system.
                 Please visit https://pulumi.com/ to install the Pulumi CLI.
                 You may try manually installing the plugin by running
-                `pulumi plugin install resource zeet-native {PLUGIN_VERSION}`
+                `pulumi plugin install resource zeet {PLUGIN_VERSION}`
                 """)
             else:
                 raise
@@ -34,10 +34,10 @@ def readme():
         with open('README.md', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
-        return "zeet-native Pulumi Package - Development Version"
+        return "zeet Pulumi Package - Development Version"
 
 
-setup(name='pulumi_zeet_native',
+setup(name='pulumi_zeet',
       version=VERSION,
       long_description=readme(),
       long_description_content_type='text/markdown',
@@ -46,7 +46,7 @@ setup(name='pulumi_zeet_native',
       },
       packages=find_packages(),
       package_data={
-          'pulumi_zeet_native': [
+          'pulumi_zeet': [
               'py.typed',
               'pulumi-plugin.json',
           ]

@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 	p "github.com/pulumi/pulumi-go-provider"
-	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/gql"
+	"github.com/zeet-dev/pulumi-zeet/provider/pkg/gql"
 )
 
 var ZeetClient gql.ZeetClient
@@ -33,5 +33,5 @@ func getConfigValue(request p.ConfigureRequest, key string) (string, error) {
 }
 
 func configKey(key string) string {
-	return fmt.Sprintf("zeet-native:config:%s", key)
+	return fmt.Sprintf("zeet:config:%s", key)
 }

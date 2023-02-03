@@ -7,9 +7,9 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Pulumi.Serialization;
 
-namespace Pulumi.ZeetNative.Resources
+namespace Pulumi.Zeet.Resources
 {
-    [ZeetNativeResourceType("zeet-native:resources:Environment")]
+    [ZeetResourceType("zeet:resources:Environment")]
     public partial class Environment : global::Pulumi.CustomResource
     {
         [Output("environmentId")]
@@ -22,7 +22,7 @@ namespace Pulumi.ZeetNative.Resources
         public Output<string> ProjectId { get; private set; } = null!;
 
         [Output("updatedAt")]
-        public Output<Pulumi.ZeetNative.Time.Outputs.Time> UpdatedAt { get; private set; } = null!;
+        public Output<Pulumi.Zeet.Time.Outputs.Time> UpdatedAt { get; private set; } = null!;
 
 
         /// <summary>
@@ -33,12 +33,12 @@ namespace Pulumi.ZeetNative.Resources
         /// <param name="args">The arguments used to populate this resource's properties</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
         public Environment(string name, EnvironmentArgs args, CustomResourceOptions? options = null)
-            : base("zeet-native:resources:Environment", name, args ?? new EnvironmentArgs(), MakeResourceOptions(options, ""))
+            : base("zeet:resources:Environment", name, args ?? new EnvironmentArgs(), MakeResourceOptions(options, ""))
         {
         }
 
         private Environment(string name, Input<string> id, CustomResourceOptions? options = null)
-            : base("zeet-native:resources:Environment", name, null, MakeResourceOptions(options, id))
+            : base("zeet:resources:Environment", name, null, MakeResourceOptions(options, id))
         {
         }
 

@@ -6,9 +6,9 @@ import (
 	"github.com/pulumi/pulumi-go-provider/infer"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/diag"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/resource"
-	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/config"
-	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/gql"
-	"github.com/zeet-dev/pulumi-zeet-native/provider/pkg/model"
+	"github.com/zeet-dev/pulumi-zeet/provider/pkg/config"
+	"github.com/zeet-dev/pulumi-zeet/provider/pkg/gql"
+	"github.com/zeet-dev/pulumi-zeet/provider/pkg/model"
 	"time"
 )
 

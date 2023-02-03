@@ -20,7 +20,7 @@ export class Environment extends pulumi.CustomResource {
     }
 
     /** @internal */
-    public static readonly __pulumiType = 'zeet-native:resources:Environment';
+    public static readonly __pulumiType = 'zeet:resources:Environment';
 
     /**
      * Returns true if the given object is an instance of Environment.  This is designed to work even

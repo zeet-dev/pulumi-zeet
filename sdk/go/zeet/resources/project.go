@@ -9,7 +9,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"github.com/zeet-dev/pulumi-zeet-native/sdk/go/zeetnative/time"
+	"github.com/zeet-dev/pulumi-zeet/sdk/go/zeet/time"
 )
 
 type Project struct {
@@ -35,7 +35,7 @@ func NewProject(ctx *pulumi.Context,
 		return nil, errors.New("invalid value for required argument 'UserId'")
 	}
 	var resource Project
-	err := ctx.RegisterResource("zeet-native:resources:Project", name, args, &resource, opts...)
+	err := ctx.RegisterResource("zeet:resources:Project", name, args, &resource, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func NewProject(ctx *pulumi.Context,
 func GetProject(ctx *pulumi.Context,
 	name string, id pulumi.IDInput, state *ProjectState, opts ...pulumi.ResourceOption) (*Project, error) {
 	var resource Project
-	err := ctx.ReadResource("zeet-native:resources:Project", name, id, state, &resource, opts...)
+	err := ctx.ReadResource("zeet:resources:Project", name, id, state, &resource, opts...)
 	if err != nil {
 		return nil, err
 	}

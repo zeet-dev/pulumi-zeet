@@ -1,15 +1,15 @@
 PROJECT_NAME := Pulumi Native Zeet Resource Provider
 
-PACK             := zeet-native
+PACK             := zeet
 PACKDIR          := sdk
-PROJECT          := github.com/zeet-dev/pulumi-zeet-native
-NODE_MODULE_NAME := @pulumi/zeet-native
-NUGET_PKG_NAME   := Pulumi.ZeetNative
+PROJECT          := github.com/zeet-dev/pulumi-zeet
+NODE_MODULE_NAME := @pulumi/zeet
+NUGET_PKG_NAME   := Pulumi.Zeet
 
 PROVIDER        := pulumi-resource-${PACK}
 VERSION         ?= $(shell pulumictl get version)
 PROVIDER_PATH   := provider
-VERSION_PATH    := ${PROVIDER_PATH}/cmd/pulumi-resource-zeet-native/main.Version
+VERSION_PATH    := ${PROVIDER_PATH}/cmd/pulumi-resource-zeet/main.Version
 
 GOPATH			:= $(shell go env GOPATH)
 
@@ -38,7 +38,7 @@ dotnet_sdk::
 		echo "${DOTNET_VERSION}" >version.txt && \
 		dotnet build /p:Version=${DOTNET_VERSION}
 
-go_sdk:: IMPORT_BASE_PATH := "github.com/zeet-dev/pulumi-zeet-native/sdk/go/zeetnative"
+go_sdk:: IMPORT_BASE_PATH := "github.com/zeet-dev/pulumi-zeet/sdk/go/zeet"
 go_sdk:: $(WORKING_DIR)/bin/$(PROVIDER)
 	rm -rf sdk/go
 	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language go

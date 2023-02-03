@@ -9,7 +9,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"github.com/zeet-dev/pulumi-zeet-native/sdk/go/zeetnative/time"
+	"github.com/zeet-dev/pulumi-zeet/sdk/go/zeet/time"
 )
 
 type Environment struct {
@@ -35,7 +35,7 @@ func NewEnvironment(ctx *pulumi.Context,
 		return nil, errors.New("invalid value for required argument 'ProjectId'")
 	}
 	var resource Environment
-	err := ctx.RegisterResource("zeet-native:resources:Environment", name, args, &resource, opts...)
+	err := ctx.RegisterResource("zeet:resources:Environment", name, args, &resource, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func NewEnvironment(ctx *pulumi.Context,
 func GetEnvironment(ctx *pulumi.Context,
 	name string, id pulumi.IDInput, state *EnvironmentState, opts ...pulumi.ResourceOption) (*Environment, error) {
 	var resource Environment
-	err := ctx.ReadResource("zeet-native:resources:Environment", name, id, state, &resource, opts...)
+	err := ctx.ReadResource("zeet:resources:Environment", name, id, state, &resource, opts...)
 	if err != nil {
 		return nil, err
 	}
