@@ -1,4 +1,4 @@
-import * as zeet from "@pulumi/zeet";
+import * as zeet from "@zeet-dev/pulumi-zeet";
 import * as pulumi from "@pulumi/pulumi";
 
 
