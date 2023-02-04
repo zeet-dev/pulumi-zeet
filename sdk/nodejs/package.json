@@ -1,5 +1,5 @@
 {
-    "name": "@pulumi/zeet",
+    "name": "@zeet-dev/pulumi-zeet",
     "version": "${VERSION}",
     "scripts": {
         "build": "tsc",

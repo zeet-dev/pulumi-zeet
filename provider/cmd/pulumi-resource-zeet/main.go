@@ -35,9 +35,13 @@ func main() {
 			infer.Resource[resources.App, resources.AppArgs, resources.AppState](),
 		},
 		Metadata: schema.Metadata{
+			// TODO: source these from environment variables
 			LanguageMap: map[string]any{
 				"go": map[string]any{
 					"importBasePath": "github.com/zeet-dev/pulumi-zeet/sdk/go/zeet",
+				},
+				"nodejs": map[string]any{
+					"packageName": "@zeet-dev/pulumi-zeet",
 				},
 			},
 		},

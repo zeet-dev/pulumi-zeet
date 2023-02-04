@@ -3,7 +3,7 @@ PROJECT_NAME := Pulumi Native Zeet Resource Provider
 PACK             := zeet
 PACKDIR          := sdk
 PROJECT          := github.com/zeet-dev/pulumi-zeet
-NODE_MODULE_NAME := @pulumi/zeet
+NODE_MODULE_NAME := @zeet-dev/pulumi-zeet
 NUGET_PKG_NAME   := Pulumi.Zeet
 
 PROVIDER        := pulumi-resource-${PACK}
