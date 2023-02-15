@@ -38,7 +38,6 @@ dotnet_sdk::
 		echo "${DOTNET_VERSION}" >version.txt && \
 		dotnet build /p:Version=${DOTNET_VERSION}
 
-go_sdk:: IMPORT_BASE_PATH := "github.com/zeet-dev/pulumi-zeet/sdk/go/zeet"
 go_sdk:: $(WORKING_DIR)/bin/$(PROVIDER)
 	rm -rf sdk/go
 	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language go

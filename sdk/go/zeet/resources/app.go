@@ -7,7 +7,7 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/zeet-dev/pulumi-zeet/sdk/go/zeet/model"
 	"github.com/zeet-dev/pulumi-zeet/sdk/go/zeet/time"
