@@ -14,14 +14,24 @@ A pulumi provider for Zeet.
 
 1. Install the pulumi provider plugin
    ```
-    pulumi plugin install resource zeet [VERSION] --server github://api.github.com/zeet-dev
+   pulumi plugin install resource zeet ${VERSION} --server github://api.github.com/zeet-dev
    ```
+
+1. Configure your pulumi stack
+   ```
+   pulumi config set zeet:endpoint ${ZEET_API_URL} 
+   pulumi config set --secret zeet:api-token ${ZEET_API_TOKEN}
+   ```
+
+## Golang Stack
 1. Install the SDK
    ```
    go get github.com/zeet-dev/pulumi-zeet
    ```
-1. Configure your pulumi stack
+
+
+# Typescript Stack
+1. Install the SDK
    ```
-   pulumi config set zeet:endpoint ${ZEET_API_ENDPOINT} 
-   pulumi config set --secret zeet:api-token ${ZEET_API_TOKEN}
+   npm i @zeet-dev/pulumi-zeet
    ```

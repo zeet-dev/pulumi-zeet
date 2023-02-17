@@ -1469,6 +1469,22 @@ type __deleteProjectInput struct {
 // GetProjectID returns __deleteProjectInput.ProjectID, and is useful for accessing the field via an interface.
 func (v *__deleteProjectInput) GetProjectID() string { return v.ProjectID }
 
+// __disableAppInput is used internally by genqlient
+type __disableAppInput struct {
+	AppID string `json:"appID"`
+}
+
+// GetAppID returns __disableAppInput.AppID, and is useful for accessing the field via an interface.
+func (v *__disableAppInput) GetAppID() string { return v.AppID }
+
+// __enableAppInput is used internally by genqlient
+type __enableAppInput struct {
+	AppID string `json:"appID"`
+}
+
+// GetAppID returns __enableAppInput.AppID, and is useful for accessing the field via an interface.
+func (v *__enableAppInput) GetAppID() string { return v.AppID }
+
 // __getAppInput is used internally by genqlient
 type __getAppInput struct {
 	AppID string `json:"appID"`
@@ -1998,6 +2014,308 @@ type deleteProjectResponse struct {
 
 // GetDeleteProjectV2 returns deleteProjectResponse.DeleteProjectV2, and is useful for accessing the field via an interface.
 func (v *deleteProjectResponse) GetDeleteProjectV2() bool { return v.DeleteProjectV2 }
+
+// disableAppDisableRepo includes the requested fields of the GraphQL type Repo.
+type disableAppDisableRepo struct {
+	AppStateFragment `json:"-"`
+}
+
+// GetId returns disableAppDisableRepo.Id, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetId() string { return v.AppStateFragment.Id }
+
+// GetName returns disableAppDisableRepo.Name, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetName() string { return v.AppStateFragment.Name }
+
+// GetProject returns disableAppDisableRepo.Project, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetProject() *AppStateFragmentProject {
+	return v.AppStateFragment.Project
+}
+
+// GetProjectEnvironment returns disableAppDisableRepo.ProjectEnvironment, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetProjectEnvironment() *AppStateFragmentProjectEnvironment {
+	return v.AppStateFragment.ProjectEnvironment
+}
+
+// GetBuildMethod returns disableAppDisableRepo.BuildMethod, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
+	return v.AppStateFragment.BuildMethod
+}
+
+// GetDeployTarget returns disableAppDisableRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetDeployTarget() *DeployTarget {
+	return v.AppStateFragment.DeployTarget
+}
+
+// GetCluster returns disableAppDisableRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetCluster() *AppStateFragmentCluster {
+	return v.AppStateFragment.Cluster
+}
+
+// GetEnvs returns disableAppDisableRepo.Envs, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetEnvs() []*AppStateFragmentEnvsEnvVar {
+	return v.AppStateFragment.Envs
+}
+
+// GetCpu returns disableAppDisableRepo.Cpu, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetCpu() *string { return v.AppStateFragment.Cpu }
+
+// GetMemory returns disableAppDisableRepo.Memory, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetMemory() *string { return v.AppStateFragment.Memory }
+
+// GetOwner returns disableAppDisableRepo.Owner, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetOwner() *AppStateFragmentOwnerUser {
+	return v.AppStateFragment.Owner
+}
+
+// GetEnabled returns disableAppDisableRepo.Enabled, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
+
+// GetProductionBranch returns disableAppDisableRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetProductionBranch() *string {
+	return v.AppStateFragment.ProductionBranch
+}
+
+// GetUpdatedAt returns disableAppDisableRepo.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetUpdatedAt() time.Time { return v.AppStateFragment.UpdatedAt }
+
+func (v *disableAppDisableRepo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*disableAppDisableRepo
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.disableAppDisableRepo = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.AppStateFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshaldisableAppDisableRepo struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Project *AppStateFragmentProject `json:"project"`
+
+	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
+
+	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
+
+	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
+
+	Cpu *string `json:"cpu"`
+
+	Memory *string `json:"memory"`
+
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
+	Enabled bool `json:"enabled"`
+
+	ProductionBranch *string `json:"productionBranch"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (v *disableAppDisableRepo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *disableAppDisableRepo) __premarshalJSON() (*__premarshaldisableAppDisableRepo, error) {
+	var retval __premarshaldisableAppDisableRepo
+
+	retval.Id = v.AppStateFragment.Id
+	retval.Name = v.AppStateFragment.Name
+	retval.Project = v.AppStateFragment.Project
+	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.BuildMethod = v.AppStateFragment.BuildMethod
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
+	retval.Envs = v.AppStateFragment.Envs
+	retval.Cpu = v.AppStateFragment.Cpu
+	retval.Memory = v.AppStateFragment.Memory
+	retval.Owner = v.AppStateFragment.Owner
+	retval.Enabled = v.AppStateFragment.Enabled
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
+	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
+	return &retval, nil
+}
+
+// disableAppResponse is returned by disableApp on success.
+type disableAppResponse struct {
+	DisableRepo *disableAppDisableRepo `json:"disableRepo"`
+}
+
+// GetDisableRepo returns disableAppResponse.DisableRepo, and is useful for accessing the field via an interface.
+func (v *disableAppResponse) GetDisableRepo() *disableAppDisableRepo { return v.DisableRepo }
+
+// enableAppEnableRepo includes the requested fields of the GraphQL type Repo.
+type enableAppEnableRepo struct {
+	AppStateFragment `json:"-"`
+}
+
+// GetId returns enableAppEnableRepo.Id, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetId() string { return v.AppStateFragment.Id }
+
+// GetName returns enableAppEnableRepo.Name, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetName() string { return v.AppStateFragment.Name }
+
+// GetProject returns enableAppEnableRepo.Project, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetProject() *AppStateFragmentProject {
+	return v.AppStateFragment.Project
+}
+
+// GetProjectEnvironment returns enableAppEnableRepo.ProjectEnvironment, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetProjectEnvironment() *AppStateFragmentProjectEnvironment {
+	return v.AppStateFragment.ProjectEnvironment
+}
+
+// GetBuildMethod returns enableAppEnableRepo.BuildMethod, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
+	return v.AppStateFragment.BuildMethod
+}
+
+// GetDeployTarget returns enableAppEnableRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetDeployTarget() *DeployTarget { return v.AppStateFragment.DeployTarget }
+
+// GetCluster returns enableAppEnableRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetCluster() *AppStateFragmentCluster {
+	return v.AppStateFragment.Cluster
+}
+
+// GetEnvs returns enableAppEnableRepo.Envs, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetEnvs() []*AppStateFragmentEnvsEnvVar { return v.AppStateFragment.Envs }
+
+// GetCpu returns enableAppEnableRepo.Cpu, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetCpu() *string { return v.AppStateFragment.Cpu }
+
+// GetMemory returns enableAppEnableRepo.Memory, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetMemory() *string { return v.AppStateFragment.Memory }
+
+// GetOwner returns enableAppEnableRepo.Owner, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetOwner() *AppStateFragmentOwnerUser { return v.AppStateFragment.Owner }
+
+// GetEnabled returns enableAppEnableRepo.Enabled, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
+
+// GetProductionBranch returns enableAppEnableRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetProductionBranch() *string {
+	return v.AppStateFragment.ProductionBranch
+}
+
+// GetUpdatedAt returns enableAppEnableRepo.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetUpdatedAt() time.Time { return v.AppStateFragment.UpdatedAt }
+
+func (v *enableAppEnableRepo) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*enableAppEnableRepo
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.enableAppEnableRepo = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.AppStateFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalenableAppEnableRepo struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Project *AppStateFragmentProject `json:"project"`
+
+	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
+
+	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
+
+	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
+
+	Cpu *string `json:"cpu"`
+
+	Memory *string `json:"memory"`
+
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
+	Enabled bool `json:"enabled"`
+
+	ProductionBranch *string `json:"productionBranch"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (v *enableAppEnableRepo) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *enableAppEnableRepo) __premarshalJSON() (*__premarshalenableAppEnableRepo, error) {
+	var retval __premarshalenableAppEnableRepo
+
+	retval.Id = v.AppStateFragment.Id
+	retval.Name = v.AppStateFragment.Name
+	retval.Project = v.AppStateFragment.Project
+	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.BuildMethod = v.AppStateFragment.BuildMethod
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
+	retval.Envs = v.AppStateFragment.Envs
+	retval.Cpu = v.AppStateFragment.Cpu
+	retval.Memory = v.AppStateFragment.Memory
+	retval.Owner = v.AppStateFragment.Owner
+	retval.Enabled = v.AppStateFragment.Enabled
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
+	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
+	return &retval, nil
+}
+
+// enableAppResponse is returned by enableApp on success.
+type enableAppResponse struct {
+	EnableRepo *enableAppEnableRepo `json:"enableRepo"`
+}
+
+// GetEnableRepo returns enableAppResponse.EnableRepo, and is useful for accessing the field via an interface.
+func (v *enableAppResponse) GetEnableRepo() *enableAppEnableRepo { return v.EnableRepo }
 
 // getAppRepo includes the requested fields of the GraphQL type Repo.
 type getAppRepo struct {
@@ -3027,6 +3345,134 @@ mutation deleteProject ($projectID: UUID!) {
 	var err error
 
 	var data deleteProjectResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func disableApp(
+	ctx context.Context,
+	client graphql.Client,
+	appID string,
+) (*disableAppResponse, error) {
+	req := &graphql.Request{
+		OpName: "disableApp",
+		Query: `
+mutation disableApp ($appID: ID!) {
+	disableRepo(id: $appID) {
+		... AppStateFragment
+	}
+}
+fragment AppStateFragment on Repo {
+	id
+	name
+	project {
+		id
+	}
+	projectEnvironment {
+		id
+	}
+	buildMethod {
+		type
+		dockerfilePath
+	}
+	deployTarget
+	cluster {
+		id
+	}
+	envs {
+		id
+		name
+		value
+		sealed
+	}
+	cpu
+	memory
+	owner {
+		id
+	}
+	enabled
+	productionBranch
+	updatedAt
+}
+`,
+		Variables: &__disableAppInput{
+			AppID: appID,
+		},
+	}
+	var err error
+
+	var data disableAppResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func enableApp(
+	ctx context.Context,
+	client graphql.Client,
+	appID string,
+) (*enableAppResponse, error) {
+	req := &graphql.Request{
+		OpName: "enableApp",
+		Query: `
+mutation enableApp ($appID: ID!) {
+	enableRepo(id: $appID) {
+		... AppStateFragment
+	}
+}
+fragment AppStateFragment on Repo {
+	id
+	name
+	project {
+		id
+	}
+	projectEnvironment {
+		id
+	}
+	buildMethod {
+		type
+		dockerfilePath
+	}
+	deployTarget
+	cluster {
+		id
+	}
+	envs {
+		id
+		name
+		value
+		sealed
+	}
+	cpu
+	memory
+	owner {
+		id
+	}
+	enabled
+	productionBranch
+	updatedAt
+}
+`,
+		Variables: &__enableAppInput{
+			AppID: appID,
+		},
+	}
+	var err error
+
+	var data enableAppResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

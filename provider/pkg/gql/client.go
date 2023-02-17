@@ -3,28 +3,27 @@ package gql
 import (
 	"context"
 	"fmt"
-	"github.com/Khan/genqlient/graphql"
-	"github.com/pulumi/pulumi-go-provider"
-	"github.com/zeet-dev/pulumi-zeet/provider/pkg/model"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/Khan/genqlient/graphql"
+	provider "github.com/pulumi/pulumi-go-provider"
+	"github.com/zeet-dev/pulumi-zeet/provider/pkg/model"
 )
 
 type zeetGraphqlClient struct {
-	endpoint  string
-	apiToken  string
-	client    graphql.Client
-	userAgent string
+	apiToken string
+	client   graphql.Client
 }
 
 func NewZeetGraphqlClient(endpoint string, apiToken string, version string) ZeetClient {
 	userAgent := fmt.Sprintf("Pulumi/3.0 (https://www.pulumi.com) pulumi-zeet/%s", version)
 	transport := authedTransport{apiToken: apiToken, wrapped: http.DefaultTransport, userAgent: userAgent}
+	graphqlEndpoint := endpoint //+ "/graphql"
 	return &zeetGraphqlClient{
-		endpoint: endpoint,
 		apiToken: apiToken,
-		client:   graphql.NewClient(endpoint, &http.Client{Transport: &transport}),
+		client:   graphql.NewClient(graphqlEndpoint, &http.Client{Transport: &transport}),
 	}
 }
 
@@ -292,50 +291,76 @@ func getBuildType(buildInput model.CreateAppBuildInput) BuildType {
 	return BuildType(buildInput.Type)
 }
 
-func (c *zeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateAppResponse, error) {
-	resp, err := getApp(ctx, c.client, appID)
-	if err != nil {
-		return CreateAppResponse{}, err
-	}
-	repo := resp.GetRepo()
+type appStateFragment interface {
+	GetId() string
+	GetName() string
+	GetProject() *AppStateFragmentProject
+	GetProjectEnvironment() *AppStateFragmentProjectEnvironment
+	GetBuildMethod() *AppStateFragmentBuildMethod
+	GetDeployTarget() *DeployTarget
+	GetCluster() *AppStateFragmentCluster
+	GetEnvs() []*AppStateFragmentEnvsEnvVar
+	GetCpu() *string
+	GetMemory() *string
+	GetOwner() *AppStateFragmentOwnerUser
+	GetEnabled() bool
+	GetProductionBranch() *string
+	GetUpdatedAt() time.Time
+}
+
+func CreateAppResponseFromAppState(state appStateFragment) (CreateAppResponse, error) {
+	var err error
 	var cpu float64
-	if repo.GetCpu() != nil {
-		cpu, err = strconv.ParseFloat(*repo.GetCpu(), 64)
+	if state.GetCpu() != nil {
+		cpu, err = strconv.ParseFloat(*state.GetCpu(), 64)
 		if err != nil {
-			return CreateAppResponse{}, fmt.Errorf("unable to parse float for cpu value '%s'", *repo.GetCpu())
+			return CreateAppResponse{}, fmt.Errorf("unable to parse float for cpu value '%s'", *state.GetCpu())
 		}
 	} else {
 		cpu = *new(float64)
 	}
 	var memory string
-	if repo.GetMemory() != nil {
-		memory = *repo.GetMemory()
+	if state.GetMemory() != nil {
+		memory = *state.GetMemory()
 	} else {
 		memory = ""
 	}
+
 	args := model.CreateAppInput{
-		UserID:        repo.GetOwner().GetId(),
-		ProjectID:     repo.GetProject().GetId(),
-		EnvironmentID: repo.GetProjectEnvironment().GetId(),
-		Name:          repo.GetName(),
+		UserID:        state.GetOwner().GetId(),
+		ProjectID:     state.GetProject().GetId(),
+		EnvironmentID: state.GetProjectEnvironment().GetId(),
+		Name:          state.GetName(),
 		GithubInput: &model.CreateAppGithubInput{
 			// NB: anchor cannot resolve githubRepository for Repo's created with x-access-token:
 			// ZEET-1480: https://linear.app/zeet/issue/ZEET-1480/anchor-or-createprojectgitgithubrepository-error-not-found
-			ProductionBranch: repo.GetProductionBranch(),
+			ProductionBranch: state.GetProductionBranch(),
 		},
-		Enabled: repo.GetEnabled(),
-		Build: model.CreateAppBuildInput{
-			Type:           string(repo.GetBuildMethod().GetType()),
-			DockerfilePath: repo.GetBuildMethod().GetDockerfilePath(),
-		},
+		Enabled: state.GetEnabled(),
 		Resources: model.CreateAppResourcesInput{
 			Cpu:    cpu,
 			Memory: memory,
 		},
 		Deploy:               model.CreateAppDeployInput{},
-		EnvironmentVariables: environmentVariablesToModel(repo.GetEnvs()),
+		EnvironmentVariables: environmentVariablesToModel(state.GetEnvs()),
 	}
-	return NewCreateAppResponse(args, resp.GetRepo()), nil
+
+	if state.GetBuildMethod() != nil {
+		args.Build = model.CreateAppBuildInput{
+			Type:           string(state.GetBuildMethod().GetType()),
+			DockerfilePath: state.GetBuildMethod().GetDockerfilePath(),
+		}
+	}
+
+	return NewCreateAppResponse(args, state), nil
+}
+
+func (c *zeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateAppResponse, error) {
+	resp, err := getApp(ctx, c.client, appID)
+	if err != nil {
+		return CreateAppResponse{}, err
+	}
+	return CreateAppResponseFromAppState(resp.GetRepo())
 }
 
 func (c *zeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args model.CreateAppInput) (CreateAppResponse, error) {
@@ -344,7 +369,6 @@ func (c *zeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args m
 	input := UpdateProjectInput{
 		Id:               appID,
 		Name:             &args.Name,
-		DockerfilePath:   args.Build.DockerfilePath,
 		Cpu:              cpuString,
 		Memory:           memoryString,
 		EphemeralStorage: args.Resources.EphemeralStorage,
@@ -354,7 +378,24 @@ func (c *zeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args m
 	if err != nil {
 		return CreateAppResponse{}, err
 	}
-	return NewCreateAppResponse(args, resp.GetUpdateProject()), nil
+	var state appStateFragment
+	state = resp.GetUpdateProject()
+	if state.GetEnabled() != args.Enabled {
+		if args.Enabled {
+			resp, err := enableApp(ctx, c.client, appID)
+			if err != nil {
+				return CreateAppResponse{}, err
+			}
+			state = resp.GetEnableRepo()
+		} else {
+			resp, err := disableApp(ctx, c.client, appID)
+			if err != nil {
+				return CreateAppResponse{}, err
+			}
+			state = resp.GetDisableRepo()
+		}
+	}
+	return NewCreateAppResponse(args, state), nil
 }
 
 func (c *zeetGraphqlClient) DeleteApp(ctx provider.Context, appID string) error {
