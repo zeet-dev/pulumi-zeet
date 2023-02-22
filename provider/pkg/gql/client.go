@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Khan/genqlient/graphql"
@@ -401,6 +402,10 @@ func (c *zeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args m
 func (c *zeetGraphqlClient) DeleteApp(ctx provider.Context, appID string) error {
 	resp, err := deleteApp(ctx, c.client, appID)
 	if err != nil {
+		// idempotent delete - if app is already deleted, return nil
+		if strings.Contains(err.Error(), "deleteRepo record not found") {
+			return nil
+		}
 		return err
 	}
 	if !resp.GetDeleteRepo() {
