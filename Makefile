@@ -77,11 +77,6 @@ lint::
 		pushd $$DIR && golangci-lint run -c ../.golangci.yml --timeout 10m && popd ; \
 	done
 
-
-install:: install_nodejs_sdk install_dotnet_sdk
-	cp $(WORKING_DIR)/bin/${PROVIDER} ${GOPATH}/bin
-
-
 GO_TEST 	 := go test -v -count=1 -cover -timeout 2h -parallel ${TESTPARALLELISM}
 
 test_all::
@@ -90,6 +85,14 @@ test_all::
 	cd tests/sdk/python && $(GO_TEST) ./...
 	cd tests/sdk/dotnet && $(GO_TEST) ./...
 	cd tests/sdk/go && $(GO_TEST) ./...
+
+install:: install_provider install_nodejs_sdk install_dotnet_sdk
+	 
+install_provider::
+	cp $(WORKING_DIR)/bin/${PROVIDER} ${GOPATH}/bin
+
+install_provider_symlink::
+	ln -sf $(WORKING_DIR)/bin/${PROVIDER} ${GOPATH}/bin
 
 install_dotnet_sdk::
 	rm -rf $(WORKING_DIR)/nuget/$(NUGET_PKG_NAME).*.nupkg
@@ -112,3 +115,5 @@ gen-gql gg::
 
 example::
 	cd examples/simple && pulumi up
+
+nodejs_e2e:: provider install_provider_symlink nodejs_sdk install_nodejs_sdk

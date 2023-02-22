@@ -2,14 +2,15 @@ package resources
 
 import (
 	"fmt"
-	"github.com/pulumi/pulumi-go-provider"
+	"time"
+
+	provider "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/diag"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/resource"
 	"github.com/zeet-dev/pulumi-zeet/provider/pkg/config"
 	"github.com/zeet-dev/pulumi-zeet/provider/pkg/gql"
 	"github.com/zeet-dev/pulumi-zeet/provider/pkg/model"
-	"time"
 )
 
 type App struct{}
@@ -116,7 +117,7 @@ func (a App) Read(ctx provider.Context, id string, inputs AppArgs, state AppStat
 }
 
 func responseToAppState(resp gql.CreateAppResponse) AppState {
-	return AppState{
+	state := AppState{
 		AppArgs: AppArgs{
 			UserID:        resp.UserID,
 			ProjectID:     resp.ProjectID,
@@ -124,8 +125,10 @@ func responseToAppState(resp gql.CreateAppResponse) AppState {
 			Name:          resp.Name,
 			Enabled:       resp.Enabled,
 			ResourcesInput: model.CreateAppResourcesInput{
-				Cpu:    resp.Resources.Cpu,
-				Memory: resp.Resources.Memory,
+				Cpu:              resp.Resources.Cpu,
+				Memory:           resp.Resources.Memory,
+				EphemeralStorage: resp.Resources.EphemeralStorage,
+				SpotInstance:     resp.Resources.SpotInstance,
 			},
 			BuildInput: model.CreateAppBuildInput{
 				Type:           resp.Build.Type,
@@ -135,15 +138,21 @@ func responseToAppState(resp gql.CreateAppResponse) AppState {
 				DeployTarget: resp.Deploy.DeployTarget,
 				ClusterID:    resp.Deploy.ClusterID,
 			},
-			GithubInput: &model.CreateAppGithubInput{
-				Url:              resp.GithubInput.Url,
-				ProductionBranch: resp.GithubInput.ProductionBranch,
-			},
+
 			EnvironmentVariables: resp.EnvironmentVariables,
 		},
 		AppID:     resp.ID,
 		UpdatedAt: resp.UpdatedAt,
 	}
+
+	if resp.GithubInput != nil {
+		state.GithubInput = &model.CreateAppGithubInput{
+			Url:              resp.GithubInput.Url,
+			ProductionBranch: resp.GithubInput.ProductionBranch,
+		}
+	}
+
+	return state
 }
 
 func (a App) Update(ctx provider.Context, id string, olds AppState, news AppArgs, preview bool) (AppState, error) {
@@ -152,32 +161,30 @@ func (a App) Update(ctx provider.Context, id string, olds AppState, news AppArgs
 		newState.AppArgs = news
 		return newState, nil
 	}
-	return AppState{}, fmt.Errorf("app update is not yet supported")
-	//resp, err := config.ZeetClient.UpdateApp(ctx, id, model.CreateAppInput{
-	//	UserID:        olds.UserID,
-	//	ProjectID:     olds.ProjectID,
-	//	EnvironmentID: olds.EnvironmentID,
-	//	Name:          news.Name,
-	//	GithubInput: &model.CreateAppGithubInput{
-	//		Url:              olds.GithubInput.Url,
-	//		ProductionBranch: olds.GithubInput.ProductionBranch,
-	//	},
-	//	Enabled: news.Enabled,
-	//	Build:   news.BuildInput,
-	//	Resources: model.CreateAppResourcesInput{
-	//		Cpu:    news.ResourcesInput.Cpu,
-	//		Memory: news.ResourcesInput.Memory,
-	//	},
-	//	Deploy: model.CreateAppDeployInput{
-	//		DeployTarget: olds.DeployInput.DeployTarget,
-	//		ClusterID:    olds.DeployInput.ClusterID,
-	//	},
-	//	EnvironmentVariables: olds.EnvironmentVariables,
-	//})
-	//if err != nil {
-	//	return AppState{}, err
-	//}
-	//return responseToAppState(resp), nil
+	input := model.CreateAppInput{
+		// update not possible yet
+		UserID:               olds.UserID,
+		ProjectID:            olds.ProjectID,
+		EnvironmentID:        olds.EnvironmentID,
+		GithubInput:          olds.GithubInput,
+		Deploy:               olds.DeployInput,
+		EnvironmentVariables: olds.EnvironmentVariables,
+
+		// can be updated
+		Name:    news.Name,
+		Enabled: news.Enabled,
+		Build:   news.BuildInput,
+		Resources: model.CreateAppResourcesInput{
+			Cpu:    news.ResourcesInput.Cpu,
+			Memory: news.ResourcesInput.Memory,
+		},
+	}
+	resp, err := config.ZeetClient.UpdateApp(ctx, id, input)
+	if err != nil {
+		return AppState{}, err
+	}
+
+	return responseToAppState(resp), nil
 }
 
 func (a App) Delete(ctx provider.Context, id string, props AppState) error {

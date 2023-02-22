@@ -1,166 +1,151 @@
 query currentUserID {
-    currentUser {
-        id
-    }
+  currentUser {
+    id
+  }
 }
 
 ### Project ###
 mutation createProject($userID: UUID!, $name: String!) {
-    createProjectV2(input: {
-        userID: $userID,
-        name: $name
-    }) {
-        id
-        name
-        updatedAt
-    }
-}
-
-fragment ProjectStateFragment on Project {
+  createProjectV2(input: { userID: $userID, name: $name }) {
     id
     name
     updatedAt
-    environments {
-        id
-        name
-        updatedAt
-    }
+  }
+}
+
+fragment ProjectStateFragment on Project {
+  id
+  name
+  updatedAt
+  environments {
+    id
+    name
+    updatedAt
+  }
 }
 
 query getProjectByID($projectID: UUID!) {
-    project(id: $projectID) {
-        ...ProjectStateFragment
-    }
+  project(id: $projectID) {
+    ...ProjectStateFragment
+  }
 }
 
 mutation updateProject($projectID: UUID!, $name: String) {
-    updateProjectV2(input: {
-        id: $projectID,
-        name: $name,
-    }) {
-        ...ProjectStateFragment
-    }
+  updateProjectV2(input: { id: $projectID, name: $name }) {
+    ...ProjectStateFragment
+  }
 }
 
 mutation deleteProject($projectID: UUID!) {
-    deleteProjectV2(id: $projectID)
+  deleteProjectV2(id: $projectID)
 }
 
 ### Environment ###
 fragment EnvironmentStateFragment on ProjectEnvironment {
+  id
+  name
+  project {
     id
-    name
-    project {
-        id
-    }
-    updatedAt
+  }
+  updatedAt
 }
 mutation createEnvironment($projectID: UUID!, $name: String!) {
-    createProjectEnvironment(input: {
-        projectID: $projectID,
-        name: $name
-    }) {
-        ...EnvironmentStateFragment
-    }
+  createProjectEnvironment(input: { projectID: $projectID, name: $name }) {
+    ...EnvironmentStateFragment
+  }
 }
 
 query getProjectEnvironments($projectID: UUID!) {
-    project(id: $projectID) {
-        ...ProjectStateFragment
-        environments {
-            ...EnvironmentStateFragment
-        }
+  project(id: $projectID) {
+    ...ProjectStateFragment
+    environments {
+      ...EnvironmentStateFragment
     }
+  }
 }
 
 mutation updateEnvironment($environmentID: UUID!, $name: String) {
-    updateProjectEnvironment(input: {
-        id: $environmentID,
-        name: $name,
-    }) {
-        ...EnvironmentStateFragment
-    }
+  updateProjectEnvironment(input: { id: $environmentID, name: $name }) {
+    ...EnvironmentStateFragment
+  }
 }
 
 mutation deleteEnvironment($environmentID: UUID!) {
-    deleteProjectEnvironment(id: $environmentID)
+  deleteProjectEnvironment(id: $environmentID)
 }
 
-#nput := CreateProjectGitInput{
-#		UserID:        &args.UserID,
-#		ProjectID:     &args.ProjectID,
-#		EnvironmentID: &args.EnvironmentID,
-#		Name:          &args.Name,
-#		Build: &ProjectBuildInput{
-#			BuildType:      &buildType,
-#			DockerfilePath: &args.Build.DockerfilePath,
-#		},
-#		DeployTarget: &ProjectDeployInput{
-#			DeployTarget: deployTarget,
-#			ClusterID:    &args.Deploy.ClusterID,
-#		},
-#		Envs: environmentVariablesToRequestInput(args.EnvironmentVariables),
-#	}
 fragment AppStateFragment on Repo {
+  id
+  name
+  project {
+    id
+  }
+  projectEnvironment {
+    id
+  }
+  buildMethod {
+    type
+    dockerfilePath
+  }
+  deployTarget
+  cluster {
+    id
+  }
+  envs {
     id
     name
-    project {
-        id
-    }
-    projectEnvironment {
-        id
-    }
-    buildMethod {
-        type
-        dockerfilePath
-    }
-    deployTarget
-    cluster {
-        id
-    }
-    envs {
-        id
-        name
-        value
-        sealed
-    }
-    cpu
-    memory
-    owner {
-        id
-    }
-    enabled
-    productionBranch
-    updatedAt
+    value
+    sealed
+  }
+  cpu
+  memory
+  owner {
+    id
+  }
+  enabled
+  productionBranch
+  updatedAt
 }
 
 ### Apps ###
 # Used to create Zeet "Repos", aka "Apps"
 # ProjectID and EnvironmentID are expected to be specified
 mutation createAppGit($input: CreateProjectGitInput!) {
-    createProjectGit(input: $input) {
-        ...AppStateFragment
-    }
+  createProjectGit(input: $input) {
+    ...AppStateFragment
+  }
 }
 
 mutation createAppDocker($input: CreateProjectDockerInput!) {
-    createProjectDocker(input: $input) {
-        ...AppStateFragment
-    }
+  createProjectDocker(input: $input) {
+    ...AppStateFragment
+  }
 }
 
 query getApp($appID: UUID!) {
-    repo(id: $appID) {
-        ...AppStateFragment
-    }
+  repo(id: $appID) {
+    ...AppStateFragment
+  }
 }
 
 mutation updateApp($input: UpdateProjectInput!) {
-    updateProject(input: $input) {
-        ...AppStateFragment
-    }
+  updateProject(input: $input) {
+    ...AppStateFragment
+  }
+}
+
+mutation enableApp($appID: ID!) {
+  enableRepo(id: $appID) {
+    ...AppStateFragment
+  }
+}
+
+mutation disableApp($appID: ID!) {
+  disableRepo(id: $appID) {
+    ...AppStateFragment
+  }
 }
 
 mutation deleteApp($appID: ID!) {
-    deleteRepo(id: $appID)
+  deleteRepo(id: $appID)
 }

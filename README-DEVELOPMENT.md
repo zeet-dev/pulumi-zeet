@@ -1,12 +1,4 @@
-# Pulumi Native Provider Boilerplate
-
-(this readme is retained from the original boilerplate repo template.)
-
-## Authoring a Pulumi Native Provider
-
-This boilerplate creates a working Pulumi-owned provider named `xyz`.
-It implements a random number generator that you can [build and test out for yourself](#test-against-the-example) and then replace the Random code with code specific to your provider.
-
+# Pulumi Zeet Native Provider
 
 ### Prerequisites
 
@@ -17,32 +9,16 @@ Ensure the following tools are installed and present in your `$PATH`:
 * [NodeJS](https://nodejs.org/en/) 14.x.  We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS installations.
 * [Yarn](https://yarnpkg.com/)
 * [TypeScript](https://www.typescriptlang.org/)
-* [Python](https://www.python.org/downloads/) (called as `python3`).  For recent versions of MacOS, the system-installed version is fine.
-* [.NET](https://dotnet.microsoft.com/download)
+* [Python](https://www.python.org/downloads/) (called as `python3`).  For recent versions of MacOS, the system-installed version is fine. (Optional)
+* [.NET](https://dotnet.microsoft.com/download) (Optional)
 
-
-### Creating and Initializing the Repository
-
-Pulumi offers this repository as a [GitHub template repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) for convenience.  From this repository:
-
-1. Click "Use this template".
-1. Set the following options:
-   * Owner: pulumi 
-   * Repository name: pulumi-xyz-native (replace "xyz" with the name of your provider)
-   * Description: Pulumi provider for xyz
-   * Repository type: Public
-1. Clone the generated repository.
-
-From the templated repository:
-
-1. Search-replace `xyz` with the name of your desired provider.
 
 #### Build the provider and install the plugin
 
    ```bash
    $ make build install
    ```
-   
+ 
 This will:
 
 1. Create the SDK codegen binary and place it in a `./bin` folder (gitignored)
@@ -54,7 +30,7 @@ This will:
    
 ```bash
 $ cd examples/simple
-$ yarn link @pulumi/xyz
+$ yarn link @zeet-dev/pulumi-zeet
 $ yarn install
 $ pulumi stack init test
 $ pulumi up
@@ -67,9 +43,9 @@ Now that you have completed all of the above steps, you have a working provider 
 You now have:
 
 1. A `provider/` folder containing the building and implementation logic
-    1. `cmd/pulumi-resource-xyz/main.go` - holds the provider's sample implementation logic.
+    1. `cmd/pulumi-resource-zeet/main.go` - holds the provider's sample implementation logic.
 2. `deployment-templates` - a set of files to help you around deployment and publication
-3. `sdk` - holds the generated code libraries created by `pulumi-gen-xyz/main.go`
+3. `sdk` - holds the generated code libraries created by `pulumi-gen-zeet/main.go`
 4. `examples` a folder of Pulumi programs to try locally and/or use in CI.
 5. A `Makefile` and this `README`.
 
@@ -86,10 +62,14 @@ You can now repeat the steps for [build, install, and test](#test-against-the-ex
 
 ## Configuring CI and releases
 
-1. Follow the instructions laid out in the [deployment templates](./deployment-templates/README-DEPLOYMENT.md).
+1. Push a tag to your repo in the format "v0.0.0" to initiate a release
+
+1. IMPORTANT: also add a tag in the format "sdk/v0.0.0" for the Go SDK
+
 
 ## References
 
 Other resources/examples for implementing providers:
 * [Pulumi Command provider](https://github.com/pulumi/pulumi-command/blob/master/provider/pkg/provider/provider.go)
 * [Pulumi Go Provider repository](https://github.com/pulumi/pulumi-go-provider)
+

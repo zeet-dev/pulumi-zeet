@@ -2,7 +2,8 @@ package gql
 
 import (
 	"context"
-	"github.com/pulumi/pulumi-go-provider"
+
+	provider "github.com/pulumi/pulumi-go-provider"
 	"github.com/zeet-dev/pulumi-zeet/provider/pkg/model"
 )
 
