@@ -33,9 +33,9 @@ export namespace model {
 
     export interface CreateAppResourcesInputArgs {
         cpu: pulumi.Input<number>;
-        ephemeralStorage: pulumi.Input<number>;
+        ephemeralStorage?: pulumi.Input<number>;
         memory: pulumi.Input<string>;
-        spotInstance: pulumi.Input<boolean>;
+        spotInstance?: pulumi.Input<boolean>;
     }
 }
 
