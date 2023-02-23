@@ -209,13 +209,15 @@ class CreateAppResourcesInput(dict):
 
     def __init__(__self__, *,
                  cpu: float,
-                 ephemeral_storage: float,
                  memory: str,
-                 spot_instance: bool):
+                 ephemeral_storage: Optional[float] = None,
+                 spot_instance: Optional[bool] = None):
         pulumi.set(__self__, "cpu", cpu)
-        pulumi.set(__self__, "ephemeral_storage", ephemeral_storage)
         pulumi.set(__self__, "memory", memory)
-        pulumi.set(__self__, "spot_instance", spot_instance)
+        if ephemeral_storage is not None:
+            pulumi.set(__self__, "ephemeral_storage", ephemeral_storage)
+        if spot_instance is not None:
+            pulumi.set(__self__, "spot_instance", spot_instance)
 
     @property
     @pulumi.getter
@@ -223,18 +225,18 @@ class CreateAppResourcesInput(dict):
         return pulumi.get(self, "cpu")
 
     @property
-    @pulumi.getter(name="ephemeralStorage")
-    def ephemeral_storage(self) -> float:
-        return pulumi.get(self, "ephemeral_storage")
-
-    @property
     @pulumi.getter
     def memory(self) -> str:
         return pulumi.get(self, "memory")
 
     @property
+    @pulumi.getter(name="ephemeralStorage")
+    def ephemeral_storage(self) -> Optional[float]:
+        return pulumi.get(self, "ephemeral_storage")
+
+    @property
     @pulumi.getter(name="spotInstance")
-    def spot_instance(self) -> bool:
+    def spot_instance(self) -> Optional[bool]:
         return pulumi.get(self, "spot_instance")
 
 

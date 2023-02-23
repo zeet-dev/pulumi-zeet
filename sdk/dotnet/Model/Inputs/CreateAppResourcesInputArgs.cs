@@ -15,14 +15,14 @@ namespace Pulumi.Zeet.Model.Inputs
         [Input("cpu", required: true)]
         public Input<double> Cpu { get; set; } = null!;
 
-        [Input("ephemeralStorage", required: true)]
-        public Input<double> EphemeralStorage { get; set; } = null!;
+        [Input("ephemeralStorage")]
+        public Input<double>? EphemeralStorage { get; set; }
 
         [Input("memory", required: true)]
         public Input<string> Memory { get; set; } = null!;
 
-        [Input("spotInstance", required: true)]
-        public Input<bool> SpotInstance { get; set; } = null!;
+        [Input("spotInstance")]
+        public Input<bool>? SpotInstance { get; set; }
 
         public CreateAppResourcesInputArgs()
         {

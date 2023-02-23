@@ -14,19 +14,19 @@ namespace Pulumi.Zeet.Model.Outputs
     public sealed class CreateAppResourcesInput
     {
         public readonly double Cpu;
-        public readonly double EphemeralStorage;
+        public readonly double? EphemeralStorage;
         public readonly string Memory;
-        public readonly bool SpotInstance;
+        public readonly bool? SpotInstance;
 
         [OutputConstructor]
         private CreateAppResourcesInput(
             double cpu,
 
-            double ephemeralStorage,
+            double? ephemeralStorage,
 
             string memory,
 
-            bool spotInstance)
+            bool? spotInstance)
         {
             Cpu = cpu;
             EphemeralStorage = ephemeralStorage;

@@ -160,13 +160,15 @@ class CreateAppGithubInputArgs:
 class CreateAppResourcesInputArgs:
     def __init__(__self__, *,
                  cpu: pulumi.Input[float],
-                 ephemeral_storage: pulumi.Input[float],
                  memory: pulumi.Input[str],
-                 spot_instance: pulumi.Input[bool]):
+                 ephemeral_storage: Optional[pulumi.Input[float]] = None,
+                 spot_instance: Optional[pulumi.Input[bool]] = None):
         pulumi.set(__self__, "cpu", cpu)
-        pulumi.set(__self__, "ephemeral_storage", ephemeral_storage)
         pulumi.set(__self__, "memory", memory)
-        pulumi.set(__self__, "spot_instance", spot_instance)
+        if ephemeral_storage is not None:
+            pulumi.set(__self__, "ephemeral_storage", ephemeral_storage)
+        if spot_instance is not None:
+            pulumi.set(__self__, "spot_instance", spot_instance)
 
     @property
     @pulumi.getter
@@ -178,15 +180,6 @@ class CreateAppResourcesInputArgs:
         pulumi.set(self, "cpu", value)
 
     @property
-    @pulumi.getter(name="ephemeralStorage")
-    def ephemeral_storage(self) -> pulumi.Input[float]:
-        return pulumi.get(self, "ephemeral_storage")
-
-    @ephemeral_storage.setter
-    def ephemeral_storage(self, value: pulumi.Input[float]):
-        pulumi.set(self, "ephemeral_storage", value)
-
-    @property
     @pulumi.getter
     def memory(self) -> pulumi.Input[str]:
         return pulumi.get(self, "memory")
@@ -196,12 +189,21 @@ class CreateAppResourcesInputArgs:
         pulumi.set(self, "memory", value)
 
     @property
+    @pulumi.getter(name="ephemeralStorage")
+    def ephemeral_storage(self) -> Optional[pulumi.Input[float]]:
+        return pulumi.get(self, "ephemeral_storage")
+
+    @ephemeral_storage.setter
+    def ephemeral_storage(self, value: Optional[pulumi.Input[float]]):
+        pulumi.set(self, "ephemeral_storage", value)
+
+    @property
     @pulumi.getter(name="spotInstance")
-    def spot_instance(self) -> pulumi.Input[bool]:
+    def spot_instance(self) -> Optional[pulumi.Input[bool]]:
         return pulumi.get(self, "spot_instance")
 
     @spot_instance.setter
-    def spot_instance(self, value: pulumi.Input[bool]):
+    def spot_instance(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "spot_instance", value)
 
 
