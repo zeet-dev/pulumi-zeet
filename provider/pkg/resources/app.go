@@ -152,6 +152,12 @@ func responseToAppState(resp gql.CreateAppResponse) AppState {
 		}
 	}
 
+	if resp.DockerInput != nil {
+		state.DockerInput = &model.CreateAppDockerInput{
+			DockerImage: resp.DockerInput.DockerImage,
+		}
+	}
+
 	return state
 }
 
@@ -178,6 +184,7 @@ func (a App) Update(ctx provider.Context, id string, olds AppState, news AppArgs
 			Cpu:    news.ResourcesInput.Cpu,
 			Memory: news.ResourcesInput.Memory,
 		},
+		DockerInput: news.DockerInput,
 	}
 	resp, err := config.ZeetClient.UpdateApp(ctx, id, input)
 	if err != nil {

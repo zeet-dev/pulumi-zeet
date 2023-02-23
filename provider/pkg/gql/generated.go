@@ -25,35 +25,24 @@ func (v *AcceleratorSpecInput) GetCount() int { return v.Count }
 // GetTpuTfVersion returns AcceleratorSpecInput.TpuTfVersion, and is useful for accessing the field via an interface.
 func (v *AcceleratorSpecInput) GetTpuTfVersion() *string { return v.TpuTfVersion }
 
-// nput := CreateProjectGitInput{
-// UserID:        &args.UserID,
-// ProjectID:     &args.ProjectID,
-// EnvironmentID: &args.EnvironmentID,
-// Name:          &args.Name,
-// Build: &ProjectBuildInput{
-// BuildType:      &buildType,
-// DockerfilePath: &args.Build.DockerfilePath,
-// },
-// DeployTarget: &ProjectDeployInput{
-// DeployTarget: deployTarget,
-// ClusterID:    &args.Deploy.ClusterID,
-// },
-// Envs: environmentVariablesToRequestInput(args.EnvironmentVariables),
-// }
+// AppStateFragment includes the GraphQL fields of Repo requested by the fragment AppStateFragment.
 type AppStateFragment struct {
 	Id                 string                              `json:"id"`
 	Name               string                              `json:"name"`
+	Owner              *AppStateFragmentOwnerUser          `json:"owner"`
 	Project            *AppStateFragmentProject            `json:"project"`
 	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
+	Source             *AppStateFragmentSourceRepoSource   `json:"source"`
 	BuildMethod        *AppStateFragmentBuildMethod        `json:"buildMethod"`
-	DeployTarget       *DeployTarget                       `json:"deployTarget"`
-	Cluster            *AppStateFragmentCluster            `json:"cluster"`
+	ProductionBranch   *string                             `json:"productionBranch"`
 	Envs               []*AppStateFragmentEnvsEnvVar       `json:"envs"`
 	Cpu                *string                             `json:"cpu"`
 	Memory             *string                             `json:"memory"`
-	Owner              *AppStateFragmentOwnerUser          `json:"owner"`
+	Dedicated          *bool                               `json:"dedicated"`
+	EphemeralStorage   *float64                            `json:"ephemeralStorage"`
+	DeployTarget       *DeployTarget                       `json:"deployTarget"`
+	Cluster            *AppStateFragmentCluster            `json:"cluster"`
 	Enabled            bool                                `json:"enabled"`
-	ProductionBranch   *string                             `json:"productionBranch"`
 	UpdatedAt          time.Time                           `json:"updatedAt"`
 }
 
@@ -63,6 +52,9 @@ func (v *AppStateFragment) GetId() string { return v.Id }
 // GetName returns AppStateFragment.Name, and is useful for accessing the field via an interface.
 func (v *AppStateFragment) GetName() string { return v.Name }
 
+// GetOwner returns AppStateFragment.Owner, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetOwner() *AppStateFragmentOwnerUser { return v.Owner }
+
 // GetProject returns AppStateFragment.Project, and is useful for accessing the field via an interface.
 func (v *AppStateFragment) GetProject() *AppStateFragmentProject { return v.Project }
 
@@ -71,14 +63,14 @@ func (v *AppStateFragment) GetProjectEnvironment() *AppStateFragmentProjectEnvir
 	return v.ProjectEnvironment
 }
 
+// GetSource returns AppStateFragment.Source, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetSource() *AppStateFragmentSourceRepoSource { return v.Source }
+
 // GetBuildMethod returns AppStateFragment.BuildMethod, and is useful for accessing the field via an interface.
 func (v *AppStateFragment) GetBuildMethod() *AppStateFragmentBuildMethod { return v.BuildMethod }
 
-// GetDeployTarget returns AppStateFragment.DeployTarget, and is useful for accessing the field via an interface.
-func (v *AppStateFragment) GetDeployTarget() *DeployTarget { return v.DeployTarget }
-
-// GetCluster returns AppStateFragment.Cluster, and is useful for accessing the field via an interface.
-func (v *AppStateFragment) GetCluster() *AppStateFragmentCluster { return v.Cluster }
+// GetProductionBranch returns AppStateFragment.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetProductionBranch() *string { return v.ProductionBranch }
 
 // GetEnvs returns AppStateFragment.Envs, and is useful for accessing the field via an interface.
 func (v *AppStateFragment) GetEnvs() []*AppStateFragmentEnvsEnvVar { return v.Envs }
@@ -89,14 +81,20 @@ func (v *AppStateFragment) GetCpu() *string { return v.Cpu }
 // GetMemory returns AppStateFragment.Memory, and is useful for accessing the field via an interface.
 func (v *AppStateFragment) GetMemory() *string { return v.Memory }
 
-// GetOwner returns AppStateFragment.Owner, and is useful for accessing the field via an interface.
-func (v *AppStateFragment) GetOwner() *AppStateFragmentOwnerUser { return v.Owner }
+// GetDedicated returns AppStateFragment.Dedicated, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetDedicated() *bool { return v.Dedicated }
+
+// GetEphemeralStorage returns AppStateFragment.EphemeralStorage, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetEphemeralStorage() *float64 { return v.EphemeralStorage }
+
+// GetDeployTarget returns AppStateFragment.DeployTarget, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetDeployTarget() *DeployTarget { return v.DeployTarget }
+
+// GetCluster returns AppStateFragment.Cluster, and is useful for accessing the field via an interface.
+func (v *AppStateFragment) GetCluster() *AppStateFragmentCluster { return v.Cluster }
 
 // GetEnabled returns AppStateFragment.Enabled, and is useful for accessing the field via an interface.
 func (v *AppStateFragment) GetEnabled() bool { return v.Enabled }
-
-// GetProductionBranch returns AppStateFragment.ProductionBranch, and is useful for accessing the field via an interface.
-func (v *AppStateFragment) GetProductionBranch() *string { return v.ProductionBranch }
 
 // GetUpdatedAt returns AppStateFragment.UpdatedAt, and is useful for accessing the field via an interface.
 func (v *AppStateFragment) GetUpdatedAt() time.Time { return v.UpdatedAt }
@@ -164,6 +162,22 @@ type AppStateFragmentProjectEnvironment struct {
 
 // GetId returns AppStateFragmentProjectEnvironment.Id, and is useful for accessing the field via an interface.
 func (v *AppStateFragmentProjectEnvironment) GetId() string { return v.Id }
+
+// AppStateFragmentSourceRepoSource includes the requested fields of the GraphQL type RepoSource.
+type AppStateFragmentSourceRepoSource struct {
+	Id   string         `json:"id"`
+	Type RepoSourceType `json:"type"`
+	Name string         `json:"name"`
+}
+
+// GetId returns AppStateFragmentSourceRepoSource.Id, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentSourceRepoSource) GetId() string { return v.Id }
+
+// GetType returns AppStateFragmentSourceRepoSource.Type, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentSourceRepoSource) GetType() RepoSourceType { return v.Type }
+
+// GetName returns AppStateFragmentSourceRepoSource.Name, and is useful for accessing the field via an interface.
+func (v *AppStateFragmentSourceRepoSource) GetName() string { return v.Name }
 
 type AutoscalingInput struct {
 	MinReplicas          int                        `json:"minReplicas"`
@@ -1036,6 +1050,19 @@ func (v *ReplicationInput) GetReplicas() int { return v.Replicas }
 // GetClusterID returns ReplicationInput.ClusterID, and is useful for accessing the field via an interface.
 func (v *ReplicationInput) GetClusterID() *string { return v.ClusterID }
 
+type RepoSourceType string
+
+const (
+	RepoSourceTypeGithub       RepoSourceType = "GITHUB"
+	RepoSourceTypeGithubPublic RepoSourceType = "GITHUB_PUBLIC"
+	RepoSourceTypeGitlab       RepoSourceType = "GITLAB"
+	RepoSourceTypeGit          RepoSourceType = "GIT"
+	RepoSourceTypeDocker       RepoSourceType = "DOCKER"
+	RepoSourceTypeDockerHub    RepoSourceType = "DOCKER_HUB"
+	RepoSourceTypeHelm         RepoSourceType = "HELM"
+	RepoSourceTypeTerraform    RepoSourceType = "TERRAFORM"
+)
+
 type ServerlessResourcesSpecInput struct {
 	Cpu    *float64 `json:"cpu"`
 	Memory float64  `json:"memory"`
@@ -1552,6 +1579,11 @@ func (v *createAppDockerCreateProjectDockerRepo) GetId() string { return v.AppSt
 // GetName returns createAppDockerCreateProjectDockerRepo.Name, and is useful for accessing the field via an interface.
 func (v *createAppDockerCreateProjectDockerRepo) GetName() string { return v.AppStateFragment.Name }
 
+// GetOwner returns createAppDockerCreateProjectDockerRepo.Owner, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetOwner() *AppStateFragmentOwnerUser {
+	return v.AppStateFragment.Owner
+}
+
 // GetProject returns createAppDockerCreateProjectDockerRepo.Project, and is useful for accessing the field via an interface.
 func (v *createAppDockerCreateProjectDockerRepo) GetProject() *AppStateFragmentProject {
 	return v.AppStateFragment.Project
@@ -1562,19 +1594,19 @@ func (v *createAppDockerCreateProjectDockerRepo) GetProjectEnvironment() *AppSta
 	return v.AppStateFragment.ProjectEnvironment
 }
 
+// GetSource returns createAppDockerCreateProjectDockerRepo.Source, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetSource() *AppStateFragmentSourceRepoSource {
+	return v.AppStateFragment.Source
+}
+
 // GetBuildMethod returns createAppDockerCreateProjectDockerRepo.BuildMethod, and is useful for accessing the field via an interface.
 func (v *createAppDockerCreateProjectDockerRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
 	return v.AppStateFragment.BuildMethod
 }
 
-// GetDeployTarget returns createAppDockerCreateProjectDockerRepo.DeployTarget, and is useful for accessing the field via an interface.
-func (v *createAppDockerCreateProjectDockerRepo) GetDeployTarget() *DeployTarget {
-	return v.AppStateFragment.DeployTarget
-}
-
-// GetCluster returns createAppDockerCreateProjectDockerRepo.Cluster, and is useful for accessing the field via an interface.
-func (v *createAppDockerCreateProjectDockerRepo) GetCluster() *AppStateFragmentCluster {
-	return v.AppStateFragment.Cluster
+// GetProductionBranch returns createAppDockerCreateProjectDockerRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetProductionBranch() *string {
+	return v.AppStateFragment.ProductionBranch
 }
 
 // GetEnvs returns createAppDockerCreateProjectDockerRepo.Envs, and is useful for accessing the field via an interface.
@@ -1590,18 +1622,28 @@ func (v *createAppDockerCreateProjectDockerRepo) GetMemory() *string {
 	return v.AppStateFragment.Memory
 }
 
-// GetOwner returns createAppDockerCreateProjectDockerRepo.Owner, and is useful for accessing the field via an interface.
-func (v *createAppDockerCreateProjectDockerRepo) GetOwner() *AppStateFragmentOwnerUser {
-	return v.AppStateFragment.Owner
+// GetDedicated returns createAppDockerCreateProjectDockerRepo.Dedicated, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetDedicated() *bool {
+	return v.AppStateFragment.Dedicated
+}
+
+// GetEphemeralStorage returns createAppDockerCreateProjectDockerRepo.EphemeralStorage, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetEphemeralStorage() *float64 {
+	return v.AppStateFragment.EphemeralStorage
+}
+
+// GetDeployTarget returns createAppDockerCreateProjectDockerRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetDeployTarget() *DeployTarget {
+	return v.AppStateFragment.DeployTarget
+}
+
+// GetCluster returns createAppDockerCreateProjectDockerRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *createAppDockerCreateProjectDockerRepo) GetCluster() *AppStateFragmentCluster {
+	return v.AppStateFragment.Cluster
 }
 
 // GetEnabled returns createAppDockerCreateProjectDockerRepo.Enabled, and is useful for accessing the field via an interface.
 func (v *createAppDockerCreateProjectDockerRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
-
-// GetProductionBranch returns createAppDockerCreateProjectDockerRepo.ProductionBranch, and is useful for accessing the field via an interface.
-func (v *createAppDockerCreateProjectDockerRepo) GetProductionBranch() *string {
-	return v.AppStateFragment.ProductionBranch
-}
 
 // GetUpdatedAt returns createAppDockerCreateProjectDockerRepo.UpdatedAt, and is useful for accessing the field via an interface.
 func (v *createAppDockerCreateProjectDockerRepo) GetUpdatedAt() time.Time {
@@ -1638,15 +1680,17 @@ type __premarshalcreateAppDockerCreateProjectDockerRepo struct {
 
 	Name string `json:"name"`
 
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
 	Project *AppStateFragmentProject `json:"project"`
 
 	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
 
+	Source *AppStateFragmentSourceRepoSource `json:"source"`
+
 	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
 
-	DeployTarget *DeployTarget `json:"deployTarget"`
-
-	Cluster *AppStateFragmentCluster `json:"cluster"`
+	ProductionBranch *string `json:"productionBranch"`
 
 	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
 
@@ -1654,11 +1698,15 @@ type __premarshalcreateAppDockerCreateProjectDockerRepo struct {
 
 	Memory *string `json:"memory"`
 
-	Owner *AppStateFragmentOwnerUser `json:"owner"`
+	Dedicated *bool `json:"dedicated"`
+
+	EphemeralStorage *float64 `json:"ephemeralStorage"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
 
 	Enabled bool `json:"enabled"`
-
-	ProductionBranch *string `json:"productionBranch"`
 
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -1676,17 +1724,20 @@ func (v *createAppDockerCreateProjectDockerRepo) __premarshalJSON() (*__premarsh
 
 	retval.Id = v.AppStateFragment.Id
 	retval.Name = v.AppStateFragment.Name
+	retval.Owner = v.AppStateFragment.Owner
 	retval.Project = v.AppStateFragment.Project
 	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.Source = v.AppStateFragment.Source
 	retval.BuildMethod = v.AppStateFragment.BuildMethod
-	retval.DeployTarget = v.AppStateFragment.DeployTarget
-	retval.Cluster = v.AppStateFragment.Cluster
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.Envs = v.AppStateFragment.Envs
 	retval.Cpu = v.AppStateFragment.Cpu
 	retval.Memory = v.AppStateFragment.Memory
-	retval.Owner = v.AppStateFragment.Owner
+	retval.Dedicated = v.AppStateFragment.Dedicated
+	retval.EphemeralStorage = v.AppStateFragment.EphemeralStorage
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
 	retval.Enabled = v.AppStateFragment.Enabled
-	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
 	return &retval, nil
 }
@@ -1712,6 +1763,11 @@ func (v *createAppGitCreateProjectGitRepo) GetId() string { return v.AppStateFra
 // GetName returns createAppGitCreateProjectGitRepo.Name, and is useful for accessing the field via an interface.
 func (v *createAppGitCreateProjectGitRepo) GetName() string { return v.AppStateFragment.Name }
 
+// GetOwner returns createAppGitCreateProjectGitRepo.Owner, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetOwner() *AppStateFragmentOwnerUser {
+	return v.AppStateFragment.Owner
+}
+
 // GetProject returns createAppGitCreateProjectGitRepo.Project, and is useful for accessing the field via an interface.
 func (v *createAppGitCreateProjectGitRepo) GetProject() *AppStateFragmentProject {
 	return v.AppStateFragment.Project
@@ -1722,19 +1778,19 @@ func (v *createAppGitCreateProjectGitRepo) GetProjectEnvironment() *AppStateFrag
 	return v.AppStateFragment.ProjectEnvironment
 }
 
+// GetSource returns createAppGitCreateProjectGitRepo.Source, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetSource() *AppStateFragmentSourceRepoSource {
+	return v.AppStateFragment.Source
+}
+
 // GetBuildMethod returns createAppGitCreateProjectGitRepo.BuildMethod, and is useful for accessing the field via an interface.
 func (v *createAppGitCreateProjectGitRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
 	return v.AppStateFragment.BuildMethod
 }
 
-// GetDeployTarget returns createAppGitCreateProjectGitRepo.DeployTarget, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetDeployTarget() *DeployTarget {
-	return v.AppStateFragment.DeployTarget
-}
-
-// GetCluster returns createAppGitCreateProjectGitRepo.Cluster, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetCluster() *AppStateFragmentCluster {
-	return v.AppStateFragment.Cluster
+// GetProductionBranch returns createAppGitCreateProjectGitRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetProductionBranch() *string {
+	return v.AppStateFragment.ProductionBranch
 }
 
 // GetEnvs returns createAppGitCreateProjectGitRepo.Envs, and is useful for accessing the field via an interface.
@@ -1748,18 +1804,26 @@ func (v *createAppGitCreateProjectGitRepo) GetCpu() *string { return v.AppStateF
 // GetMemory returns createAppGitCreateProjectGitRepo.Memory, and is useful for accessing the field via an interface.
 func (v *createAppGitCreateProjectGitRepo) GetMemory() *string { return v.AppStateFragment.Memory }
 
-// GetOwner returns createAppGitCreateProjectGitRepo.Owner, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetOwner() *AppStateFragmentOwnerUser {
-	return v.AppStateFragment.Owner
+// GetDedicated returns createAppGitCreateProjectGitRepo.Dedicated, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetDedicated() *bool { return v.AppStateFragment.Dedicated }
+
+// GetEphemeralStorage returns createAppGitCreateProjectGitRepo.EphemeralStorage, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetEphemeralStorage() *float64 {
+	return v.AppStateFragment.EphemeralStorage
+}
+
+// GetDeployTarget returns createAppGitCreateProjectGitRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetDeployTarget() *DeployTarget {
+	return v.AppStateFragment.DeployTarget
+}
+
+// GetCluster returns createAppGitCreateProjectGitRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *createAppGitCreateProjectGitRepo) GetCluster() *AppStateFragmentCluster {
+	return v.AppStateFragment.Cluster
 }
 
 // GetEnabled returns createAppGitCreateProjectGitRepo.Enabled, and is useful for accessing the field via an interface.
 func (v *createAppGitCreateProjectGitRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
-
-// GetProductionBranch returns createAppGitCreateProjectGitRepo.ProductionBranch, and is useful for accessing the field via an interface.
-func (v *createAppGitCreateProjectGitRepo) GetProductionBranch() *string {
-	return v.AppStateFragment.ProductionBranch
-}
 
 // GetUpdatedAt returns createAppGitCreateProjectGitRepo.UpdatedAt, and is useful for accessing the field via an interface.
 func (v *createAppGitCreateProjectGitRepo) GetUpdatedAt() time.Time {
@@ -1796,15 +1860,17 @@ type __premarshalcreateAppGitCreateProjectGitRepo struct {
 
 	Name string `json:"name"`
 
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
 	Project *AppStateFragmentProject `json:"project"`
 
 	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
 
+	Source *AppStateFragmentSourceRepoSource `json:"source"`
+
 	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
 
-	DeployTarget *DeployTarget `json:"deployTarget"`
-
-	Cluster *AppStateFragmentCluster `json:"cluster"`
+	ProductionBranch *string `json:"productionBranch"`
 
 	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
 
@@ -1812,11 +1878,15 @@ type __premarshalcreateAppGitCreateProjectGitRepo struct {
 
 	Memory *string `json:"memory"`
 
-	Owner *AppStateFragmentOwnerUser `json:"owner"`
+	Dedicated *bool `json:"dedicated"`
+
+	EphemeralStorage *float64 `json:"ephemeralStorage"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
 
 	Enabled bool `json:"enabled"`
-
-	ProductionBranch *string `json:"productionBranch"`
 
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -1834,17 +1904,20 @@ func (v *createAppGitCreateProjectGitRepo) __premarshalJSON() (*__premarshalcrea
 
 	retval.Id = v.AppStateFragment.Id
 	retval.Name = v.AppStateFragment.Name
+	retval.Owner = v.AppStateFragment.Owner
 	retval.Project = v.AppStateFragment.Project
 	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.Source = v.AppStateFragment.Source
 	retval.BuildMethod = v.AppStateFragment.BuildMethod
-	retval.DeployTarget = v.AppStateFragment.DeployTarget
-	retval.Cluster = v.AppStateFragment.Cluster
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.Envs = v.AppStateFragment.Envs
 	retval.Cpu = v.AppStateFragment.Cpu
 	retval.Memory = v.AppStateFragment.Memory
-	retval.Owner = v.AppStateFragment.Owner
+	retval.Dedicated = v.AppStateFragment.Dedicated
+	retval.EphemeralStorage = v.AppStateFragment.EphemeralStorage
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
 	retval.Enabled = v.AppStateFragment.Enabled
-	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
 	return &retval, nil
 }
@@ -2026,6 +2099,11 @@ func (v *disableAppDisableRepo) GetId() string { return v.AppStateFragment.Id }
 // GetName returns disableAppDisableRepo.Name, and is useful for accessing the field via an interface.
 func (v *disableAppDisableRepo) GetName() string { return v.AppStateFragment.Name }
 
+// GetOwner returns disableAppDisableRepo.Owner, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetOwner() *AppStateFragmentOwnerUser {
+	return v.AppStateFragment.Owner
+}
+
 // GetProject returns disableAppDisableRepo.Project, and is useful for accessing the field via an interface.
 func (v *disableAppDisableRepo) GetProject() *AppStateFragmentProject {
 	return v.AppStateFragment.Project
@@ -2036,19 +2114,19 @@ func (v *disableAppDisableRepo) GetProjectEnvironment() *AppStateFragmentProject
 	return v.AppStateFragment.ProjectEnvironment
 }
 
+// GetSource returns disableAppDisableRepo.Source, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetSource() *AppStateFragmentSourceRepoSource {
+	return v.AppStateFragment.Source
+}
+
 // GetBuildMethod returns disableAppDisableRepo.BuildMethod, and is useful for accessing the field via an interface.
 func (v *disableAppDisableRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
 	return v.AppStateFragment.BuildMethod
 }
 
-// GetDeployTarget returns disableAppDisableRepo.DeployTarget, and is useful for accessing the field via an interface.
-func (v *disableAppDisableRepo) GetDeployTarget() *DeployTarget {
-	return v.AppStateFragment.DeployTarget
-}
-
-// GetCluster returns disableAppDisableRepo.Cluster, and is useful for accessing the field via an interface.
-func (v *disableAppDisableRepo) GetCluster() *AppStateFragmentCluster {
-	return v.AppStateFragment.Cluster
+// GetProductionBranch returns disableAppDisableRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetProductionBranch() *string {
+	return v.AppStateFragment.ProductionBranch
 }
 
 // GetEnvs returns disableAppDisableRepo.Envs, and is useful for accessing the field via an interface.
@@ -2062,18 +2140,26 @@ func (v *disableAppDisableRepo) GetCpu() *string { return v.AppStateFragment.Cpu
 // GetMemory returns disableAppDisableRepo.Memory, and is useful for accessing the field via an interface.
 func (v *disableAppDisableRepo) GetMemory() *string { return v.AppStateFragment.Memory }
 
-// GetOwner returns disableAppDisableRepo.Owner, and is useful for accessing the field via an interface.
-func (v *disableAppDisableRepo) GetOwner() *AppStateFragmentOwnerUser {
-	return v.AppStateFragment.Owner
+// GetDedicated returns disableAppDisableRepo.Dedicated, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetDedicated() *bool { return v.AppStateFragment.Dedicated }
+
+// GetEphemeralStorage returns disableAppDisableRepo.EphemeralStorage, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetEphemeralStorage() *float64 {
+	return v.AppStateFragment.EphemeralStorage
+}
+
+// GetDeployTarget returns disableAppDisableRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetDeployTarget() *DeployTarget {
+	return v.AppStateFragment.DeployTarget
+}
+
+// GetCluster returns disableAppDisableRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *disableAppDisableRepo) GetCluster() *AppStateFragmentCluster {
+	return v.AppStateFragment.Cluster
 }
 
 // GetEnabled returns disableAppDisableRepo.Enabled, and is useful for accessing the field via an interface.
 func (v *disableAppDisableRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
-
-// GetProductionBranch returns disableAppDisableRepo.ProductionBranch, and is useful for accessing the field via an interface.
-func (v *disableAppDisableRepo) GetProductionBranch() *string {
-	return v.AppStateFragment.ProductionBranch
-}
 
 // GetUpdatedAt returns disableAppDisableRepo.UpdatedAt, and is useful for accessing the field via an interface.
 func (v *disableAppDisableRepo) GetUpdatedAt() time.Time { return v.AppStateFragment.UpdatedAt }
@@ -2108,15 +2194,17 @@ type __premarshaldisableAppDisableRepo struct {
 
 	Name string `json:"name"`
 
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
 	Project *AppStateFragmentProject `json:"project"`
 
 	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
 
+	Source *AppStateFragmentSourceRepoSource `json:"source"`
+
 	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
 
-	DeployTarget *DeployTarget `json:"deployTarget"`
-
-	Cluster *AppStateFragmentCluster `json:"cluster"`
+	ProductionBranch *string `json:"productionBranch"`
 
 	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
 
@@ -2124,11 +2212,15 @@ type __premarshaldisableAppDisableRepo struct {
 
 	Memory *string `json:"memory"`
 
-	Owner *AppStateFragmentOwnerUser `json:"owner"`
+	Dedicated *bool `json:"dedicated"`
+
+	EphemeralStorage *float64 `json:"ephemeralStorage"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
 
 	Enabled bool `json:"enabled"`
-
-	ProductionBranch *string `json:"productionBranch"`
 
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -2146,17 +2238,20 @@ func (v *disableAppDisableRepo) __premarshalJSON() (*__premarshaldisableAppDisab
 
 	retval.Id = v.AppStateFragment.Id
 	retval.Name = v.AppStateFragment.Name
+	retval.Owner = v.AppStateFragment.Owner
 	retval.Project = v.AppStateFragment.Project
 	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.Source = v.AppStateFragment.Source
 	retval.BuildMethod = v.AppStateFragment.BuildMethod
-	retval.DeployTarget = v.AppStateFragment.DeployTarget
-	retval.Cluster = v.AppStateFragment.Cluster
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.Envs = v.AppStateFragment.Envs
 	retval.Cpu = v.AppStateFragment.Cpu
 	retval.Memory = v.AppStateFragment.Memory
-	retval.Owner = v.AppStateFragment.Owner
+	retval.Dedicated = v.AppStateFragment.Dedicated
+	retval.EphemeralStorage = v.AppStateFragment.EphemeralStorage
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
 	retval.Enabled = v.AppStateFragment.Enabled
-	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
 	return &retval, nil
 }
@@ -2180,6 +2275,9 @@ func (v *enableAppEnableRepo) GetId() string { return v.AppStateFragment.Id }
 // GetName returns enableAppEnableRepo.Name, and is useful for accessing the field via an interface.
 func (v *enableAppEnableRepo) GetName() string { return v.AppStateFragment.Name }
 
+// GetOwner returns enableAppEnableRepo.Owner, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetOwner() *AppStateFragmentOwnerUser { return v.AppStateFragment.Owner }
+
 // GetProject returns enableAppEnableRepo.Project, and is useful for accessing the field via an interface.
 func (v *enableAppEnableRepo) GetProject() *AppStateFragmentProject {
 	return v.AppStateFragment.Project
@@ -2190,17 +2288,19 @@ func (v *enableAppEnableRepo) GetProjectEnvironment() *AppStateFragmentProjectEn
 	return v.AppStateFragment.ProjectEnvironment
 }
 
+// GetSource returns enableAppEnableRepo.Source, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetSource() *AppStateFragmentSourceRepoSource {
+	return v.AppStateFragment.Source
+}
+
 // GetBuildMethod returns enableAppEnableRepo.BuildMethod, and is useful for accessing the field via an interface.
 func (v *enableAppEnableRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
 	return v.AppStateFragment.BuildMethod
 }
 
-// GetDeployTarget returns enableAppEnableRepo.DeployTarget, and is useful for accessing the field via an interface.
-func (v *enableAppEnableRepo) GetDeployTarget() *DeployTarget { return v.AppStateFragment.DeployTarget }
-
-// GetCluster returns enableAppEnableRepo.Cluster, and is useful for accessing the field via an interface.
-func (v *enableAppEnableRepo) GetCluster() *AppStateFragmentCluster {
-	return v.AppStateFragment.Cluster
+// GetProductionBranch returns enableAppEnableRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetProductionBranch() *string {
+	return v.AppStateFragment.ProductionBranch
 }
 
 // GetEnvs returns enableAppEnableRepo.Envs, and is useful for accessing the field via an interface.
@@ -2212,16 +2312,24 @@ func (v *enableAppEnableRepo) GetCpu() *string { return v.AppStateFragment.Cpu }
 // GetMemory returns enableAppEnableRepo.Memory, and is useful for accessing the field via an interface.
 func (v *enableAppEnableRepo) GetMemory() *string { return v.AppStateFragment.Memory }
 
-// GetOwner returns enableAppEnableRepo.Owner, and is useful for accessing the field via an interface.
-func (v *enableAppEnableRepo) GetOwner() *AppStateFragmentOwnerUser { return v.AppStateFragment.Owner }
+// GetDedicated returns enableAppEnableRepo.Dedicated, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetDedicated() *bool { return v.AppStateFragment.Dedicated }
+
+// GetEphemeralStorage returns enableAppEnableRepo.EphemeralStorage, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetEphemeralStorage() *float64 {
+	return v.AppStateFragment.EphemeralStorage
+}
+
+// GetDeployTarget returns enableAppEnableRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetDeployTarget() *DeployTarget { return v.AppStateFragment.DeployTarget }
+
+// GetCluster returns enableAppEnableRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *enableAppEnableRepo) GetCluster() *AppStateFragmentCluster {
+	return v.AppStateFragment.Cluster
+}
 
 // GetEnabled returns enableAppEnableRepo.Enabled, and is useful for accessing the field via an interface.
 func (v *enableAppEnableRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
-
-// GetProductionBranch returns enableAppEnableRepo.ProductionBranch, and is useful for accessing the field via an interface.
-func (v *enableAppEnableRepo) GetProductionBranch() *string {
-	return v.AppStateFragment.ProductionBranch
-}
 
 // GetUpdatedAt returns enableAppEnableRepo.UpdatedAt, and is useful for accessing the field via an interface.
 func (v *enableAppEnableRepo) GetUpdatedAt() time.Time { return v.AppStateFragment.UpdatedAt }
@@ -2256,15 +2364,17 @@ type __premarshalenableAppEnableRepo struct {
 
 	Name string `json:"name"`
 
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
 	Project *AppStateFragmentProject `json:"project"`
 
 	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
 
+	Source *AppStateFragmentSourceRepoSource `json:"source"`
+
 	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
 
-	DeployTarget *DeployTarget `json:"deployTarget"`
-
-	Cluster *AppStateFragmentCluster `json:"cluster"`
+	ProductionBranch *string `json:"productionBranch"`
 
 	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
 
@@ -2272,11 +2382,15 @@ type __premarshalenableAppEnableRepo struct {
 
 	Memory *string `json:"memory"`
 
-	Owner *AppStateFragmentOwnerUser `json:"owner"`
+	Dedicated *bool `json:"dedicated"`
+
+	EphemeralStorage *float64 `json:"ephemeralStorage"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
 
 	Enabled bool `json:"enabled"`
-
-	ProductionBranch *string `json:"productionBranch"`
 
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -2294,17 +2408,20 @@ func (v *enableAppEnableRepo) __premarshalJSON() (*__premarshalenableAppEnableRe
 
 	retval.Id = v.AppStateFragment.Id
 	retval.Name = v.AppStateFragment.Name
+	retval.Owner = v.AppStateFragment.Owner
 	retval.Project = v.AppStateFragment.Project
 	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.Source = v.AppStateFragment.Source
 	retval.BuildMethod = v.AppStateFragment.BuildMethod
-	retval.DeployTarget = v.AppStateFragment.DeployTarget
-	retval.Cluster = v.AppStateFragment.Cluster
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.Envs = v.AppStateFragment.Envs
 	retval.Cpu = v.AppStateFragment.Cpu
 	retval.Memory = v.AppStateFragment.Memory
-	retval.Owner = v.AppStateFragment.Owner
+	retval.Dedicated = v.AppStateFragment.Dedicated
+	retval.EphemeralStorage = v.AppStateFragment.EphemeralStorage
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
 	retval.Enabled = v.AppStateFragment.Enabled
-	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
 	return &retval, nil
 }
@@ -2328,6 +2445,9 @@ func (v *getAppRepo) GetId() string { return v.AppStateFragment.Id }
 // GetName returns getAppRepo.Name, and is useful for accessing the field via an interface.
 func (v *getAppRepo) GetName() string { return v.AppStateFragment.Name }
 
+// GetOwner returns getAppRepo.Owner, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetOwner() *AppStateFragmentOwnerUser { return v.AppStateFragment.Owner }
+
 // GetProject returns getAppRepo.Project, and is useful for accessing the field via an interface.
 func (v *getAppRepo) GetProject() *AppStateFragmentProject { return v.AppStateFragment.Project }
 
@@ -2336,16 +2456,16 @@ func (v *getAppRepo) GetProjectEnvironment() *AppStateFragmentProjectEnvironment
 	return v.AppStateFragment.ProjectEnvironment
 }
 
+// GetSource returns getAppRepo.Source, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetSource() *AppStateFragmentSourceRepoSource { return v.AppStateFragment.Source }
+
 // GetBuildMethod returns getAppRepo.BuildMethod, and is useful for accessing the field via an interface.
 func (v *getAppRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
 	return v.AppStateFragment.BuildMethod
 }
 
-// GetDeployTarget returns getAppRepo.DeployTarget, and is useful for accessing the field via an interface.
-func (v *getAppRepo) GetDeployTarget() *DeployTarget { return v.AppStateFragment.DeployTarget }
-
-// GetCluster returns getAppRepo.Cluster, and is useful for accessing the field via an interface.
-func (v *getAppRepo) GetCluster() *AppStateFragmentCluster { return v.AppStateFragment.Cluster }
+// GetProductionBranch returns getAppRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetProductionBranch() *string { return v.AppStateFragment.ProductionBranch }
 
 // GetEnvs returns getAppRepo.Envs, and is useful for accessing the field via an interface.
 func (v *getAppRepo) GetEnvs() []*AppStateFragmentEnvsEnvVar { return v.AppStateFragment.Envs }
@@ -2356,14 +2476,20 @@ func (v *getAppRepo) GetCpu() *string { return v.AppStateFragment.Cpu }
 // GetMemory returns getAppRepo.Memory, and is useful for accessing the field via an interface.
 func (v *getAppRepo) GetMemory() *string { return v.AppStateFragment.Memory }
 
-// GetOwner returns getAppRepo.Owner, and is useful for accessing the field via an interface.
-func (v *getAppRepo) GetOwner() *AppStateFragmentOwnerUser { return v.AppStateFragment.Owner }
+// GetDedicated returns getAppRepo.Dedicated, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetDedicated() *bool { return v.AppStateFragment.Dedicated }
+
+// GetEphemeralStorage returns getAppRepo.EphemeralStorage, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetEphemeralStorage() *float64 { return v.AppStateFragment.EphemeralStorage }
+
+// GetDeployTarget returns getAppRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetDeployTarget() *DeployTarget { return v.AppStateFragment.DeployTarget }
+
+// GetCluster returns getAppRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *getAppRepo) GetCluster() *AppStateFragmentCluster { return v.AppStateFragment.Cluster }
 
 // GetEnabled returns getAppRepo.Enabled, and is useful for accessing the field via an interface.
 func (v *getAppRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
-
-// GetProductionBranch returns getAppRepo.ProductionBranch, and is useful for accessing the field via an interface.
-func (v *getAppRepo) GetProductionBranch() *string { return v.AppStateFragment.ProductionBranch }
 
 // GetUpdatedAt returns getAppRepo.UpdatedAt, and is useful for accessing the field via an interface.
 func (v *getAppRepo) GetUpdatedAt() time.Time { return v.AppStateFragment.UpdatedAt }
@@ -2398,15 +2524,17 @@ type __premarshalgetAppRepo struct {
 
 	Name string `json:"name"`
 
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
 	Project *AppStateFragmentProject `json:"project"`
 
 	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
 
+	Source *AppStateFragmentSourceRepoSource `json:"source"`
+
 	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
 
-	DeployTarget *DeployTarget `json:"deployTarget"`
-
-	Cluster *AppStateFragmentCluster `json:"cluster"`
+	ProductionBranch *string `json:"productionBranch"`
 
 	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
 
@@ -2414,11 +2542,15 @@ type __premarshalgetAppRepo struct {
 
 	Memory *string `json:"memory"`
 
-	Owner *AppStateFragmentOwnerUser `json:"owner"`
+	Dedicated *bool `json:"dedicated"`
+
+	EphemeralStorage *float64 `json:"ephemeralStorage"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
 
 	Enabled bool `json:"enabled"`
-
-	ProductionBranch *string `json:"productionBranch"`
 
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -2436,17 +2568,20 @@ func (v *getAppRepo) __premarshalJSON() (*__premarshalgetAppRepo, error) {
 
 	retval.Id = v.AppStateFragment.Id
 	retval.Name = v.AppStateFragment.Name
+	retval.Owner = v.AppStateFragment.Owner
 	retval.Project = v.AppStateFragment.Project
 	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.Source = v.AppStateFragment.Source
 	retval.BuildMethod = v.AppStateFragment.BuildMethod
-	retval.DeployTarget = v.AppStateFragment.DeployTarget
-	retval.Cluster = v.AppStateFragment.Cluster
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.Envs = v.AppStateFragment.Envs
 	retval.Cpu = v.AppStateFragment.Cpu
 	retval.Memory = v.AppStateFragment.Memory
-	retval.Owner = v.AppStateFragment.Owner
+	retval.Dedicated = v.AppStateFragment.Dedicated
+	retval.EphemeralStorage = v.AppStateFragment.EphemeralStorage
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
 	retval.Enabled = v.AppStateFragment.Enabled
-	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
 	return &retval, nil
 }
@@ -2721,6 +2856,11 @@ func (v *updateAppUpdateProjectRepo) GetId() string { return v.AppStateFragment.
 // GetName returns updateAppUpdateProjectRepo.Name, and is useful for accessing the field via an interface.
 func (v *updateAppUpdateProjectRepo) GetName() string { return v.AppStateFragment.Name }
 
+// GetOwner returns updateAppUpdateProjectRepo.Owner, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetOwner() *AppStateFragmentOwnerUser {
+	return v.AppStateFragment.Owner
+}
+
 // GetProject returns updateAppUpdateProjectRepo.Project, and is useful for accessing the field via an interface.
 func (v *updateAppUpdateProjectRepo) GetProject() *AppStateFragmentProject {
 	return v.AppStateFragment.Project
@@ -2731,19 +2871,19 @@ func (v *updateAppUpdateProjectRepo) GetProjectEnvironment() *AppStateFragmentPr
 	return v.AppStateFragment.ProjectEnvironment
 }
 
+// GetSource returns updateAppUpdateProjectRepo.Source, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetSource() *AppStateFragmentSourceRepoSource {
+	return v.AppStateFragment.Source
+}
+
 // GetBuildMethod returns updateAppUpdateProjectRepo.BuildMethod, and is useful for accessing the field via an interface.
 func (v *updateAppUpdateProjectRepo) GetBuildMethod() *AppStateFragmentBuildMethod {
 	return v.AppStateFragment.BuildMethod
 }
 
-// GetDeployTarget returns updateAppUpdateProjectRepo.DeployTarget, and is useful for accessing the field via an interface.
-func (v *updateAppUpdateProjectRepo) GetDeployTarget() *DeployTarget {
-	return v.AppStateFragment.DeployTarget
-}
-
-// GetCluster returns updateAppUpdateProjectRepo.Cluster, and is useful for accessing the field via an interface.
-func (v *updateAppUpdateProjectRepo) GetCluster() *AppStateFragmentCluster {
-	return v.AppStateFragment.Cluster
+// GetProductionBranch returns updateAppUpdateProjectRepo.ProductionBranch, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetProductionBranch() *string {
+	return v.AppStateFragment.ProductionBranch
 }
 
 // GetEnvs returns updateAppUpdateProjectRepo.Envs, and is useful for accessing the field via an interface.
@@ -2757,18 +2897,26 @@ func (v *updateAppUpdateProjectRepo) GetCpu() *string { return v.AppStateFragmen
 // GetMemory returns updateAppUpdateProjectRepo.Memory, and is useful for accessing the field via an interface.
 func (v *updateAppUpdateProjectRepo) GetMemory() *string { return v.AppStateFragment.Memory }
 
-// GetOwner returns updateAppUpdateProjectRepo.Owner, and is useful for accessing the field via an interface.
-func (v *updateAppUpdateProjectRepo) GetOwner() *AppStateFragmentOwnerUser {
-	return v.AppStateFragment.Owner
+// GetDedicated returns updateAppUpdateProjectRepo.Dedicated, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetDedicated() *bool { return v.AppStateFragment.Dedicated }
+
+// GetEphemeralStorage returns updateAppUpdateProjectRepo.EphemeralStorage, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetEphemeralStorage() *float64 {
+	return v.AppStateFragment.EphemeralStorage
+}
+
+// GetDeployTarget returns updateAppUpdateProjectRepo.DeployTarget, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetDeployTarget() *DeployTarget {
+	return v.AppStateFragment.DeployTarget
+}
+
+// GetCluster returns updateAppUpdateProjectRepo.Cluster, and is useful for accessing the field via an interface.
+func (v *updateAppUpdateProjectRepo) GetCluster() *AppStateFragmentCluster {
+	return v.AppStateFragment.Cluster
 }
 
 // GetEnabled returns updateAppUpdateProjectRepo.Enabled, and is useful for accessing the field via an interface.
 func (v *updateAppUpdateProjectRepo) GetEnabled() bool { return v.AppStateFragment.Enabled }
-
-// GetProductionBranch returns updateAppUpdateProjectRepo.ProductionBranch, and is useful for accessing the field via an interface.
-func (v *updateAppUpdateProjectRepo) GetProductionBranch() *string {
-	return v.AppStateFragment.ProductionBranch
-}
 
 // GetUpdatedAt returns updateAppUpdateProjectRepo.UpdatedAt, and is useful for accessing the field via an interface.
 func (v *updateAppUpdateProjectRepo) GetUpdatedAt() time.Time { return v.AppStateFragment.UpdatedAt }
@@ -2803,15 +2951,17 @@ type __premarshalupdateAppUpdateProjectRepo struct {
 
 	Name string `json:"name"`
 
+	Owner *AppStateFragmentOwnerUser `json:"owner"`
+
 	Project *AppStateFragmentProject `json:"project"`
 
 	ProjectEnvironment *AppStateFragmentProjectEnvironment `json:"projectEnvironment"`
 
+	Source *AppStateFragmentSourceRepoSource `json:"source"`
+
 	BuildMethod *AppStateFragmentBuildMethod `json:"buildMethod"`
 
-	DeployTarget *DeployTarget `json:"deployTarget"`
-
-	Cluster *AppStateFragmentCluster `json:"cluster"`
+	ProductionBranch *string `json:"productionBranch"`
 
 	Envs []*AppStateFragmentEnvsEnvVar `json:"envs"`
 
@@ -2819,11 +2969,15 @@ type __premarshalupdateAppUpdateProjectRepo struct {
 
 	Memory *string `json:"memory"`
 
-	Owner *AppStateFragmentOwnerUser `json:"owner"`
+	Dedicated *bool `json:"dedicated"`
+
+	EphemeralStorage *float64 `json:"ephemeralStorage"`
+
+	DeployTarget *DeployTarget `json:"deployTarget"`
+
+	Cluster *AppStateFragmentCluster `json:"cluster"`
 
 	Enabled bool `json:"enabled"`
-
-	ProductionBranch *string `json:"productionBranch"`
 
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -2841,17 +2995,20 @@ func (v *updateAppUpdateProjectRepo) __premarshalJSON() (*__premarshalupdateAppU
 
 	retval.Id = v.AppStateFragment.Id
 	retval.Name = v.AppStateFragment.Name
+	retval.Owner = v.AppStateFragment.Owner
 	retval.Project = v.AppStateFragment.Project
 	retval.ProjectEnvironment = v.AppStateFragment.ProjectEnvironment
+	retval.Source = v.AppStateFragment.Source
 	retval.BuildMethod = v.AppStateFragment.BuildMethod
-	retval.DeployTarget = v.AppStateFragment.DeployTarget
-	retval.Cluster = v.AppStateFragment.Cluster
+	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.Envs = v.AppStateFragment.Envs
 	retval.Cpu = v.AppStateFragment.Cpu
 	retval.Memory = v.AppStateFragment.Memory
-	retval.Owner = v.AppStateFragment.Owner
+	retval.Dedicated = v.AppStateFragment.Dedicated
+	retval.EphemeralStorage = v.AppStateFragment.EphemeralStorage
+	retval.DeployTarget = v.AppStateFragment.DeployTarget
+	retval.Cluster = v.AppStateFragment.Cluster
 	retval.Enabled = v.AppStateFragment.Enabled
-	retval.ProductionBranch = v.AppStateFragment.ProductionBranch
 	retval.UpdatedAt = v.AppStateFragment.UpdatedAt
 	return &retval, nil
 }
@@ -3044,20 +3201,25 @@ mutation createAppDocker ($input: CreateProjectDockerInput!) {
 fragment AppStateFragment on Repo {
 	id
 	name
+	owner {
+		id
+	}
 	project {
 		id
 	}
 	projectEnvironment {
 		id
 	}
+	source {
+		id
+		type
+		name
+	}
 	buildMethod {
 		type
 		dockerfilePath
 	}
-	deployTarget
-	cluster {
-		id
-	}
+	productionBranch
 	envs {
 		id
 		name
@@ -3066,11 +3228,13 @@ fragment AppStateFragment on Repo {
 	}
 	cpu
 	memory
-	owner {
+	dedicated
+	ephemeralStorage
+	deployTarget
+	cluster {
 		id
 	}
 	enabled
-	productionBranch
 	updatedAt
 }
 `,
@@ -3111,20 +3275,25 @@ mutation createAppGit ($input: CreateProjectGitInput!) {
 fragment AppStateFragment on Repo {
 	id
 	name
+	owner {
+		id
+	}
 	project {
 		id
 	}
 	projectEnvironment {
 		id
 	}
+	source {
+		id
+		type
+		name
+	}
 	buildMethod {
 		type
 		dockerfilePath
 	}
-	deployTarget
-	cluster {
-		id
-	}
+	productionBranch
 	envs {
 		id
 		name
@@ -3133,11 +3302,13 @@ fragment AppStateFragment on Repo {
 	}
 	cpu
 	memory
-	owner {
+	dedicated
+	ephemeralStorage
+	deployTarget
+	cluster {
 		id
 	}
 	enabled
-	productionBranch
 	updatedAt
 }
 `,
@@ -3372,20 +3543,25 @@ mutation disableApp ($appID: ID!) {
 fragment AppStateFragment on Repo {
 	id
 	name
+	owner {
+		id
+	}
 	project {
 		id
 	}
 	projectEnvironment {
 		id
 	}
+	source {
+		id
+		type
+		name
+	}
 	buildMethod {
 		type
 		dockerfilePath
 	}
-	deployTarget
-	cluster {
-		id
-	}
+	productionBranch
 	envs {
 		id
 		name
@@ -3394,11 +3570,13 @@ fragment AppStateFragment on Repo {
 	}
 	cpu
 	memory
-	owner {
+	dedicated
+	ephemeralStorage
+	deployTarget
+	cluster {
 		id
 	}
 	enabled
-	productionBranch
 	updatedAt
 }
 `,
@@ -3436,20 +3614,25 @@ mutation enableApp ($appID: ID!) {
 fragment AppStateFragment on Repo {
 	id
 	name
+	owner {
+		id
+	}
 	project {
 		id
 	}
 	projectEnvironment {
 		id
 	}
+	source {
+		id
+		type
+		name
+	}
 	buildMethod {
 		type
 		dockerfilePath
 	}
-	deployTarget
-	cluster {
-		id
-	}
+	productionBranch
 	envs {
 		id
 		name
@@ -3458,11 +3641,13 @@ fragment AppStateFragment on Repo {
 	}
 	cpu
 	memory
-	owner {
+	dedicated
+	ephemeralStorage
+	deployTarget
+	cluster {
 		id
 	}
 	enabled
-	productionBranch
 	updatedAt
 }
 `,
@@ -3500,20 +3685,25 @@ query getApp ($appID: UUID!) {
 fragment AppStateFragment on Repo {
 	id
 	name
+	owner {
+		id
+	}
 	project {
 		id
 	}
 	projectEnvironment {
 		id
 	}
+	source {
+		id
+		type
+		name
+	}
 	buildMethod {
 		type
 		dockerfilePath
 	}
-	deployTarget
-	cluster {
-		id
-	}
+	productionBranch
 	envs {
 		id
 		name
@@ -3522,11 +3712,13 @@ fragment AppStateFragment on Repo {
 	}
 	cpu
 	memory
-	owner {
+	dedicated
+	ephemeralStorage
+	deployTarget
+	cluster {
 		id
 	}
 	enabled
-	productionBranch
 	updatedAt
 }
 `,
@@ -3659,20 +3851,25 @@ mutation updateApp ($input: UpdateProjectInput!) {
 fragment AppStateFragment on Repo {
 	id
 	name
+	owner {
+		id
+	}
 	project {
 		id
 	}
 	projectEnvironment {
 		id
 	}
+	source {
+		id
+		type
+		name
+	}
 	buildMethod {
 		type
 		dockerfilePath
 	}
-	deployTarget
-	cluster {
-		id
-	}
+	productionBranch
 	envs {
 		id
 		name
@@ -3681,11 +3878,13 @@ fragment AppStateFragment on Repo {
 	}
 	cpu
 	memory
-	owner {
+	dedicated
+	ephemeralStorage
+	deployTarget
+	cluster {
 		id
 	}
 	enabled
-	productionBranch
 	updatedAt
 }
 `,

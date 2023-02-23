@@ -77,33 +77,47 @@ mutation deleteEnvironment($environmentID: UUID!) {
 fragment AppStateFragment on Repo {
   id
   name
+  owner {
+    id
+  }
   project {
     id
   }
   projectEnvironment {
     id
   }
+
+  source {
+    id
+    type
+    name
+  }
+
   buildMethod {
     type
     dockerfilePath
   }
-  deployTarget
-  cluster {
-    id
-  }
+  productionBranch
+
   envs {
     id
     name
     value
     sealed
   }
+
   cpu
   memory
-  owner {
+  dedicated
+  ephemeralStorage
+
+  deployTarget
+  cluster {
     id
   }
+
   enabled
-  productionBranch
+
   updatedAt
 }
 

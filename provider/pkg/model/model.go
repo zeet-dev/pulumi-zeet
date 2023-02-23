@@ -8,8 +8,8 @@ import (
 type CreateAppResourcesInput struct {
 	Cpu              float64  `pulumi:"cpu"`
 	Memory           string   `pulumi:"memory"`
-	EphemeralStorage *float64 `pulumi:"ephemeralStorage"`
-	SpotInstance     *bool    `pulumi:"spotInstance"`
+	EphemeralStorage *float64 `pulumi:"ephemeralStorage,optional"`
+	SpotInstance     *bool    `pulumi:"spotInstance,optional"`
 }
 
 var nonNumericRegex = regexp.MustCompile(`[^0-9\\.]+`)

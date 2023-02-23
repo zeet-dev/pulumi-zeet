@@ -21,7 +21,7 @@ type zeetGraphqlClient struct {
 func NewZeetGraphqlClient(endpoint string, apiToken string, version string) ZeetClient {
 	userAgent := fmt.Sprintf("Pulumi/3.0 (https://www.pulumi.com) pulumi-zeet/%s", version)
 	transport := authedTransport{apiToken: apiToken, wrapped: http.DefaultTransport, userAgent: userAgent}
-	graphqlEndpoint := endpoint //+ "/graphql"
+	graphqlEndpoint := endpoint + "/graphql"
 	return &zeetGraphqlClient{
 		apiToken: apiToken,
 		client:   graphql.NewClient(graphqlEndpoint, &http.Client{Transport: &transport}),
@@ -184,17 +184,12 @@ func (c *zeetGraphqlClient) DeleteEnvironment(ctx provider.Context, environmentI
 	return nil
 }
 
-func NewCreateAppResponse(args model.CreateAppInput, state appStateResponse) CreateAppResponse {
+func NewCreateAppResponse(args model.CreateAppInput, state AppStateFragment) CreateAppResponse {
 	return CreateAppResponse{
 		CreateAppInput: args,
 		ID:             state.GetId(),
 		UpdatedAt:      state.GetUpdatedAt(),
 	}
-}
-
-type appStateResponse interface {
-	GetId() string
-	GetUpdatedAt() time.Time
 }
 
 type CreateAppResponse struct {
@@ -204,7 +199,7 @@ type CreateAppResponse struct {
 }
 
 func (c *zeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateAppInput) (CreateAppResponse, error) {
-	var response appStateResponse
+	var response AppStateFragment
 	if args.GithubInput != nil {
 		input, err := newCreateProjectGitInput(args, *args.GithubInput)
 		if err != nil {
@@ -214,14 +209,14 @@ func (c *zeetGraphqlClient) CreateApp(ctx provider.Context, args model.CreateApp
 		if err != nil {
 			return CreateAppResponse{}, err
 		}
-		response = resp.GetCreateProjectGit()
+		response = resp.GetCreateProjectGit().AppStateFragment
 	} else if args.DockerInput != nil {
 		input := newCreateProjectDockerInput(args, *args.DockerInput)
 		resp, err := createAppDocker(ctx, c.client, &input)
 		if err != nil {
 			return CreateAppResponse{}, err
 		}
-		response = resp.GetCreateProjectDocker()
+		response = resp.GetCreateProjectDocker().AppStateFragment
 	} else {
 		return CreateAppResponse{}, fmt.Errorf("must specify one app spec")
 	}
@@ -292,24 +287,7 @@ func getBuildType(buildInput model.CreateAppBuildInput) BuildType {
 	return BuildType(buildInput.Type)
 }
 
-type appStateFragment interface {
-	GetId() string
-	GetName() string
-	GetProject() *AppStateFragmentProject
-	GetProjectEnvironment() *AppStateFragmentProjectEnvironment
-	GetBuildMethod() *AppStateFragmentBuildMethod
-	GetDeployTarget() *DeployTarget
-	GetCluster() *AppStateFragmentCluster
-	GetEnvs() []*AppStateFragmentEnvsEnvVar
-	GetCpu() *string
-	GetMemory() *string
-	GetOwner() *AppStateFragmentOwnerUser
-	GetEnabled() bool
-	GetProductionBranch() *string
-	GetUpdatedAt() time.Time
-}
-
-func CreateAppResponseFromAppState(state appStateFragment) (CreateAppResponse, error) {
+func CreateAppResponseFromAppState(state AppStateFragment) (CreateAppResponse, error) {
 	var err error
 	var cpu float64
 	if state.GetCpu() != nil {
@@ -327,6 +305,20 @@ func CreateAppResponseFromAppState(state appStateFragment) (CreateAppResponse, e
 		memory = ""
 	}
 
+	var spot bool
+	if state.GetDedicated() != nil {
+		spot = !*state.GetDedicated()
+	} else {
+		spot = false
+	}
+
+	var ephemeralStorage float64
+	if state.GetEphemeralStorage() != nil {
+		ephemeralStorage = *state.GetEphemeralStorage()
+	} else {
+		ephemeralStorage = 0
+	}
+
 	args := model.CreateAppInput{
 		UserID:        state.GetOwner().GetId(),
 		ProjectID:     state.GetProject().GetId(),
@@ -339,8 +331,10 @@ func CreateAppResponseFromAppState(state appStateFragment) (CreateAppResponse, e
 		},
 		Enabled: state.GetEnabled(),
 		Resources: model.CreateAppResourcesInput{
-			Cpu:    cpu,
-			Memory: memory,
+			Cpu:              cpu,
+			Memory:           memory,
+			SpotInstance:     &spot,
+			EphemeralStorage: &ephemeralStorage,
 		},
 		Deploy:               model.CreateAppDeployInput{},
 		EnvironmentVariables: environmentVariablesToModel(state.GetEnvs()),
@@ -353,6 +347,15 @@ func CreateAppResponseFromAppState(state appStateFragment) (CreateAppResponse, e
 		}
 	}
 
+	if state.GetSource() != nil {
+		switch state.GetSource().GetType() {
+		case RepoSourceTypeDocker:
+			args.DockerInput = &model.CreateAppDockerInput{
+				DockerImage: state.GetSource().GetId(),
+			}
+		}
+	}
+
 	return NewCreateAppResponse(args, state), nil
 }
 
@@ -361,7 +364,7 @@ func (c *zeetGraphqlClient) ReadApp(ctx provider.Context, appID string) (CreateA
 	if err != nil {
 		return CreateAppResponse{}, err
 	}
-	return CreateAppResponseFromAppState(resp.GetRepo())
+	return CreateAppResponseFromAppState(resp.GetRepo().AppStateFragment)
 }
 
 func (c *zeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args model.CreateAppInput) (CreateAppResponse, error) {
@@ -379,21 +382,21 @@ func (c *zeetGraphqlClient) UpdateApp(ctx provider.Context, appID string, args m
 	if err != nil {
 		return CreateAppResponse{}, err
 	}
-	var state appStateFragment
-	state = resp.GetUpdateProject()
+	var state AppStateFragment
+	state = resp.GetUpdateProject().AppStateFragment
 	if state.GetEnabled() != args.Enabled {
 		if args.Enabled {
 			resp, err := enableApp(ctx, c.client, appID)
 			if err != nil {
 				return CreateAppResponse{}, err
 			}
-			state = resp.GetEnableRepo()
+			state = resp.GetEnableRepo().AppStateFragment
 		} else {
 			resp, err := disableApp(ctx, c.client, appID)
 			if err != nil {
 				return CreateAppResponse{}, err
 			}
-			state = resp.GetDisableRepo()
+			state = resp.GetDisableRepo().AppStateFragment
 		}
 	}
 	return NewCreateAppResponse(args, state), nil
