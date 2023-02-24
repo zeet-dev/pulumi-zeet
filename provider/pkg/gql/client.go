@@ -95,6 +95,10 @@ func (c *zeetGraphqlClient) DeleteProject(ctx provider.Context, projectID string
 	resp, err := deleteProject(ctx, c.client, projectID)
 	// graphql error
 	if err != nil {
+		// idempotent delete - return nil if already deleted
+		if strings.Contains(err.Error(), "deleteProjectV2 record not found") {
+			return nil
+		}
 		return err
 	}
 	// server returned false
@@ -174,6 +178,10 @@ func (c *zeetGraphqlClient) DeleteEnvironment(ctx provider.Context, environmentI
 	resp, err := deleteEnvironment(ctx, c.client, environmentID)
 	// graphql error
 	if err != nil {
+		// idempotent delete - return nil if already deleted
+		if strings.Contains(err.Error(), "deleteProjectEnvironment record not found") {
+			return nil
+		}
 		return err
 	}
 	// server returned false
